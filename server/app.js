@@ -6,6 +6,15 @@ import express from 'express'
 import { google as googleapis } from 'googleapis'
 import { AFTER_AUTH_PATH, CALENDAR_SCOPE, FRONTEND_URL, PORT } from './config.js'
 import { decrypt, encrypt } from './crypto.js'
+import {
+  getCalendarConnection,
+  saveCalendarConnection,
+  clearCalendarConnection,
+  saveCalendarEvent,
+  deleteCalendarEvent,
+  getAllCalendarEvents,
+  updateCalendarId,
+} from './db-supabase.js'
 
 const CALENDAR_NAME = 'Bridesmap'
 const MAX_TASKS = 500
@@ -68,7 +77,7 @@ function parseTasks(body) {
 
 const hashOf = (t) => crypto.createHash('sha256').update(JSON.stringify([t.title, t.dueDate, t.reminderDaysBefore])).digest('hex')
 
-export function createApp({ config, db, google = realGoogle }) {
+export function createApp({ config, google = realGoogle }) {
   const app = express()
   app.disable('x-powered-by')
   app.use(express.json({ limit: '200kb' }))
@@ -84,19 +93,8 @@ export function createApp({ config, db, google = realGoogle }) {
     next()
   })
 
-  // ---------- akses data ----------
-  const getConnection = () => db.prepare('SELECT * FROM calendar_connections WHERE id = 1').get()
-  const clearConnection = db.transaction(() => {
-    db.prepare('DELETE FROM calendar_connections WHERE id = 1').run()
-    db.prepare('DELETE FROM calendar_events').run()
-  })
-  const saveConnection = db.transaction((refreshToken, calendarId) => {
-    db.prepare('DELETE FROM calendar_events').run() // kalender baru: pemetaan lama tidak berlaku
-    db.prepare(
-      `INSERT INTO calendar_connections (id, refresh_token_enc, calendar_id, connected_at) VALUES (1, ?, ?, ?)
-       ON CONFLICT(id) DO UPDATE SET refresh_token_enc = excluded.refresh_token_enc, calendar_id = excluded.calendar_id, connected_at = excluded.connected_at`,
-    ).run(encrypt(refreshToken, config.key), calendarId, new Date().toISOString())
-  })
+  // ---------- Note: database operations now use Supabase (db-supabase.js) ----------
+  // All database calls are async with getCalendarConnection(), saveCalendarConnection(), etc.
 
   // ---------- state OAuth (anti-CSRF), disimpan di memori ----------
   const pendingStates = new Map()
@@ -167,7 +165,7 @@ export function createApp({ config, db, google = realGoogle }) {
       if (!tokens.refresh_token) return back('gagal')
       auth.setCredentials(tokens)
       const calendarId = await createCalendar(google.calendar(auth))
-      saveConnection(tokens.refresh_token, calendarId)
+      await saveCalendarConnection(encrypt(tokens.refresh_token, config.key), calendarId)
       back('terhubung')
     } catch (e) {
       logError('callback', e)
@@ -176,10 +174,10 @@ export function createApp({ config, db, google = realGoogle }) {
   })
 
   // 3. Status (tidak pernah memuat token)
-  app.get('/api/calendar/status', (_req, res) => {
-    const conn = getConnection()
+  app.get('/api/calendar/status', wrap(async (_req, res) => {
+    const conn = await getCalendarConnection()
     res.json(conn ? { connected: true, calendarName: CALENDAR_NAME, connectedAt: conn.connected_at } : { connected: false })
-  })
+  }))
 
   // 4. Sinkronisasi: insert / patch / delete mengikuti daftar tugas terbaru
   app.post(
@@ -187,7 +185,7 @@ export function createApp({ config, db, google = realGoogle }) {
     wrap(async (req, res) => {
       const parsed = parseTasks(req.body)
       if (parsed.error) return res.status(400).json({ error: 'invalid_request', detail: parsed.error })
-      let conn = getConnection()
+      let conn = await getCalendarConnection()
       if (!conn) return res.status(409).json({ error: 'not_connected' })
       const cal = calendarFor(conn)
 
@@ -197,20 +195,18 @@ export function createApp({ config, db, google = realGoogle }) {
       } catch (e) {
         if (!isGone(e)) throw e
         const calendarId = await createCalendar(cal)
-        db.prepare('DELETE FROM calendar_events').run()
-        db.prepare('UPDATE calendar_connections SET calendar_id = ? WHERE id = 1').run(calendarId)
+        await clearCalendarConnection()
+        await updateCalendarId(calendarId)
         conn = { ...conn, calendar_id: calendarId }
       }
       const calendarId = conn.calendar_id
       const result = { created: 0, updated: 0, unchanged: 0, deleted: 0, failed: [] }
-      const mapping = new Map(db.prepare('SELECT * FROM calendar_events WHERE calendar_id = ?').all(calendarId).map((r) => [r.task_id, r]))
-      const upsert = db.prepare(
-        `INSERT INTO calendar_events (task_id, event_id, calendar_id, payload_hash, synced_at) VALUES (?, ?, ?, ?, ?)
-         ON CONFLICT(task_id) DO UPDATE SET event_id = excluded.event_id, calendar_id = excluded.calendar_id, payload_hash = excluded.payload_hash, synced_at = excluded.synced_at`,
-      )
+      const allEvents = await getAllCalendarEvents()
+      const mapping = new Map(allEvents.map((r) => [r.task_id, r]))
+
       const insertEvent = async (t, hash) => {
         const { data } = await cal.events.insert({ calendarId, requestBody: buildEvent(t) })
-        upsert.run(t.id, data.id, calendarId, hash, new Date().toISOString())
+        await saveCalendarEvent(t.id, data.id, calendarId, hash)
         result.created++
       }
 
@@ -225,7 +221,7 @@ export function createApp({ config, db, google = realGoogle }) {
           } else {
             try {
               await cal.events.patch({ calendarId, eventId: m.event_id, requestBody: buildEvent(t) })
-              upsert.run(t.id, m.event_id, calendarId, hash, new Date().toISOString())
+              await saveCalendarEvent(t.id, m.event_id, calendarId, hash)
               result.updated++
             } catch (e) {
               if (!isGone(e)) throw e
@@ -253,7 +249,7 @@ export function createApp({ config, db, google = realGoogle }) {
             continue
           }
         }
-        db.prepare('DELETE FROM calendar_events WHERE task_id = ?').run(m.task_id)
+        await deleteCalendarEvent(m.task_id)
         result.deleted++
       }
 
@@ -262,10 +258,10 @@ export function createApp({ config, db, google = realGoogle }) {
   )
 
   // 5. Putuskan: hapus refresh token (dan pemetaan) dari database
-  app.delete('/api/calendar/disconnect', (_req, res) => {
-    clearConnection()
+  app.delete('/api/calendar/disconnect', wrap(async (_req, res) => {
+    await clearCalendarConnection()
     res.json({ connected: false })
-  })
+  }))
 
   app.use('/api', (_req, res) => res.status(404).json({ error: 'not_found' }))
   // eslint-disable-next-line no-unused-vars

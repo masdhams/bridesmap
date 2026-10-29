@@ -1,14 +1,13 @@
-// Titik masuk server. Hanya berjalan kalau server/.env sudah diisi lengkap.
+// Titik masuk server. Hanya berjalan kalau environment variables sudah diisi lengkap.
 import { createApp } from './app.js'
 import { ConfigError, loadConfig, PORT } from './config.js'
-import { openDb } from './db.js'
 
 let config
 try {
   config = loadConfig()
 } catch (e) {
   if (!(e instanceof ConfigError)) throw e
-  console.error(`\n[server] ${e.message}\n[server] Server belum dijalankan. Salin server/.env.example ke server/.env, isi nilainya, lalu jalankan ulang.\n`)
+  console.error(`\n[server] ${e.message}\n[server] Verifikasi VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY di .env.local\n`)
   process.exit(1)
 }
 
@@ -19,8 +18,7 @@ process.on('uncaughtException', (e) => {
   process.exit(1)
 })
 
-const db = openDb()
-const server = createApp({ config, db }).listen(PORT, '127.0.0.1', () => {
+const server = createApp({ config }).listen(PORT, '127.0.0.1', () => {
   console.log(`[server] Bridesmap berjalan di http://localhost:${PORT}`)
 })
 server.on('error', (e) => {

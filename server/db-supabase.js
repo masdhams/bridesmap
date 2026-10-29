@@ -98,3 +98,13 @@ export async function getAllCalendarEvents() {
   if (error) throw error
   return data || []
 }
+
+// Update calendar_id in calendar_connections
+export async function updateCalendarId(calendarId) {
+  const { error } = await supabase
+    .from('calendar_connections')
+    .update({ calendar_id: calendarId, updated_at: new Date().toISOString() })
+    .eq('id', 1)
+
+  if (error) throw error
+}
