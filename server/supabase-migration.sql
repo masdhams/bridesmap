@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS auth_users (
 CREATE TABLE IF NOT EXISTS calendar_connections (
   id INTEGER PRIMARY KEY CHECK (id = 1),
   refresh_token_enc TEXT NOT NULL,
-  calendar_id TEXT NOT NULL,
+  calendar_id TEXT NOT NULL UNIQUE,
   connected_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -22,8 +22,7 @@ CREATE TABLE IF NOT EXISTS calendar_events (
   event_id TEXT NOT NULL,
   calendar_id TEXT NOT NULL,
   payload_hash TEXT NOT NULL,
-  synced_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT fk_calendar_connection FOREIGN KEY (calendar_id) REFERENCES calendar_connections(calendar_id)
+  synced_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 -- 3. Budget & Financial Data
@@ -219,31 +218,31 @@ ALTER TABLE deep_talk_entries ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies (users can only see their own data)
 CREATE POLICY "Users can view their own data" ON auth_users
-  FOR SELECT USING (id = current_user_id());
+  FOR SELECT USING (id = auth.uid());
 
 CREATE POLICY "Users can view their own budget categories" ON budget_categories
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
 
 CREATE POLICY "Users can view their own expenses" ON budget_expenses
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
 
 CREATE POLICY "Users can view their own vendors" ON vendors
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
 
 CREATE POLICY "Users can view their own tasks" ON checklist_tasks
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
 
 CREATE POLICY "Users can view their own guests" ON guests
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
 
 CREATE POLICY "Users can view their own seserahan" ON seserahan_items
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
 
 CREATE POLICY "Users can view their own rundown" ON rundown_events
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
 
 CREATE POLICY "Users can view their own invitations" ON invitations
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
 
 CREATE POLICY "Users can view their own deep talk" ON deep_talk_entries
-  FOR SELECT USING (user_id = current_user_id());
+  FOR SELECT USING (user_id = auth.uid());
