@@ -23,10 +23,6 @@ const FEATURES = [
 
 const TABS = ['Seluruh rencana', 'Budget & pembayaran', 'Tamu & RSVP', 'Deep Talk & Surat untuk Nanti'] as const
 
-const FAQ = [
-  { q: 'Apakah Bridesmap menjamin vendor saya aman?', a: 'Tidak. Kami bukan rekening bersama/escrow dan tidak menjamin vendor. Yang kami bantu: jadwal pembayaran yang jelas, pengingat, dan jejak bukti transfer yang rapi.' },
-]
-
 const glass = 'rounded-[22px] border border-white/20 bg-white/12 p-5'
 
 // Contoh tampilan (pasangan fiktif). Satu sumber angka supaya antar-bagian konsisten, dan tanggal dihitung dari hari ini agar tidak basi.
@@ -312,22 +308,6 @@ export default function Landing() {
           </section>
         )}
 
-        <section className="mx-auto flex max-w-3xl flex-col gap-3 border-t border-border py-16">
-          <h2 className="mb-2 text-center text-[clamp(28px,3.6vw,40px)]">
-            Pertanyaan <span className="italic">yang sering muncul</span>
-          </h2>
-          {FAQ.map((f) => (
-            <details key={f.q} className="group rounded-[20px] border border-border bg-card px-5">
-              <summary className="flex min-h-14 list-none items-center justify-between gap-3 font-semibold">
-                {f.q}
-                <span className="text-xl leading-none text-primary transition-transform duration-200 group-open:rotate-45" aria-hidden>
-                  +
-                </span>
-              </summary>
-              <p className="pb-4 text-sm leading-relaxed text-body">{f.a}</p>
-            </details>
-          ))}
-        </section>
       </main>
       <PublicFooter />
     </div>
