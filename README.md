@@ -42,8 +42,7 @@ Stack: React 19 + Vite + TypeScript + Tailwind CSS v4, zustand (state), date-fns
 
 ## Belum tersambung (butuh keputusan/akun)
 
-- **Google Calendar** — backend kecil di `server/` (Express + SQLite) untuk mengirim tugas sebagai pengingat. Butuh `server/.env` diisi lebih dulu; cara menjalankan dan menguji ada di [`server/README.md`](server/README.md). Perintah: `npm run dev:server`.
-- **Backend & login** — data saat ini di `localStorage` (sinkron antar-tab). Kolaborasi 2 akun real-time (#8) butuh backend, mis. Supabase. Lapisan data ada di `src/lib/store.ts`.
+- **Kolaborasi 2 akun real-time (#8)** — belum dibangun. Data rencana sekarang per akun (Supabase), tapi belum real-time antar pasangan. Lapisan data ada di `src/lib/store.ts` dan `src/lib/planSync.ts`.
 - **Google Calendar OAuth** — saat ini pakai tautan "tambah event" + file .ics (tanpa OAuth).
 - **Konten placeholder** — nama pembuat, email, testimoni: `src/data/content.ts` (`LEGAL`, `TESTIMONIALS`). Hari libur 2026–2027 perkiraan: `src/data/calendar.ts`.
 - **MVP-2** belum dibangun: save-the-date & undangan digital (#33), Wedding Inbox + AI (#35).

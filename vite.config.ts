@@ -4,8 +4,4 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    // Backend kecil (server/) untuk sambungan Google Calendar. Jalankan dengan `npm run dev:server`.
-    proxy: { '/api': 'http://localhost:3000' },
-  },
 })

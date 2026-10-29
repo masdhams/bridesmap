@@ -1,5 +1,5 @@
 // Service worker sederhana: cache app shell supaya bisa dibuka offline.
-const CACHE = 'bb-shell-v1'
+const CACHE = 'bb-shell-v2'
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/index.html', '/icon.svg', '/manifest.webmanifest'])))
@@ -13,7 +13,10 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   const req = e.request
-  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return
+  const url = new URL(req.url)
+  if (req.method !== 'GET' || url.origin !== location.origin) return
+  // Respons API selalu dari jaringan, jangan pernah di-cache.
+  if (url.pathname.startsWith('/api/')) return
   // Network-first untuk navigasi, cache-first untuk aset statis.
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req).catch(() => caches.match('/index.html')))

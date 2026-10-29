@@ -99,7 +99,7 @@ export function CalendarCard() {
 
       {status === 'offline' && (
         <div className="mt-3 rounded-xl bg-muted/70 p-3 text-sm text-body" role="status">
-          Server kalender belum berjalan. Isi <code>server/.env</code>, lalu jalankan <code>npm run dev:server</code> (lihat <code>server/README.md</code>).
+          Server kalender tidak merespons. Coba lagi sebentar lagi.
           <button className="btn-ghost btn-sm ml-1 inline-flex" onClick={refresh}>
             Cek lagi
           </button>
