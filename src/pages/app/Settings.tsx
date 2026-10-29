@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CalendarCard } from '../../components/CalendarCard'
 import { ConfirmButton, Field, MoneyInput, PageHeader, PartnerAvatar } from '../../components/ui'
+import { useAuth } from '../../lib/auth'
+import { supabase } from '../../lib/supabase'
 import { exportData, storageUsageBytes, usePlan } from '../../lib/store'
 import { compressImage, downloadFile, todayISO } from '../../lib/utils'
 
@@ -17,7 +19,17 @@ export default function Settings() {
     <div className="max-w-2xl">
       <PageHeader title="Pengaturan & pasangan" />
 
-      <section className="card p-5 space-y-4">
+      <section className="card p-5 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-semibold">Akun</h2>
+          <p className="text-sm text-muted-foreground">{useAuth.getState().session?.user.email}</p>
+        </div>
+        <button className="btn-ghost btn-sm" onClick={() => supabase.auth.signOut()}>
+          Keluar
+        </button>
+      </section>
+
+      <section className="card mt-5 p-5 space-y-4">
         <h2 className="text-2xl font-semibold">Rencana kalian</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Nama kamu" htmlFor="pa"><input id="pa" className="input" value={profile.partnerA} onChange={(e) => setProfile({ partnerA: e.target.value })} /></Field>

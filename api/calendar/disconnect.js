@@ -1,4 +1,4 @@
-import { clearCalendarConnection } from '../../server/db-supabase.js'
+import { clearCalendarConnection, userIdFromRequest } from '../../server/db-supabase.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'DELETE') {
@@ -6,7 +6,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    await clearCalendarConnection()
+    const userId = await userIdFromRequest(req)
+    if (!userId) return res.status(401).json({ error: 'unauthorized' })
+
+    await clearCalendarConnection(userId)
     res.json({ connected: false })
   } catch (error) {
     console.error('[disconnect]', error)

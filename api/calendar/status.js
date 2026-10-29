@@ -1,4 +1,4 @@
-import { getCalendarConnection } from '../../server/db-supabase.js'
+import { getCalendarConnection, userIdFromRequest } from '../../server/db-supabase.js'
 
 const CALENDAR_NAME = 'Bridesmap'
 
@@ -8,7 +8,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const conn = await getCalendarConnection()
+    const userId = await userIdFromRequest(req)
+    if (!userId) return res.status(401).json({ error: 'unauthorized' })
+
+    const conn = await getCalendarConnection(userId)
     res.json(
       conn
         ? {

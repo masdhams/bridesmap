@@ -107,7 +107,7 @@ export function CalendarCard() {
       )}
 
       {typeof status === 'object' && status && !status.connected && (
-        <button className="btn-primary btn-sm mt-3" onClick={connectCalendar}>
+        <button className="btn-primary btn-sm mt-3" onClick={() => connectCalendar().catch(() => setStatus('offline'))}>
           <CalendarSync className="size-4" aria-hidden /> Hubungkan Google Calendar
         </button>
       )}

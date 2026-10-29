@@ -4,11 +4,11 @@ import { loadConfig } from '../../server/config.js'
 import { decrypt } from '../../server/crypto.js'
 import {
   getCalendarConnection,
-  saveCalendarConnection,
   getAllCalendarEvents,
   saveCalendarEvent,
   deleteCalendarEvent,
   updateCalendarId,
+  userIdFromRequest,
 } from '../../server/db-supabase.js'
 
 const MAX_TASKS = 500
@@ -65,18 +65,20 @@ export default async function handler(req, res) {
   }
 
   try {
+    const userId = await userIdFromRequest(req)
+    if (!userId) return res.status(401).json({ error: 'unauthorized' })
+
     const config = loadConfig()
     const parsed = parseTasks(req.body)
     if (parsed.error) return res.status(400).json({ error: 'invalid_request', detail: parsed.error })
 
-    let conn = await getCalendarConnection()
+    let conn = await getCalendarConnection(userId)
     if (!conn) return res.status(409).json({ error: 'not_connected' })
 
     const oauth2Client = new googleapis.auth.OAuth2(config.clientId, config.clientSecret, config.redirectUri)
     oauth2Client.setCredentials({ refresh_token: decrypt(conn.refresh_token_enc, config.key) })
     const cal = googleapis.calendar({ version: 'v3', auth: oauth2Client })
 
-    // Check if calendar still exists, recreate if deleted
     try {
       await cal.calendars.get({ calendarId: conn.calendar_id })
     } catch (e) {
@@ -88,9 +90,8 @@ export default async function handler(req, res) {
             timeZone: 'Asia/Jakarta',
           },
         })
-        const newCalendarId = data.id
-        await updateCalendarId(newCalendarId)
-        conn = { ...conn, calendar_id: newCalendarId }
+        await updateCalendarId(userId, data.id)
+        conn = { ...conn, calendar_id: data.id }
       } else {
         throw e
       }
@@ -98,16 +99,15 @@ export default async function handler(req, res) {
 
     const calendarId = conn.calendar_id
     const result = { created: 0, updated: 0, unchanged: 0, deleted: 0, failed: [] }
-    const allEvents = await getAllCalendarEvents()
+    const allEvents = await getAllCalendarEvents(userId)
     const mapping = new Map(allEvents.map((r) => [r.task_id, r]))
 
     const insertEvent = async (t, hash) => {
       const { data } = await cal.events.insert({ calendarId, requestBody: buildEvent(t) })
-      await saveCalendarEvent(t.id, data.id, calendarId, hash)
+      await saveCalendarEvent(userId, t.id, data.id, calendarId, hash)
       result.created++
     }
 
-    // Sync each task
     for (const t of parsed.tasks) {
       const hash = hashOf(t)
       const m = mapping.get(t.id)
@@ -119,7 +119,7 @@ export default async function handler(req, res) {
         } else {
           try {
             await cal.events.patch({ calendarId, eventId: m.event_id, requestBody: buildEvent(t) })
-            await saveCalendarEvent(t.id, m.event_id, calendarId, hash)
+            await saveCalendarEvent(userId, t.id, m.event_id, calendarId, hash)
             result.updated++
           } catch (e) {
             if ([404, 410].includes(e?.response?.status)) {
@@ -135,13 +135,12 @@ export default async function handler(req, res) {
       }
     }
 
-    // Delete tasks that no longer exist
     const keep = new Set(parsed.tasks.map((t) => t.id))
     for (const m of mapping.values()) {
       if (keep.has(m.task_id)) continue
       try {
         await cal.events.delete({ calendarId, eventId: m.event_id })
-        await deleteCalendarEvent(m.task_id)
+        await deleteCalendarEvent(userId, m.task_id)
         result.deleted++
       } catch (e) {
         if (![404, 410].includes(e?.response?.status)) {

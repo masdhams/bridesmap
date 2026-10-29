@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import AppLayout from './components/AppLayout'
+import { useAuth } from './lib/auth'
 import { usePlan } from './lib/store'
 import About from './pages/About'
 import Landing from './pages/Landing'
+import Masuk from './pages/Masuk'
 import Onboarding from './pages/Onboarding'
 import LiveInvitation from './pages/LiveInvitation'
 import InvitationEditor from './pages/app/InvitationEditor'
@@ -35,6 +37,14 @@ import RedRetroInvitation from './pages/invitations/RedRetroInvitation'
 import NoirInvitation from './pages/invitations/NoirInvitation'
 import SageInvitation from './pages/invitations/SageInvitation'
 import ToolsIndex from './pages/tools/ToolsIndex'
+
+function RequireAuth({ children }: { children: React.ReactNode }) {
+  const { session, ready, planReady } = useAuth()
+  const { pathname, search } = useLocation()
+  if (!ready || (session && !planReady)) return <div className="min-h-dvh" />
+  if (!session) return <Navigate to={`/masuk?next=${encodeURIComponent(pathname + search)}`} replace />
+  return <>{children}</>
+}
 
 function RequirePlan({ children }: { children: React.ReactNode }) {
   const onboarded = usePlan((s) => s.profile.onboarded)
@@ -68,7 +78,15 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/tentang" element={<About />} />
-        <Route path="/mulai" element={<Onboarding />} />
+        <Route path="/masuk" element={<Masuk />} />
+        <Route
+          path="/mulai"
+          element={
+            <RequireAuth>
+              <Onboarding />
+            </RequireAuth>
+          }
+        />
         <Route path="/alat" element={<ToolsIndex />} />
         <Route path="/alat/kalkulator-budget" element={<BudgetCalculator />} />
         <Route path="/alat/checklist" element={<FreeChecklist />} />
@@ -81,9 +99,11 @@ export default function App() {
         <Route
           path="/app"
           element={
-            <RequirePlan>
-              <AppLayout />
-            </RequirePlan>
+            <RequireAuth>
+              <RequirePlan>
+                <AppLayout />
+              </RequirePlan>
+            </RequireAuth>
           }
         >
           <Route index element={<Dashboard />} />

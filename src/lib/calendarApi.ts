@@ -1,5 +1,4 @@
-// Klien untuk backend kecil di server/ (diproxy Vite: /api → http://localhost:3000).
-// Refresh token tidak pernah sampai ke sini; frontend hanya tahu "terhubung atau tidak".
+import { accessToken } from './auth'
 
 export interface CalendarStatus {
   connected: boolean
@@ -22,7 +21,7 @@ export interface SyncResult {
   failed: { id: string; status: number | null }[]
 }
 
-/** Server belum jalan (mis. server/.env belum diisi) atau tidak membalas JSON. */
+/** Server belum jalan atau tidak membalas JSON. */
 export class ServerOffline extends Error {
   constructor() {
     super('Server belum berjalan')
@@ -30,22 +29,27 @@ export class ServerOffline extends Error {
 }
 
 async function call<T>(path: string, init?: RequestInit): Promise<{ status: number; body: T }> {
+  const token = await accessToken()
   let res: Response
   try {
-    res = await fetch(path, { ...init, headers: { 'content-type': 'application/json', ...init?.headers } })
+    res = await fetch(path, {
+      ...init,
+      headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}), ...init?.headers },
+    })
   } catch {
     throw new ServerOffline()
   }
-  // Proxy Vite yang gagal terhubung membalas bukan-JSON; anggap server mati.
   if (!(res.headers.get('content-type') ?? '').includes('application/json')) throw new ServerOffline()
   return { status: res.status, body: (await res.json()) as T }
 }
 
 export const calendarStatus = async () => (await call<CalendarStatus>('/api/calendar/status')).body
 
-/** Memulai OAuth: browser dialihkan ke Google, lalu kembali ke /app/pengaturan?kalender=… */
-export const connectCalendar = () => {
-  window.location.href = '/api/calendar/connect'
+/** Minta URL persetujuan Google untuk akun yang sedang login, lalu alihkan browser ke sana. */
+export async function connectCalendar() {
+  const { status, body } = await call<{ url?: string; error?: string }>('/api/calendar/connect')
+  if (status !== 200 || !body.url) throw new ServerOffline()
+  window.location.href = body.url
 }
 
 export async function syncCalendar(tasks: SyncTask[]): Promise<{ result?: SyncResult; reconnect?: boolean; error?: string }> {
