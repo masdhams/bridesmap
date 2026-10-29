@@ -4,11 +4,12 @@ import { Link, useLocation } from 'react-router-dom'
 import { useStartSteps } from '../../components/StartHere'
 import { PageHeader } from '../../components/ui'
 import { LEGAL } from '../../data/content'
-import { GUIDE_CONTACT, GUIDE_INTRO } from '../../data/guide'
+import { GUIDE_CONTACT, GUIDE_FAQ, GUIDE_INTRO } from '../../data/guide'
+import { NAV_GROUPS } from '../../components/nav'
 import { usePlan } from '../../lib/store'
 import { cn } from '../../lib/utils'
 
-/** Halaman Panduan: mulai cepat dan kontak. Semua teks ada di src/data/guide.ts (GUIDE_FAQ disimpan untuk nanti). */
+/** Halaman Panduan: data contoh, mulai cepat, fitur, pertanyaan umum, dan kontak. Teks ada di src/data/guide.ts. */
 export default function Guide() {
   const steps = useStartSteps()
   const { hash } = useLocation()
@@ -73,6 +74,41 @@ export default function Guide() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section id="fitur" aria-labelledby="h-fitur" className="flex scroll-mt-24 flex-col gap-4">
+        <h2 id="h-fitur" className="text-[26px]">
+          Fitur <span className="italic">di Bridesmap</span>
+        </h2>
+        {NAV_GROUPS.map((g) => (
+          <div key={g.title} className="flex flex-col gap-2">
+            <p className="eyebrow">{g.title}</p>
+            <ul className="card flex flex-col divide-y divide-line">
+              {g.items
+                .filter((item) => item.to !== '/app' && item.to !== '/app/panduan')
+                .map((item) => (
+                  <li key={item.to}>
+                    <Link to={item.to} className="flex flex-col gap-0.5 px-4 py-3 transition-colors hover:bg-muted">
+                      <span className="text-[15px] font-semibold">{item.label}</span>
+                      {item.desc && <span className="text-sm text-body">{item.desc}</span>}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+
+      <section id="tanya" aria-labelledby="h-tanya" className="flex scroll-mt-24 flex-col gap-3">
+        <h2 id="h-tanya" className="text-[26px]">
+          Pertanyaan <span className="italic">umum</span>
+        </h2>
+        {GUIDE_FAQ.map((f) => (
+          <details key={f.id} className="card p-4">
+            <summary className="cursor-pointer list-none text-[15px] font-semibold">{f.q}</summary>
+            <p className="mt-2 text-sm leading-relaxed text-body">{f.a}</p>
+          </details>
+        ))}
       </section>
 
       <section id="kontak" aria-labelledby="h-kontak" className="scroll-mt-24">

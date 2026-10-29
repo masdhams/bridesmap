@@ -74,14 +74,29 @@ export const GUIDE_FAQ: GuideFaq[] = [
     a: 'Karena tidak ada pembayaran ke Bridesmap, tidak ada refund dari kami. Pengembalian DP ke vendor mengikuti kontrak kalian dengan vendor tersebut. Simpan kontrak dan bukti transfernya di halaman vendor supaya mudah dicari saat dibutuhkan.',
   },
   {
+    id: 'akun',
+    q: 'Bagaimana cara daftar dan masuk?',
+    a: 'Buka halaman Masuk, pilih Daftar, lalu isi email dan kata sandi (minimal 6 karakter). Buka link konfirmasi yang dikirim ke email kamu, lalu masuk dengan email dan kata sandi yang sama. Untuk keluar, pilih Keluar di bagian Akun pada Pengaturan. Fitur lupa kata sandi belum tersedia.',
+  },
+  {
     id: 'data',
     q: 'Di mana data kami disimpan?',
-    a: 'Rencana, foto, dan bukti transfer tersimpan di browser perangkat yang kalian pakai (kapasitasnya sekitar 5 MB). Data ini belum tersinkron otomatis ke perangkat lain, jadi ekspor secara berkala sebagai cadangan. Kalau Google Calendar terhubung, sambungannya disimpan terenkripsi di server, dan yang dikirim ke Google hanya judul tugas serta tanggalnya.',
+    a: 'Rencana, tamu, vendor, dan foto disimpan di akun kalian, jadi bisa dibuka lagi saat masuk dari perangkat lain. Salinan di browser juga tersimpan sebagai cadangan, dengan kapasitas sekitar 5 MB. Makin banyak foto, makin besar datanya, jadi ekspor secara berkala tetap dianjurkan. Kalau Google Calendar terhubung, sambungannya disimpan terenkripsi di server, dan yang dikirim ke Google hanya judul tugas serta tanggalnya.',
   },
   {
     id: 'kalender',
     q: 'Bagaimana menghubungkan dan memutuskan Google Calendar?',
-    a: 'Buka Pengaturan, cari kartu Google Calendar, lalu pilih Hubungkan Google Calendar dan setujui izinnya. Setelah itu tekan Sinkronkan sekarang. Untuk berhenti, pilih Putuskan. Acara yang sudah terkirim tetap ada di kalender "Bridesmap" di Google, jadi hapus kalender itu di Google Calendar kalau sudah tidak diperlukan.',
+    a: 'Masuk ke akun, buka Pengaturan, cari kartu Google Calendar, lalu pilih Hubungkan Google Calendar dan setujui izinnya. Setelah terhubung, tekan Sinkronkan sekarang untuk mengirim tugas yang belum selesai. Pengingat muncul pukul 09.00. Tugas yang sudah dicentang akan dihapus dari kalender saat sinkron berikutnya. Untuk berhenti, pilih Putuskan. Acara yang sudah terkirim tetap ada di kalender "Bridesmap" di Google, jadi hapus kalender itu di Google Calendar kalau sudah tidak diperlukan.',
+  },
+  {
+    id: 'undangan',
+    q: 'Bagaimana membuat dan membagikan undangan digital?',
+    a: 'Buka menu Undangan digital, pilih salah satu desain, lalu isi nama, tanggal, cerita, dan foto. Desain yang dipilih langsung terlihat di pratinjau. Atur alamat undangan di bagian bawah halaman, lalu salin tautannya dan kirim ke tamu. Undangan saat ini hanya bisa dilihat lewat tautan yang kalian bagikan.',
+  },
+  {
+    id: 'contoh',
+    q: 'Apa itu data contoh, dan bisa dihapus?',
+    a: 'Di Panduan, tombol Isi data contoh menambahkan beberapa vendor dan tamu contoh supaya aplikasi terlihat terisi. Data contoh diberi tanda (contoh) di namanya. Tombol Hapus data contoh menghapusnya lagi, dan data kalian yang asli tidak ikut terhapus.',
   },
   {
     id: 'ekspor',
@@ -91,7 +106,7 @@ export const GUIDE_FAQ: GuideFaq[] = [
   {
     id: 'pasangan',
     q: 'Bagaimana cara mengundang pasangan?',
-    a: 'Di Pengaturan, bagian Undang pasangan, pilih Kirim lewat WhatsApp atau Salin tautan. Untuk sementara data belum tersinkron otomatis antar dua akun. Di satu perangkat, kalian bisa bergantian lewat avatar pasangan di bagian atas.',
+    a: 'Di Pengaturan, bagian Undang pasangan, pilih Kirim lewat WhatsApp atau Salin tautan. Untuk sementara setiap akun punya rencananya sendiri, jadi kalian belum berbagi satu rencana yang sama secara real-time. Di satu perangkat, kalian bisa bergantian lewat avatar pasangan di bagian atas.',
   },
   {
     id: 'escrow',
