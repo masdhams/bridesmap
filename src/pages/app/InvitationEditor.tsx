@@ -60,7 +60,7 @@ export default function InvitationEditor() {
         <div className="space-y-5">
           {/* Template */}
           <Card title="Pilih desain" sub="Pratinjau memakai nama, tanggal, dan foto kalian. Ketuk desain untuk memakainya.">
-            <div className="-mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pt-1 pb-4" role="radiogroup" aria-label="Desain undangan">
+            <div className="-mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-7 pt-1 pb-4" role="radiogroup" aria-label="Desain undangan">
               {TEMPLATES.map((t) => (
                 <TemplateCard key={t.id} template={t} slug={website.slug} active={inv.template === t.id} onPick={() => setInvitation({ template: t.id })} />
               ))}
@@ -373,7 +373,7 @@ function TemplateCard({ template: t, slug, active, onPick }: { template: (typeof
           {active ? 'Dipakai' : 'Pilih'}
         </span>
       </button>
-      <div className="px-1 pb-1">
+      <div className="px-3 pb-1">
         <p className="m-0 truncate font-semibold">{t.name}</p>
         <p className="m-0 mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">{t.desc}</p>
         <a href={`/u/${slug}?tpl=${t.id}`} target="_blank" rel="noreferrer" className="mt-1 inline-flex min-h-9 items-center gap-1 text-xs font-semibold text-primary">
