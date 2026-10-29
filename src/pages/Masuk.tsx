@@ -46,12 +46,6 @@ export default function Masuk() {
     if (mode === 'daftar' && !result.data.session) setMsg({ text: 'Cek email kamu untuk konfirmasi, lalu kembali ke halaman ini untuk masuk.', ok: true })
   }
 
-  const google = async () => {
-    setMsg(null)
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${location.origin}/masuk` } })
-    if (error) setMsg({ text: 'Tidak bisa membuka masuk dengan Google. Coba lagi.', ok: false })
-  }
-
   return (
     <PublicPage>
       <section className="mx-auto max-w-md px-4 py-16 sm:px-6">
@@ -59,16 +53,6 @@ export default function Masuk() {
           <div className="space-y-1">
             <h1 className="text-3xl font-semibold">{mode === 'masuk' ? 'Masuk ke rencana kalian' : 'Mulai rencana kalian'}</h1>
             <p className="text-sm text-muted-foreground">Rencana kalian tersimpan di akun ini dan bisa dibuka dari perangkat mana pun.</p>
-          </div>
-
-          <button type="button" className="btn-ghost w-full" onClick={google} disabled={busy}>
-            Lanjut dengan Google
-          </button>
-
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="h-px flex-1 bg-border" />
-            atau pakai email
-            <span className="h-px flex-1 bg-border" />
           </div>
 
           <form className="space-y-4" onSubmit={submit}>
