@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
-import { PublicPage } from '../components/PublicLayout'
-import { Field } from '../components/ui'
+import { Field, Logo } from '../components/ui'
 import { useAuth } from '../lib/auth'
 import { supabase } from '../lib/supabase'
 import { usePlan } from '../lib/store'
@@ -47,8 +46,9 @@ export default function Masuk() {
   }
 
   return (
-    <PublicPage>
-      <section className="mx-auto max-w-md px-4 py-16 sm:px-6">
+    <main className="flex min-h-dvh flex-col items-center justify-center px-4 py-12">
+      <Logo className="mb-6 text-3xl" />
+      <section className="w-full max-w-md">
         <div className="card p-6 space-y-5">
           <div className="space-y-1">
             <h1 className="text-3xl font-semibold">{mode === 'masuk' ? 'Masuk ke rencana kalian' : 'Mulai rencana kalian'}</h1>
@@ -89,6 +89,6 @@ export default function Masuk() {
           </p>
         </div>
       </section>
-    </PublicPage>
+    </main>
   )
 }

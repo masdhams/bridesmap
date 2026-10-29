@@ -64,16 +64,6 @@ export const GUIDE_STEPS: GuideStep[] = [
 
 export const GUIDE_FAQ: GuideFaq[] = [
   {
-    id: 'pembayaran',
-    q: 'Bagaimana cara kerja pembayaran?',
-    a: 'Bridesmap gratis dipakai, jadi tidak ada pembayaran ke kami. Pembayaran ke vendor tetap kalian lakukan langsung, misalnya lewat transfer. Aplikasi membantu mencatat jadwal DP, termin, dan pelunasan, menyimpan bukti transfer, dan mengingatkan sebelum jatuh tempo.',
-  },
-  {
-    id: 'refund',
-    q: 'Bagaimana kebijakan refund?',
-    a: 'Karena tidak ada pembayaran ke Bridesmap, tidak ada refund dari kami. Pengembalian DP ke vendor mengikuti kontrak kalian dengan vendor tersebut. Simpan kontrak dan bukti transfernya di halaman vendor supaya mudah dicari saat dibutuhkan.',
-  },
-  {
     id: 'akun',
     q: 'Bagaimana cara daftar dan masuk?',
     a: 'Buka halaman Masuk, pilih Daftar, lalu isi email dan kata sandi (minimal 6 karakter). Buka link konfirmasi yang dikirim ke email kamu, lalu masuk dengan email dan kata sandi yang sama. Untuk keluar, pilih Keluar di bagian Akun pada Pengaturan. Fitur lupa kata sandi belum tersedia.',
@@ -107,11 +97,6 @@ export const GUIDE_FAQ: GuideFaq[] = [
     id: 'pasangan',
     q: 'Bagaimana cara mengundang pasangan?',
     a: 'Di Pengaturan, bagian Undang pasangan, pilih Kirim lewat WhatsApp atau Salin tautan. Untuk sementara setiap akun punya rencananya sendiri, jadi kalian belum berbagi satu rencana yang sama secara real-time. Di satu perangkat, kalian bisa bergantian lewat avatar pasangan di bagian atas.',
-  },
-  {
-    id: 'escrow',
-    q: 'Apakah Bridesmap menjamin vendor saya aman?',
-    a: 'Tidak. Kami bukan rekening bersama/escrow dan tidak menjamin vendor. Yang kami bantu: jadwal pembayaran yang jelas, pengingat, dan jejak bukti transfer yang rapi.',
   },
 ]
 
