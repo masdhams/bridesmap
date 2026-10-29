@@ -22,10 +22,11 @@ export default function About() {
         <section id="privasi" className="scroll-mt-24">
           <h2 className="text-3xl font-semibold">Privasi data</h2>
           <ul className="mt-3 list-disc pl-5 space-y-1.5 text-ink">
-            <li>Data budget dan bukti transfer adalah data keuangan pribadi. Kami mengenkripsinya saat dikirim dan saat disimpan.</li>
+            <li>Rencana pernikahan, tamu, vendor, dan foto yang kalian isi disimpan di server agar bisa dibuka dari perangkat mana pun. Data hanya bisa dibuka oleh akun kalian sendiri.</li>
+            <li>Pengelola hanya membuka data kalian untuk keperluan teknis yang sangat terbatas, seperti memperbaiki masalah yang kalian laporkan, dan selalu atas izin kalian.</li>
+            <li>Data dikirim lewat koneksi terenkripsi (HTTPS). Koneksi Google Calendar disimpan terenkripsi, dan hanya judul serta tanggal tugas yang dikirim ke Google. Nominal budget tidak pernah dikirim.</li>
             <li>Kami tidak menjual atau membagikan data ke pihak ketiga tanpa izin kalian.</li>
-            <li>Pengingat kalender hanya berisi judul tugas dan tanggal — tanpa nominal budget.</li>
-            <li>Kalian bisa mengekspor atau menghapus seluruh data kapan saja dari menu Pengaturan.</li>
+            <li>Kalian bisa mengekspor data kapan saja dari menu Pengaturan.</li>
           </ul>
         </section>
 
