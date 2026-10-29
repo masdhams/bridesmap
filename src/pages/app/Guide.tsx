@@ -1,16 +1,19 @@
-import { Check, Mail } from 'lucide-react'
+import { Check, Mail, Sparkles } from 'lucide-react'
 import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useStartSteps } from '../../components/StartHere'
 import { PageHeader } from '../../components/ui'
 import { LEGAL } from '../../data/content'
 import { GUIDE_CONTACT, GUIDE_INTRO } from '../../data/guide'
+import { usePlan } from '../../lib/store'
 import { cn } from '../../lib/utils'
 
 /** Halaman Panduan: mulai cepat dan kontak. Semua teks ada di src/data/guide.ts (GUIDE_FAQ disimpan untuk nanti). */
 export default function Guide() {
   const steps = useStartSteps()
   const { hash } = useLocation()
+  const s = usePlan()
+  const hasDemo = s.vendors.some((v) => v.name.endsWith('(contoh)')) || s.guests.some((g) => g.name.endsWith('(contoh)'))
 
   // Tautan seperti /app/panduan#mulai langsung menggulir ke bagian itu.
   useEffect(() => {
@@ -21,6 +24,28 @@ export default function Guide() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8">
       <PageHeader back="/app" title="Panduan" subtitle={GUIDE_INTRO} />
+
+      <section aria-labelledby="h-contoh" className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="min-w-0">
+          <h2 id="h-contoh" className="font-sans text-[15px] font-semibold">
+            Data contoh
+          </h2>
+          <p className="mt-0.5 text-sm text-body">
+            {hasDemo
+              ? 'Vendor dan tamu contoh masih ada. Hapus kalau sudah selesai melihat-lihat.'
+              : 'Ingin melihat app terisi dulu? Isi contoh vendor dan tamu, lalu hapus kapan saja.'}
+          </p>
+        </div>
+        {hasDemo ? (
+          <button className="btn-outline btn-sm shrink-0 self-start sm:self-center" onClick={s.clearDemo}>
+            Hapus data contoh
+          </button>
+        ) : (
+          <button className="btn-soft btn-sm shrink-0 self-start sm:self-center" onClick={s.loadDemo}>
+            <Sparkles className="size-4" aria-hidden /> Isi data contoh
+          </button>
+        )}
+      </section>
 
       <section id="mulai" aria-labelledby="h-mulai" className="flex scroll-mt-24 flex-col gap-3">
         <h2 id="h-mulai" className="text-[26px]">

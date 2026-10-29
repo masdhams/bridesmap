@@ -86,6 +86,7 @@ export interface PlanState extends Collections {
   resetEventAllocation: (eventId: string) => void
   toggleHiddenCost: (key: string) => void
   loadDemo: () => void
+  clearDemo: () => void
   importData: (json: string) => boolean
   reset: () => void
 }
@@ -312,7 +313,13 @@ export const usePlan = create<PlanState>()(
         }
       },
 
+      clearDemo: () => {
+        const isDemo = (name: string) => name.endsWith('(contoh)')
+        set((s) => ({ vendors: s.vendors.filter((v) => !isDemo(v.name)), guests: s.guests.filter((g) => !isDemo(g.name)) }))
+      },
+
       loadDemo: () => {
+        get().clearDemo()
         const s = get()
         const cat = (name: string) => s.categories.find((c) => c.name === name)?.id ?? s.categories[0]?.id ?? ''
         const wd = s.profile.weddingDate || todayISO()

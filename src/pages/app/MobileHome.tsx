@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarDays, Receipt, Sparkles } from 'lucide-react'
+import { ArrowRight, CalendarDays, Receipt } from 'lucide-react'
 import { IcAllFeatures, IcChecklist, IcHoneymoon, IcRundown, IcSavings, IcLetter, IcSeserahan, IcVision } from '../../components/icons'
 import { Link } from 'react-router-dom'
 import { BudgetMini, CountdownHero, FeatureGrid, GuestMini, type FeatureTile } from '../../components/cards'
@@ -88,12 +88,6 @@ export default function MobileHome() {
         <BudgetMini total={profile.totalBudget} committed={totals.committed} paid={totals.paid} />
         <GuestMini guests={s.guests} />
       </div>
-
-      {s.vendors.length === 0 && s.guests.length === 0 && (
-        <button className="btn-soft btn-sm self-start" onClick={s.loadDemo}>
-          <Sparkles className="size-4" aria-hidden /> Isi data contoh
-        </button>
-      )}
 
       <FeatureGrid tiles={tiles} />
 

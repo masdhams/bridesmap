@@ -1,4 +1,4 @@
-import { ArrowRight, CircleAlert, Sparkles } from 'lucide-react'
+import { ArrowRight, CircleAlert } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { BudgetCard, CountdownHero, DeepTalkCard, GuestPanel, VendorRow } from '../../components/cards'
 import { Progress } from '../../components/ui'
@@ -53,15 +53,6 @@ function DesktopHome() {
         </div>
         <CountdownHero large />
       </section>
-
-      {s.vendors.length === 0 && s.guests.length === 0 && (
-        <div className="card-flat flex flex-wrap items-center justify-between gap-3 border border-dashed border-line p-5">
-          <p className="text-sm text-body">Ingin melihat app terisi dulu? Isi contoh vendor &amp; tamu (bisa dihapus).</p>
-          <button className="btn-soft btn-sm" onClick={s.loadDemo}>
-            <Sparkles className="size-4" aria-hidden /> Isi data contoh
-          </button>
-        </div>
-      )}
 
       <section className="grid gap-5 md:grid-cols-2">
         <BudgetCard total={profile.totalBudget} committed={totals.committed} paid={totals.paid} />
