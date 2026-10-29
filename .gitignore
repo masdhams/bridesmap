@@ -1,0 +1,14 @@
+node_modules
+dist
+.env.local
+.env.production
+
+# Backend: rahasia dan data lokal. Jangan pernah di-commit.
+server/.env
+server/*.sqlite
+server/*.sqlite-wal
+server/*.sqlite-shm
+client_secret_*.json
+
+# Vercel
+.vercel

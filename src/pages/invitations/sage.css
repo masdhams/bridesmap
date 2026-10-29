@@ -1,0 +1,24 @@
+/* Undangan "Sage" — animasi muncul saat bagian masuk layar. */
+.inv-sage [data-reveal] {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  filter: blur(6px);
+  transition:
+    opacity 1.1s ease,
+    transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 1.1s ease;
+}
+.inv-sage [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inv-sage [data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}

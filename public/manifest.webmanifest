@@ -1,0 +1,13 @@
+{
+  "name": "Bridesmap Wedding Planner",
+  "short_name": "Bridesmap",
+  "description": "Plan with intention. Celebrate your story.",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#FBF8F2",
+  "theme_color": "#34432F",
+  "lang": "id",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

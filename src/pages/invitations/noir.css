@@ -1,0 +1,20 @@
+/* Undangan "Noir" — blok muncul perlahan dari bawah saat masuk layar. */
+.inv-noir [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.inv-noir [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inv-noir [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

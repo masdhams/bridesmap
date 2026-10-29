@@ -1,0 +1,131 @@
+/* Undangan "Red Retro": scrapbook kliping koran. Tekstur kertas dibuat dari noise SVG, tanpa gambar. */
+.inv-red-retro {
+  --rr-red: #a8352a;
+  --rr-red-dark: #8f2b21;
+  --rr-cream: #ece5dc;
+  --rr-paper: #f6f1ea;
+  --rr-ink: #2a2220;
+  --rr-kraft: #c9a27a;
+  --rr-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Latar kertas krem dan merah, sama-sama bertekstur halus */
+.inv-red-retro .rr-cream {
+  background: var(--rr-noise) 0 0 / 180px, var(--rr-cream);
+  background-blend-mode: soft-light, normal;
+}
+/* Merah latar = median merah badan kertas sobek di pergantian bagian (#992215), rata tanpa tekstur
+   supaya sambungan dengan kertas tidak terlihat. */
+.inv-red-retro .rr-red {
+  background: #992215;
+}
+.inv-red-retro .rr-kraft {
+  background: var(--rr-noise) 0 0 / 160px, linear-gradient(160deg, #d2ad85, var(--rr-kraft) 60%, #b98f66);
+  background-blend-mode: soft-light, normal;
+}
+
+/* Kertas buku tulis: garis biru tiap 34px (tepat di bawah dasar huruf baris berleading 34px),
+   garis margin merah, lubang binder di tengah tiap baris. Isi kartu harus kelipatan 34px. */
+.inv-red-retro .rr-notebook {
+  background:
+    radial-gradient(circle at 16px 17px, var(--rr-red) 0 4px, transparent 4.5px) 0 0 / 100% 34px repeat-y,
+    linear-gradient(90deg, transparent 38px, rgba(168, 53, 42, 0.45) 38px 39px, transparent 39px),
+    repeating-linear-gradient(180deg, transparent 0 25px, #cfd9e3 25px 26px, transparent 26px 34px),
+    var(--rr-paper);
+}
+
+/* Selotip washi kotak-kotak merah dan selotip kraft polos */
+.inv-red-retro .rr-tape {
+  background:
+    repeating-linear-gradient(0deg, rgba(168, 53, 42, 0.5) 0 5px, transparent 5px 10px),
+    repeating-linear-gradient(90deg, rgba(168, 53, 42, 0.5) 0 5px, transparent 5px 10px),
+    rgba(255, 255, 255, 0.7);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+.inv-red-retro .rr-tape-kraft {
+  background: var(--rr-noise) 0 0 / 120px, rgba(196, 160, 118, 0.85);
+  background-blend-mode: soft-light, normal;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Kertas koran tiruan: kolom teks kecil berwarna abu */
+.inv-red-retro .rr-newsprint {
+  background:
+    repeating-linear-gradient(180deg, rgba(42, 34, 32, 0.28) 0 2px, transparent 2px 6px) 0 0 / 100% 100%,
+    linear-gradient(90deg, transparent 31%, var(--rr-cream) 31% 34%, transparent 34% 64%, var(--rr-cream) 64% 67%, transparent 67%),
+    #ded6c9;
+}
+
+/* Muncul saat di-scroll: naik (bawaan), memudar, atau membesar */
+.inv-red-retro [data-reveal] {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.inv-red-retro [data-reveal='fade'] {
+  transform: none;
+}
+.inv-red-retro [data-reveal='zoom'] {
+  transform: scale(0.85);
+}
+.inv-red-retro [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stiker dekorasi bergoyang pelan */
+@keyframes rr-sway-l {
+  50% {
+    transform: rotate(6deg);
+  }
+}
+@keyframes rr-sway-r {
+  50% {
+    transform: rotate(-6deg);
+  }
+}
+@keyframes rr-sway-c {
+  25% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-3deg);
+  }
+}
+.inv-red-retro .rr-sway-l {
+  animation: rr-sway-l 4s ease-in-out infinite;
+}
+.inv-red-retro .rr-sway-r {
+  animation: rr-sway-r 4s ease-in-out infinite;
+}
+.inv-red-retro .rr-sway-c {
+  animation: rr-sway-c 5s ease-in-out infinite;
+}
+
+/* Sampul bergeser ke atas saat undangan dibuka */
+@keyframes rr-cover-up {
+  to {
+    transform: translateY(-100%);
+  }
+}
+.inv-red-retro .rr-cover-leave {
+  animation: rr-cover-up 1s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inv-red-retro [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .inv-red-retro .rr-sway-l,
+  .inv-red-retro .rr-sway-r,
+  .inv-red-retro .rr-sway-c {
+    animation: none;
+  }
+  .inv-red-retro .rr-cover-leave {
+    animation-duration: 0.01s;
+  }
+}

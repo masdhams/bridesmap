@@ -1,0 +1,355 @@
+@import 'tailwindcss';
+
+/* Design tokens — sumber: artifact "Konsep UI v0.1" (project/Main.dc.html & Components.dc.html).
+   Ivory seperti kertas undangan (Melati/Kain/Pasir), hijau daun sirih untuk aksi utama,
+   mawar bata untuk momen emosional berdua. Proporsi 60% ivory · 30% sirih · 10% mawar. */
+@theme {
+  /* Netral */
+  --color-background: #fbf8f2; /* Melati */
+  --color-muted: #f3eee4; /* Kain */
+  --color-border: #e5dccb; /* Pasir */
+  --color-divider: #efe8db;
+  --color-line: #cfc4b0; /* garis tombol sekunder */
+  --color-input: #d9cfbd;
+  --color-ink: #22261f; /* Arang */
+  --color-foreground: #22261f;
+  --color-body: #4a4e43;
+  --color-muted-foreground: #62665a; /* Abu Zaitun */
+  --color-card: #ffffff;
+  --color-disabled: #ece7dc;
+  --color-disabled-foreground: #8c8c80;
+
+  /* Utama: Sirih */
+  --color-primary: #34432f;
+  --color-primary-hover: #243020; /* Sirih Tua */
+  --color-on-primary: #ffffff;
+  --color-sage: #a9b59a;
+  --color-primary-soft: #e6ebdd; /* Sage Muda */
+  --color-on-primary-soft: #2e3b29;
+
+  /* Aksen: Mawar Bata */
+  --color-accent: #9a4e3b;
+  --color-accent-hover: #7a3b2b;
+  --color-on-accent: #ffffff;
+  --color-accent-soft: #f5e6df; /* Mawar Muda */
+  --color-accent-ink: #8a4433;
+
+  /* Status */
+  --color-success: #3b5230;
+  --color-success-solid: #4e6b3f;
+  --color-success-soft: #e6ebdd;
+  --color-warning: #7a4f12;
+  --color-warning-solid: #93601a;
+  --color-warning-soft: #f6ead3;
+  --color-destructive: #a3392c;
+  --color-danger-ink: #8e2f24;
+  --color-danger-soft: #f6deda;
+  --color-ring: #34432f;
+
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+
+  --radius-card: 24px;
+  --shadow-soft: 0 1px 2px rgb(34 38 31 / 0.04), 0 8px 24px rgb(34 38 31 / 0.05);
+  --shadow-lift: 0 2px 4px rgb(34 38 31 / 0.05), 0 16px 40px rgb(34 38 31 / 0.1);
+  --shadow-tab: 0 1px 3px rgb(34 38 31 / 0.12);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-ink font-sans antialiased;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  /* Instrument Serif hanya punya ketebalan 400 — jangan dipalsukan tebal. */
+  :is(h1, h2, h3):not(.font-sans),
+  .font-serif {
+    font-family: var(--font-serif);
+    font-weight: 400 !important;
+    letter-spacing: -0.01em;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply text-foreground;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  button,
+  [role='button'],
+  a,
+  label[for],
+  select,
+  summary {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+  /* Checkbox bulat ala daftar tugas di Komponen UI. */
+  input[type='checkbox'] {
+    appearance: none;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    border: 1.5px solid #a9a08c;
+    background: #fff center / 14px no-repeat;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease;
+  }
+  input[type='checkbox']:checked {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  }
+  /* Checkbox kotak membulat untuk daftar biaya tersembunyi. */
+  input[type='checkbox'].check-square {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    background-size: 13px;
+  }
+  input[type='checkbox'].check-accent:checked {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+  }
+  ::selection {
+    background: var(--color-primary-soft);
+  }
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 min-h-[52px] text-[15px] font-semibold select-none whitespace-nowrap disabled:cursor-not-allowed disabled:bg-disabled disabled:text-disabled-foreground disabled:border-transparent;
+}
+
+@utility chip {
+  @apply inline-flex items-center gap-1.5 rounded-full px-3 min-h-[30px] text-[13px] font-semibold whitespace-nowrap;
+}
+
+@layer components {
+  /* Warna tombol berganti seketika (aktif <-> nonaktif). Dianimasikan, kontras teks sempat jatuh ke ~1,4:1 dan teksnya "hilang".
+     Hanya efek hover pada tombol aktif yang diberi transisi, dan hanya pada warna latar. */
+  @media (hover: hover) {
+    .btn-primary:enabled:hover,
+    .btn-accent:enabled:hover,
+    .btn-soft:enabled:hover,
+    .btn-ghost:enabled:hover,
+    .btn-outline:enabled:hover,
+    .btn-danger:enabled:hover {
+      transition: background-color 200ms;
+    }
+  }
+  .card {
+    @apply bg-card border border-border;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-soft);
+  }
+  .card-flat {
+    @apply bg-muted;
+    border-radius: var(--radius-card);
+  }
+  .btn-primary {
+    @apply btn bg-primary text-on-primary hover:bg-primary-hover;
+  }
+  .btn-accent {
+    @apply btn bg-accent text-on-accent hover:bg-accent-hover;
+  }
+  .btn-soft {
+    @apply btn bg-primary-soft text-on-primary-soft hover:bg-[#d9e1cd];
+  }
+  .btn-ghost {
+    @apply btn text-ink hover:bg-muted;
+  }
+  .btn-outline {
+    @apply btn border border-line bg-card text-ink hover:bg-muted;
+  }
+  .btn-danger {
+    @apply btn bg-destructive text-white hover:brightness-95;
+  }
+  .btn-sm {
+    @apply min-h-10 px-4 text-sm;
+  }
+  .link-arrow {
+    @apply inline-flex items-center gap-2 border-b border-ink pb-1 text-[15px] font-semibold text-ink transition-colors duration-200 hover:border-primary hover:text-primary;
+  }
+  .icon-btn {
+    @apply inline-flex items-center justify-center size-11 rounded-full text-ink hover:bg-muted transition-colors duration-200;
+  }
+  .input {
+    @apply w-full rounded-[14px] border border-input bg-card px-4 min-h-[50px] text-[15px] text-ink placeholder:text-muted-foreground/70 transition-colors duration-150 focus:border-primary focus:outline-none focus:shadow-[inset_0_0_0_1px_var(--color-primary)];
+  }
+  textarea.input {
+    @apply py-3;
+  }
+  .label {
+    @apply block text-sm font-semibold text-ink mb-2;
+  }
+  .hint {
+    @apply text-[13px] text-muted-foreground mt-1.5;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
+  }
+  .badge-success {
+    @apply chip bg-success-soft text-success;
+  }
+  .badge-neutral {
+    @apply chip bg-muted text-body;
+  }
+  .badge-warning {
+    @apply chip bg-warning-soft text-warning;
+  }
+  .badge-danger {
+    @apply chip bg-danger-soft text-danger-ink;
+  }
+  .badge-accent {
+    @apply chip bg-accent-soft text-accent-ink;
+  }
+  .section-title {
+    @apply font-serif text-4xl sm:text-5xl text-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-fade-up {
+  animation: fade-up 300ms ease-out both;
+}
+
+/* Surat untuk Nanti: amplop terkunci "menolak" saat dicoba buka, dan denyut halus pada surat yang siap dibuka. */
+@keyframes wobble {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-6deg); }
+  40% { transform: rotate(5deg); }
+  60% { transform: rotate(-3deg); }
+  80% { transform: rotate(2deg); }
+}
+.animate-wobble {
+  animation: wobble 500ms ease-in-out;
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(154 78 59 / 0.32); }
+  50% { box-shadow: 0 0 0 10px rgb(154 78 59 / 0); }
+}
+.animate-glow {
+  animation: glow 2.4s ease-out infinite;
+}
+
+/* Pita yang memercik saat tugas dicentang (lib/celebrate.ts). */
+.ribbon-layer {
+  position: fixed;
+  z-index: 80;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.ribbon-layer i {
+  position: absolute;
+  left: -3px;
+  top: -6px;
+  width: 6px;
+  height: 12px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: ribbon 900ms cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+@keyframes ribbon {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0) scale(0.6); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 40px)) rotate(var(--rot)) scale(1); }
+}
+
+/* Garis coret yang tergambar dari kiri ke kanan di judul tugas yang baru selesai. */
+.strike-draw {
+  background: linear-gradient(currentColor, currentColor) 0 58% / 0 1.5px no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  animation: strike-draw 380ms ease-out forwards;
+}
+@keyframes strike-draw {
+  to { background-size: 100% 1.5px; }
+}
+
+/* Centang yang "meletup" kecil saat muncul. */
+@keyframes pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.animate-pop {
+  animation: pop 320ms cubic-bezier(0.3, 0.8, 0.4, 1.2) both;
+}
+input[type='checkbox'].animate-pop {
+  animation-name: pop-check;
+}
+@keyframes pop-check {
+  0% { transform: scale(0.8); }
+  55% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* Isi progress bar tumbuh dari kiri saat pertama tampil. */
+.bar-grow {
+  transform-origin: left center;
+  animation: bar-grow 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+}
+
+/* Ikon duotone (Phosphor): lapisan isi sedikit lebih pekat dari bawaan 20%, supaya terasa seperti ilustrasi dua nada. */
+.ic-duo [opacity='0.2'] {
+  opacity: 0.32;
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .card {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+.print-only {
+  display: none;
+}
