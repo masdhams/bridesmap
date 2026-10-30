@@ -86,7 +86,7 @@ export default function DeepTalk() {
               className="w-full rounded-[20px] border border-transparent bg-card p-4 text-[15px] leading-relaxed outline-none transition-colors duration-150 placeholder:text-muted-foreground/70 focus:border-accent"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder={`Tulis dengan jujur — ${name(other)} baru bisa membaca setelah ikut menjawab.`}
+              placeholder={`Ceritakan apa yang kamu pikirkan. ${name(other)} bisa membaca jawabanmu setelah ikut menjawab.`}
             />
           )}
         </section>
@@ -94,7 +94,7 @@ export default function DeepTalk() {
         <section className="flex flex-col gap-3 rounded-[20px] bg-white/60 p-4">
           <div className="flex items-center gap-2.5">
             <PartnerAvatar who={other} name={name(other)} size={32} />
-            <span className="text-sm font-semibold">{theirs ? `${name(other)} sudah menjawab` : `Menunggu ${name(other)} menjawab`}</span>
+            <span className="text-sm font-semibold">{theirs ? `${name(other)} sudah menjawab` : `Menunggu jawaban ${name(other)}`}</span>
           </div>
           {both ? (
             <p className="whitespace-pre-line text-[15px] leading-relaxed">{theirs!.text}</p>
@@ -106,7 +106,7 @@ export default function DeepTalk() {
               </div>
               <p className="flex items-center gap-1.5 text-xs text-accent-ink">
                 <Lock className="size-3.5" strokeWidth={1.8} aria-hidden />
-                {theirs ? 'Terbuka setelah kamu mengirim jawaban' : 'Jawaban kalian terbuka setelah keduanya menjawab'}
+                {theirs ? 'Jawaban terbuka setelah kamu ikut menjawab.' : 'Kalian bisa saling membaca jawaban setelah keduanya menjawab.'}
               </p>
             </>
           )}
@@ -114,7 +114,7 @@ export default function DeepTalk() {
 
         {!mine && (
           <button className="btn-accent w-full" onClick={submit} disabled={!text.trim()}>
-            {theirs ? `Kirim & buka jawaban ${name(other)}` : 'Kirim jawaban'} <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
+            {theirs ? `Kirim jawaban & baca jawaban ${name(other)}` : 'Kirim jawaban'} <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
           </button>
         )}
 
@@ -125,7 +125,7 @@ export default function DeepTalk() {
           <span className="flex min-w-0 flex-1 flex-col">
             <span className="text-sm font-semibold">Surat untuk Nanti</span>
             <span className="truncate text-xs text-muted-foreground">
-              {locked.length ? `${locked.length} surat terkunci sampai ${fmtDate(nextUnlock.unlockDate, 'd MMM yyyy')}` : 'Tulis surat untuk dibuka di hari-H'}
+              {locked.length ? `${locked.length} surat menunggu sampai ${fmtDate(nextUnlock.unlockDate, 'd MMM yyyy')}` : 'Ada sesuatu yang ingin kalian sampaikan untuk hari-H? Tulis surat untuk nanti.'}
             </span>
           </span>
           <ChevronRight className="size-5 shrink-0 text-ink" strokeWidth={1.8} aria-hidden />
@@ -134,7 +134,7 @@ export default function DeepTalk() {
         {history.length > 0 && (
           <section className="flex flex-col gap-2.5">
             <button className="btn-ghost btn-sm self-start" aria-expanded={showHistory} onClick={() => setShowHistory((v) => !v)}>
-              {showHistory ? 'Sembunyikan obrolan sebelumnya' : `Obrolan sebelumnya (${history.length})`}
+              {showHistory ? 'Tutup obrolan sebelumnya' : `Lihat obrolan sebelumnya (${history.length})`}
             </button>
             {showHistory && (
               <ul className="flex flex-col gap-2.5">
@@ -155,7 +155,7 @@ export default function DeepTalk() {
                           ))}
                         </div>
                       ) : (
-                        <p className="mt-1 text-sm text-muted-foreground">Baru satu yang menjawab</p>
+                        <p className="mt-1 text-sm text-muted-foreground">Menunggu satu jawaban lagi</p>
                       )}
                     </li>
                   )

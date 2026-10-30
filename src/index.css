@@ -64,6 +64,32 @@
     font-size: 16px;
     line-height: 1.6;
   }
+  /* Scrollbar tipis: thumb Pasir membulat, track transparan, tanpa tombol panah. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  *:hover {
+    scrollbar-color: var(--color-line) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--color-border);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-line);
+  }
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
   /* Instrument Serif hanya punya ketebalan 400 — jangan dipalsukan tebal. */
   :is(h1, h2, h3):not(.font-sans),
   .font-serif {
@@ -245,6 +271,26 @@
   animation: fade-up 300ms ease-out both;
 }
 
+/* Landing: blok muncul pelan saat di-scroll (components/landing.tsx → useReveal).
+   Keadaan tersembunyi hanya berlaku setelah JS memasang .reveal-ready, jadi tanpa JS isi tetap tampil.
+   Penanda "sudah tampil" berupa atribut data-shown, bukan class: React menulis ulang className saat render
+   ulang (mis. hover di daftar Cara kerja) sehingga class tambahan dari luar React ikut terhapus dan blok hilang lagi. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 800ms ease, transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal-ready [data-reveal][data-shown] {
+    opacity: 1;
+    transform: none;
+  }
+  .hero-in {
+    animation: fade-up 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+}
 /* Surat untuk Nanti: amplop terkunci "menolak" saat dicoba buka, dan denyut halus pada surat yang siap dibuka. */
 @keyframes wobble {
   0%, 100% { transform: rotate(0); }
@@ -352,4 +398,39 @@ input[type='checkbox'].animate-pop {
 }
 .print-only {
   display: none;
+}
+
+/* Desktop bento: kartu dan daftar di area konten lebih bulat dan lembut, mengikuti Beranda.
+   Hanya layar lebar; tampilan mobile tidak berubah. */
+@media (min-width: 1024px) {
+  main .card,
+  main .card-flat {
+    border-radius: 28px;
+  }
+  main .rounded-\[20px\].border,
+  main .rounded-\[24px\].border {
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+  }
+  main .rounded-\[24px\].bg-primary,
+  main .rounded-\[24px\].bg-accent-soft {
+    border-radius: 28px;
+  }
+}
+
+/* Di belakang shell aplikasi desktop, latar halaman ikut warna bingkai (Kain) supaya tidak ada pita terang di tepi. */
+@media (min-width: 1024px) {
+  body:has(.app-shell) {
+    background-color: var(--color-muted);
+  }
+}
+
+/* Mobile: kartu dan daftar putih tanpa garis tepi, cukup bayangan lembut (mengikuti referensi aplikasi mobile). */
+@media (max-width: 1023px) {
+  main .card,
+  main .rounded-\[20px\].border.bg-card,
+  main .rounded-\[24px\].border.bg-card {
+    border-color: transparent;
+    box-shadow: 0 1px 2px rgb(34 38 31 / 0.04), 0 6px 20px rgb(34 38 31 / 0.06);
+  }
 }

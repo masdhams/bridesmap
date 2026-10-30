@@ -1,7 +1,8 @@
 import { addMonths, differenceInCalendarMonths, format, parseISO } from 'date-fns'
 import { PiggyBank, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { Amount, ConfirmButton, Empty, Field, Modal, MoneyInput, PageHeader, Progress, Segmented, Stat } from '../../components/ui'
+import { PanelBar, PanelStat } from '../../components/bento'
+import { Amount, ConfirmButton, Empty, Field, Modal, MoneyInput, PageHeader, PartnerAvatar, Progress, Segmented, Stat } from '../../components/ui'
 import { usePlan, useSession } from '../../lib/store'
 import type { Partner, SavingsEntry } from '../../lib/types'
 import { fmtDate, rupiah, todayISO, uid } from '../../lib/utils'
@@ -29,14 +30,15 @@ export default function Savings() {
 
   return (
     <div>
-      <PageHeader title="Tabungan nikah" subtitle="Tetapkan target, catat setoran berdua, dan lihat perkiraan kapan target tercapai."
+      <PageHeader back="/app" title="Tabungan nikah" subtitle="Tetapkan target, catat setoran berdua, dan lihat perkiraan kapan target tercapai."
         actions={<button className="btn-primary btn-sm" onClick={() => setDraft({ by: me, date: todayISO(), amount: 0 })}><Plus className="size-4" aria-hidden /> Setoran</button>} />
 
-      <section className="card p-5">
+      <div className="grid gap-4 lg:grid-cols-12">
+      <section className="card p-5 lg:col-span-7 lg:p-7">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-sm text-muted-foreground">Terkumpul</p>
-            <p className="text-3xl font-bold tabular-nums">{rupiah(saved)}</p>
+            <p className="text-3xl font-bold tabular-nums lg:font-serif lg:text-[52px] lg:leading-none">{rupiah(saved)}</p>
           </div>
           <p className="text-sm text-muted-foreground tabular-nums">dari {rupiah(savings.target)} · {savings.target ? Math.round((saved / savings.target) * 100) : 0}%</p>
         </div>
@@ -46,12 +48,50 @@ export default function Savings() {
           <Field label="Rencana nabung per bulan (berdua)" htmlFor="sm"><MoneyInput id="sm" value={savings.monthlyPlan} onChange={(n) => setSavings({ monthlyPlan: n })} /></Field>
         </div>
       </section>
+      {/* Desktop: panel gelap kontribusi berdua. */}
+      <section className="hidden flex-col gap-4 rounded-[28px] bg-primary p-6 text-white shadow-[var(--shadow-soft)] lg:col-span-5 lg:flex">
+        <div className="flex items-start justify-between gap-3">
+          <span className="flex flex-col">
+            <span className="text-[17px] font-semibold">Kontribusi berdua</span>
+            <span className="text-xs text-[#D5DCCB]">Dari {savings.entries.length} setoran</span>
+          </span>
+          <span className="font-serif text-[40px] leading-[0.9] tabular-nums">
+            {saved ? Math.round((byA / saved) * 100) : 0}
+            <span className="text-[22px] text-[#D5DCCB]">:{saved ? Math.round((byB / saved) * 100) : 0}</span>
+          </span>
+        </div>
+        {(['A', 'B'] as const).map((p) => {
+          const v = p === 'A' ? byA : byB
+          return (
+            <div key={p} className="flex flex-col gap-2 rounded-[18px] bg-white/[0.07] px-4 py-3">
+              <span className="flex items-center justify-between gap-3">
+                <span className="flex min-w-0 items-center gap-2.5">
+                  <PartnerAvatar who={p} name={name(p)} size={28} />
+                  <span className="truncate text-sm font-semibold">{name(p)}</span>
+                </span>
+                <span className="text-sm font-semibold tabular-nums">{rupiah(v)}</span>
+              </span>
+              <PanelBar value={v} max={saved} />
+            </div>
+          )
+        })}
+        <div className="mt-auto">
+          <PanelStat
+            label="Perkiraan tercapai"
+            value={remaining === 0 ? 'Tercapai' : eta ? format(eta, 'MMM yyyy') : 'Isi rencana per bulan'}
+            tone={remaining > 0 && eta && !onTime ? 'text-[#F2B8A8]' : undefined}
+          />
+        </div>
+      </section>
+      </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-3 lg:gap-4">
         <Stat label="Sisa target" value={<Amount value={remaining} compactOnMobile />} />
         <Stat label="Perlu per bulan" value={<Amount value={needPerMonth} compactOnMobile />} sub={`${monthsLeft} bulan ke hari-H`} />
         <Stat label="Perkiraan tercapai" value={remaining === 0 ? 'Tercapai' : eta ? format(eta, 'MMM yyyy') : 'Isi rencana'} sub={remaining > 0 && eta ? (onTime ? 'Sebelum hari-H' : 'Setelah hari-H') : undefined} tone={remaining > 0 && eta ? (onTime ? 'success' : 'danger') : undefined} />
-        <Stat label="Kontribusi" value={`${saved ? Math.round((byA / saved) * 100) : 0}% : ${saved ? Math.round((byB / saved) * 100) : 0}%`} sub={`${profile.partnerA} : ${profile.partnerB}`} />
+        <div className="lg:hidden">
+          <Stat label="Kontribusi" value={`${saved ? Math.round((byA / saved) * 100) : 0}% : ${saved ? Math.round((byB / saved) * 100) : 0}%`} sub={`${profile.partnerA} : ${profile.partnerB}`} />
+        </div>
       </div>
       {plan > 0 && !onTime && remaining > 0 && (
         <p className="mt-3 rounded-xl bg-warning-soft px-4 py-3 text-sm text-warning">Dengan {rupiah(plan)}/bulan target baru tercapai setelah hari-H. Tambah sekitar {rupiah(needPerMonth - plan)}/bulan, atau kurangi target.</p>

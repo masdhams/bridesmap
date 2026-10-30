@@ -33,7 +33,7 @@ export default function HoneymoonItinerary() {
 
   const words = (day.title || 'Rencana hari ini').split(' ')
   const cut = Math.ceil(words.length / 2)
-  const subtitle = h.startDate && h.endDate ? `${h.destination || 'Bulan madu'} · ${fmtDate(h.startDate, 'd')}–${fmtDate(h.endDate, 'd MMM yyyy')}` : 'Isi tanggal berangkat & pulang dulu'
+  const subtitle = h.startDate && h.endDate ? `${h.destination || 'Rencana perjalanan kalian'} · ${fmtDate(h.startDate, 'd')}–${fmtDate(h.endDate, 'd MMM yyyy')}` : 'Atur tanggal berangkat dan pulang dulu'
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-4">
@@ -55,8 +55,8 @@ export default function HoneymoonItinerary() {
       />
 
       {days === 0 ? (
-        <Empty icon={<Pencil className="size-6" />} title="Belum ada tanggal">
-          Isi tanggal berangkat dan pulang di halaman Honeymoon, lalu susun kegiatan per hari di sini.
+        <Empty icon={<Pencil className="size-6" />} title="Belum ada tanggal perjalanan">
+          Isi tanggal berangkat dan pulang di halaman Honeymoon dulu. Setelah itu, kalian bisa mulai menyusun kegiatan untuk setiap hari.
         </Empty>
       ) : (
         <>
@@ -87,7 +87,7 @@ export default function HoneymoonItinerary() {
           </section>
 
           {items.length === 0 ? (
-            <p className="rounded-[20px] border border-border bg-card px-4 py-5 text-sm text-muted-foreground">Belum ada kegiatan. Tambahkan dengan tombol +.</p>
+            <p className="rounded-[20px] border border-border bg-card px-4 py-5 text-sm text-muted-foreground">Belum ada rencana untuk hari ini. Yuk, tambahkan kegiatan pertama.</p>
           ) : (
             <ol className="flex flex-col">
               {items.map((it, i) => (
@@ -108,7 +108,7 @@ export default function HoneymoonItinerary() {
           )}
 
           <div className="flex items-center justify-between rounded-[18px] bg-muted px-4 py-3.5">
-            <span className="text-[13px] text-muted-foreground">Biaya hari ini</span>
+            <span className="text-[13px] text-muted-foreground">Total biaya hari ini</span>
             <span className="text-base font-semibold tabular-nums">{rupiah(cost)}</span>
           </div>
         </>
@@ -117,7 +117,7 @@ export default function HoneymoonItinerary() {
       <Modal
         open={!!item}
         onClose={() => setItem(null)}
-        title={item?.id ? 'Ubah kegiatan' : 'Kegiatan baru'}
+        title={item?.id ? 'Ubah kegiatan' : 'Tambah kegiatan'}
         footer={
           <>
             {item?.id && (
@@ -126,7 +126,7 @@ export default function HoneymoonItinerary() {
               </ConfirmButton>
             )}
             <button className="btn-ghost" onClick={() => setItem(null)}>Batal</button>
-            <button className="btn-primary" onClick={saveItem} disabled={!item?.activity}>Simpan</button>
+            <button className="btn-primary" onClick={saveItem} disabled={!item?.activity}>Simpan kegiatan</button>
           </>
         }
       >
@@ -134,7 +134,7 @@ export default function HoneymoonItinerary() {
           <Field label="Jam" htmlFor="it"><input id="it" type="time" className="input" value={item?.time ?? ''} onChange={(e) => setItem({ ...item, time: e.target.value })} /></Field>
           <Field label="Kegiatan" htmlFor="ia"><input id="ia" className="input" value={item?.activity ?? ''} onChange={(e) => setItem({ ...item, activity: e.target.value })} placeholder="mis. Snorkeling di Pink Beach" /></Field>
         </div>
-        <Field label="Catatan" htmlFor="in"><input id="in" className="input" value={item?.note ?? ''} onChange={(e) => setItem({ ...item, note: e.target.value })} placeholder="mis. bawa air minum 1 liter per orang" /></Field>
+        <Field label="Catatan" htmlFor="in"><input id="in" className="input" value={item?.note ?? ''} onChange={(e) => setItem({ ...item, note: e.target.value })} placeholder="mis. Jangan lupa bawa air minum 1 liter per orang" /></Field>
         <Field label="Biaya (opsional)" htmlFor="ic"><MoneyInput id="ic" value={item?.cost ?? 0} onChange={(n) => setItem({ ...item, cost: n || undefined })} /></Field>
         <Checkbox checked={!!item?.highlight} onChange={(v) => setItem({ ...item, highlight: v })} label="Tandai sebagai momen favorit" strike={false} />
       </Modal>
@@ -150,7 +150,7 @@ export default function HoneymoonItinerary() {
           </>
         }
       >
-        <Field label="Judul" htmlFor="dtl" hint="Separuh akhir judul tampil miring — mis. 'Sehari di atas kapal'">
+        <Field label="Judul" htmlFor="dtl" hint="Bagian akhir judul akan tampil miring, mis. 'Sehari di atas kapal'">
           <input id="dtl" className="input" value={titleEdit ?? ''} onChange={(e) => setTitleEdit(e.target.value)} placeholder="Sehari di atas kapal" />
         </Field>
       </Modal>

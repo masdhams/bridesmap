@@ -1,6 +1,6 @@
 import { ArrowLeft, CalendarPlus, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { googleCalendarUrl, type CalEvent } from '../lib/calendar'
 import { usePlan } from '../lib/store'
 import { cn, parseAmount, rupiah, rupiahShort } from '../lib/utils'
@@ -18,17 +18,24 @@ export function Logo({ className, compact }: { className?: string; compact?: boo
 
 /** Header halaman. Di mobile mengikuti layar desain: tombol kembali bulat, judul serif, aksi di kanan. */
 export function PageHeader({ title, subtitle, actions, eyebrow, back }: { title: ReactNode; subtitle?: ReactNode; actions?: ReactNode; eyebrow?: string; back?: string }) {
+  const navigate = useNavigate()
+  const location = useLocation()
   return (
     <header className="mb-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-3 lg:mb-6 lg:items-end">
       <div className="flex min-w-0 flex-1 items-center gap-3">
         {back && (
-          <Link to={back} aria-label="Kembali" className="no-print grid size-11 shrink-0 place-items-center rounded-full border border-border bg-card text-ink transition-colors duration-200 hover:bg-muted">
+          <button
+            type="button"
+            onClick={() => (location.key !== 'default' ? navigate(-1) : navigate(back))}
+            aria-label="Kembali"
+            className="no-print grid size-11 shrink-0 place-items-center rounded-full border border-transparent bg-card text-ink shadow-[var(--shadow-soft)] transition-colors duration-200 hover:bg-muted lg:border-border lg:shadow-none"
+          >
             <ArrowLeft className="size-5" strokeWidth={1.8} />
-          </Link>
+          </button>
         )}
         <div className="min-w-0">
           {eyebrow && <p className="eyebrow mb-1.5">{eyebrow}</p>}
-          <h1 className="text-[32px] leading-none sm:text-[40px] sm:leading-[1.1]">{title}</h1>
+          <h1 className="text-[32px] leading-none sm:text-[40px] sm:leading-[1.1] lg:text-[46px]">{title}</h1>
           {subtitle && <p className="mt-2 hidden max-w-prose text-[15px] text-body sm:block">{subtitle}</p>}
         </div>
       </div>
@@ -197,7 +204,7 @@ export function Segmented<T extends string>({ value, onChange, options, label }:
           role="radio"
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
-          className={cn('rounded-full px-[18px] min-h-10 text-sm', value === o.value ? 'bg-card font-semibold text-ink shadow-[var(--shadow-tab)]' : 'font-medium text-body hover:text-ink')}
+          className={cn('rounded-full px-[18px] min-h-10 text-sm', value === o.value ? 'bg-primary font-semibold text-on-primary shadow-[var(--shadow-tab)] lg:bg-card lg:text-ink' : 'font-medium text-body hover:text-ink')}
         >
           {o.label}
         </button>
@@ -249,7 +256,7 @@ export function FilterChips<T extends string>({ value, onChange, options, label,
           onClick={() => onChange(o.value)}
           className={cn(
             'inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13px]',
-            value === o.value ? 'bg-ink font-semibold text-white' : 'border border-border bg-card font-medium text-body hover:border-line',
+            value === o.value ? 'bg-primary font-semibold text-white lg:bg-ink' : 'border border-border bg-card font-medium text-body hover:border-line',
           )}
         >
           {o.label}

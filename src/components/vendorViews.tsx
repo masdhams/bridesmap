@@ -54,12 +54,13 @@ export function VendorStats({ vendors, types, typeOf }: { vendors: Vendor[]; typ
     { label: 'Sudah dibayar', value: rupiah(paid), sub: deal > 0 ? `${Math.round((paid / deal) * 100)}% dari nilai deal` : 'Belum ada deal' },
   ]
   return (
-    <dl className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
-      {stats.map((s) => (
-        <div key={s.label} className="card flex min-w-0 flex-col gap-1 p-4">
-          <dt className="text-xs text-muted-foreground">{s.label}</dt>
-          <dd className="font-serif text-[22px] leading-tight tabular-nums sm:text-[26px]">{s.value}</dd>
-          <dd className="text-[11px] leading-tight text-muted-foreground">{s.sub}</dd>
+    <dl className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 lg:gap-4">
+      {stats.map((s, i) => (
+        // Desktop: kartu "Nilai deal" jadi aksen gelap Sirih, angka lebih besar.
+        <div key={s.label} className={cn('card flex min-w-0 flex-col gap-1 p-4 lg:gap-2 lg:p-6', i === 2 && 'lg:border-transparent lg:bg-primary lg:text-white')}>
+          <dt className={cn('text-xs text-muted-foreground', i === 2 && 'lg:text-[#D5DCCB]')}>{s.label}</dt>
+          <dd className="font-serif text-[22px] leading-tight tabular-nums sm:text-[26px] lg:text-[34px] lg:leading-none">{s.value}</dd>
+          <dd className={cn('text-[11px] leading-tight text-muted-foreground', i === 2 && 'lg:text-[#D5DCCB]')}>{s.sub}</dd>
         </div>
       ))}
     </dl>
@@ -82,7 +83,7 @@ export function CategoryTiles({
   onChange: (key: string) => void
   onAdd: (categoryId: string) => void
 }) {
-  const base = 'flex min-h-[92px] w-[116px] shrink-0 snap-start flex-col items-start gap-2 rounded-[18px] border p-3 text-left transition-colors duration-200 sm:w-auto'
+  const base = 'flex min-h-[92px] w-[116px] shrink-0 snap-start flex-col items-start gap-2 rounded-[18px] border p-3 text-left transition-colors duration-200 sm:w-auto lg:min-h-[112px] lg:rounded-[24px] lg:p-4'
   return (
     <ul aria-label="Kategori vendor" className="-mx-5 flex snap-x scroll-px-5 gap-2.5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-5">
       <li className="contents">

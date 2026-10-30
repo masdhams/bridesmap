@@ -7,8 +7,8 @@ import { cn } from '../lib/utils'
 import { Logo } from './ui'
 
 const LINKS = [
-  { to: '/alat', label: 'Alat gratis' },
   { to: '/#fitur', label: 'Fitur' },
+  { to: '/#penawaran', label: 'Penawaran' },
   { to: '/tentang', label: 'Tentang & kebijakan' },
 ]
 
@@ -29,8 +29,8 @@ export function PublicHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Link to={onboarded ? '/app' : '/mulai'} className="btn-primary btn-sm whitespace-nowrap sm:min-h-10 sm:px-4 sm:text-sm">
-            {onboarded ? 'Buka rencana' : 'Mulai gratis'}
+          <Link to={onboarded ? '/app' : '/#penawaran'} className="btn-primary btn-sm whitespace-nowrap sm:min-h-10 sm:px-4 sm:text-sm">
+            {onboarded ? 'Buka rencana' : 'Lihat penawaran'}
           </Link>
           <button className="icon-btn md:hidden" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-label="Menu">
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -60,10 +60,12 @@ export function PublicFooter() {
           <span className="text-sm text-muted-foreground">{BRAND.tagline}</span>
         </div>
         <nav aria-label="Tautan kaki" className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-body">
+          <Link className="hover:text-ink" to="/#fitur">Fitur</Link>
+          <Link className="hover:text-ink" to="/#undangan">Undangan</Link>
+          <Link className="hover:text-ink" to="/#penawaran">Penawaran</Link>
           <Link className="hover:text-ink" to="/tentang#privasi">Privasi</Link>
-          <Link className="hover:text-ink" to="/tentang#pembuat">Tentang pembuat</Link>
-          <a className="hover:text-ink" href={'mailto:' + LEGAL.contactEmail}>Kontak</a>
-          <Link className="hover:text-ink" to="/alat">Alat gratis</Link>
+          <Link className="hover:text-ink" to="/tentang#pembuat">Our Story</Link>
+          <a className="hover:text-ink" href={'mailto:' + LEGAL.contactEmail}>Contact Us</a>
         </nav>
       </div>
       <p className="mt-6 text-xs text-muted-foreground">© {new Date().getFullYear()} {BRAND.product} · dibuat oleh {LEGAL.maker}</p>

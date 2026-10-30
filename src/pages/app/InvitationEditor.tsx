@@ -47,7 +47,7 @@ export default function InvitationEditor() {
 
   return (
     <div>
-      <PageHeader
+      <PageHeader back="/app"
         title="Undangan digital"
         subtitle="Pilih template, lengkapi isinya, lalu kirim tautan personal ke setiap tamu dari halaman Tamu."
       />
@@ -60,7 +60,7 @@ export default function InvitationEditor() {
         <div className="space-y-5">
           {/* Template */}
           <Card title="Pilih desain" sub="Pratinjau memakai nama, tanggal, dan foto kalian. Ketuk desain untuk memakainya.">
-            <div className="-mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-7 pt-1 pb-4" role="radiogroup" aria-label="Desain undangan">
+            <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-5 px-5 pt-1 pb-4" role="radiogroup" aria-label="Desain undangan">
               {TEMPLATES.map((t) => (
                 <TemplateCard key={t.id} template={t} slug={website.slug} active={inv.template === t.id} onPick={() => setInvitation({ template: t.id })} />
               ))}

@@ -57,7 +57,7 @@ export default function LetterWrite() {
       const imgs = await Promise.all(Array.from(files).slice(0, room).map((f) => compressImage(f, 900, 0.65)))
       setPhotos([...photos, ...imgs])
     } catch {
-      setErr('Ada foto yang tidak bisa dibaca. Coba foto lain.')
+      setErr('Ada foto yang belum bisa dibuka. Coba pilih foto lainnya, ya.')
     }
   }
 
@@ -89,7 +89,7 @@ export default function LetterWrite() {
           </Link>
           <div className="flex flex-1 flex-col">
             <h1 className="font-sans text-[15px] font-semibold leading-tight">Surat baru</h1>
-            <span className="text-xs text-accent-ink">Ditulis hari ini, dibuka nanti</span>
+            <span className="text-xs text-accent-ink">Tulis sekarang, baca di waktu yang kalian pilih</span>
           </div>
         </header>
 
@@ -111,7 +111,7 @@ export default function LetterWrite() {
 
         {/* 2. Kapan dibuka */}
         <section className="flex flex-col gap-2.5" aria-labelledby="w-buka">
-          <p id="w-buka" className={label}>Baru bisa dibuka pada</p>
+          <p id="w-buka" className={label}>Surat ini bisa dibuka pada</p>
           <div role="radiogroup" aria-labelledby="w-buka" className="grid gap-2 sm:grid-cols-2">
             {presets.map((p) => {
               const on = !custom && date === p.date
@@ -124,18 +124,18 @@ export default function LetterWrite() {
             })}
             <button role="radio" aria-checked={custom} onClick={() => setCustom(true)} className={cn('flex min-h-[60px] items-center gap-3 rounded-2xl border px-4 py-2 text-left', custom ? 'border-accent bg-card' : 'border-white/70 bg-white/55')}>
               <CalendarDays className="size-5 shrink-0 text-accent" strokeWidth={1.8} aria-hidden />
-              <span className={cn('text-sm', custom ? 'font-semibold text-accent-ink' : 'font-medium')}>Pilih tanggal lain</span>
+              <span className={cn('text-sm', custom ? 'font-semibold text-accent-ink' : 'font-medium')}>Pilih tanggal sendiri</span>
             </button>
           </div>
-          {custom && <input type="date" aria-label="Tanggal surat boleh dibuka" className="input" min={format(addDays(new Date(), 1), 'yyyy-MM-dd')} value={date} onChange={(e) => setDate(e.target.value)} />}
+          {custom && <input type="date" aria-label="Pilih tanggal surat bisa dibuka" className="input" min={format(addDays(new Date(), 1), 'yyyy-MM-dd')} value={date} onChange={(e) => setDate(e.target.value)} />}
           <p role="status" className={cn('text-[13px]', valid ? 'text-accent-ink' : 'font-semibold text-destructive')}>
             {valid ? (
               <>
-                Terkunci <strong>{cd.big} {cd.unit}</strong> · dibuka {fmtDate(date, 'EEEE, d MMMM yyyy')}
+                Tersegel selama <strong>{cd.big} {cd.unit}</strong> · bisa dibuka {fmtDate(date, 'EEEE, d MMMM yyyy')}
                 {moment && ` (${moment})`}
               </>
             ) : (
-              'Pilih tanggal setelah hari ini.'
+              'Pilih tanggal setelah hari ini, ya.'
             )}
           </p>
         </section>
@@ -158,7 +158,7 @@ export default function LetterWrite() {
             rows={9}
             className="w-full resize-none bg-transparent text-[16px] outline-none placeholder:text-muted-foreground/70"
             style={{ lineHeight: '32px', backgroundImage: PAPER_LINES, backgroundAttachment: 'local', backgroundPosition: '0 -1px' }}
-            placeholder="Kalau kamu membaca ini, berarti semua rapat keluarga, revisi budget, dan drama seragam sudah lewat…"
+            placeholder="Kalau kamu sedang membaca surat ini, berarti hari yang kita tunggu akhirnya tiba. Bagaimana rasanya mengingat semua yang sudah kita lewati?"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
@@ -183,7 +183,7 @@ export default function LetterWrite() {
               <label className="grid size-[84px] cursor-pointer place-items-center rounded-[10px] border border-dashed border-accent/50 bg-white/55 text-accent-ink hover:bg-white/80" aria-label="Tambah foto ke surat">
                 <span className="flex flex-col items-center gap-1 text-[11px] font-medium">
                   {photos.length === 0 ? <Image className="size-5" strokeWidth={1.8} aria-hidden /> : <Plus className="size-5" strokeWidth={1.8} aria-hidden />}
-                  Tambah foto
+                  Tambahkan foto
                 </span>
                 <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => { addPhotos(e.target.files); e.target.value = '' }} />
               </label>
@@ -194,14 +194,14 @@ export default function LetterWrite() {
 
         <p className="flex items-start gap-2 text-xs leading-relaxed text-accent-ink">
           <Lock className="mt-0.5 size-3.5 shrink-0" strokeWidth={1.8} aria-hidden />
-          Setelah disegel, surat tidak bisa dibaca atau diubah oleh siapa pun sampai {valid ? fmtDate(date, 'd MMMM yyyy') : 'tanggal yang dipilih'}.
+          Setelah disegel, surat ini tidak bisa dibaca atau diubah sampai {valid ? fmtDate(date, 'd MMMM yyyy') : 'tanggal yang dipilih'}. Jadi, pastikan semuanya sudah sesuai sebelum menyimpannya.
         </p>
 
         <div className="sticky bottom-0 -mx-5 bg-gradient-to-t from-accent-soft via-accent-soft/95 to-transparent px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:mx-0 sm:px-0">
           <button className="btn-accent w-full" onClick={save} disabled={!message.trim() || !valid}>
-            <Lock className="size-4" strokeWidth={1.8} aria-hidden /> Simpan &amp; segel surat
+            <Lock className="size-4" strokeWidth={1.8} aria-hidden /> Segel &amp; simpan surat
           </button>
-          {!message.trim() && <p className="mt-2 text-center text-xs text-muted-foreground">Tulis isi suratnya dulu ya.</p>}
+          {!message.trim() && <p className="mt-2 text-center text-xs text-muted-foreground">Isi suratnya dulu sebelum disegel, ya.</p>}
         </div>
       </div>
 
@@ -214,10 +214,10 @@ export default function LetterWrite() {
             </div>
             <div className={cn('flex flex-col gap-1.5 transition-opacity duration-500', envOpen ? 'opacity-0' : 'opacity-100')} style={{ transitionDelay: envOpen ? '0ms' : '1500ms' }}>
               <p className="font-serif text-[34px] leading-[1.1]">
-                Surat <span className="italic">tersegel</span>
+                Surat berhasil <span className="italic">disegel</span>
               </p>
-              <p className="text-sm text-body">Baru bisa dibuka {fmtDate(date, 'd MMMM yyyy')}.</p>
-              <p className="text-xs text-muted-foreground">Mengantar ke daftar surat…</p>
+              <p className="text-sm text-body">Surat ini bisa dibuka {fmtDate(date, 'd MMMM yyyy')}.</p>
+              <p className="text-xs text-muted-foreground">Mengantar kalian ke daftar surat…</p>
             </div>
           </div>
         </div>

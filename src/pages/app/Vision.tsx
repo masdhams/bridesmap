@@ -16,7 +16,7 @@ export default function Vision() {
 
   return (
     <div>
-      <PageHeader title="Vision board" subtitle="Kumpulkan palet warna, bunga, dan referensi gaya untuk dibahas bersama vendor dekor & MUA." />
+      <PageHeader back="/app" title="Vision Board" subtitle="Punya gambaran dekorasi dan tampilan wedding impian? Kumpulkan warna, bunga, dan referensi favorit kalian di sini. Nanti, tinggal bagikan ke vendor." />
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
         {boards.map((b) => (
@@ -29,7 +29,7 @@ export default function Vision() {
 
       <section className="card p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <label className="group flex min-w-0 flex-1 items-center gap-2 rounded-xl border-b border-dashed border-line pb-0.5 focus-within:border-primary hover:border-ink" title="Klik untuk mengubah nama board">
+          <label className="group flex min-w-0 flex-1 items-center gap-2 rounded-xl border-b border-dashed border-line pb-0.5 focus-within:border-primary hover:border-ink" title="Klik untuk mengganti nama board">
             <input aria-label="Nama board (bisa diubah)" className="min-w-0 flex-1 bg-transparent font-serif text-2xl text-foreground focus:outline-none" value={board.name} onChange={(e) => setBoard({ name: e.target.value })} />
             <Pencil className="size-4 shrink-0 text-muted-foreground transition-colors duration-200 group-hover:text-ink group-focus-within:text-primary" strokeWidth={1.8} aria-hidden />
           </label>
@@ -53,12 +53,12 @@ export default function Vision() {
 
         <h2 className="mt-6 font-sans text-sm font-semibold text-ink">Referensi</h2>
         <form className="mt-2 flex gap-2" onSubmit={(e) => { e.preventDefault(); if (note.trim()) { setBoard({ items: [...board.items, { id: uid(), type: 'note', content: note.trim() }] }); setNote('') } }}>
-          <input className="input" value={note} onChange={(e) => setNote(e.target.value)} placeholder="mis. Bunga baby breath + mawar putih, dekor rustic" aria-label="Catatan referensi" />
-          <button className="btn-primary shrink-0" disabled={!note.trim()}><StickyNote className="size-4" aria-hidden /> Catat</button>
+          <input className="input" value={note} onChange={(e) => setNote(e.target.value)} placeholder="mis. Baby breath dan mawar putih untuk dekorasi, dengan sentuhan rustic" aria-label="Catatan inspirasi" />
+          <button className="btn-primary shrink-0" disabled={!note.trim()}><StickyNote className="size-4" aria-hidden /> Simpan catatan</button>
         </form>
         <div className="mt-3">
           <label className="btn-outline btn-sm">
-            <ImageUp className="size-4" aria-hidden /> Upload foto referensi
+            <ImageUp className="size-4" aria-hidden /> Tambahkan foto referensi
             <input type="file" accept="image/*" multiple className="sr-only" onChange={async (e) => {
               const files = Array.from(e.target.files ?? [])
               const imgs = await Promise.all(files.map((f) => compressImage(f, 800, 0.65)))
@@ -75,11 +75,11 @@ export default function Vision() {
               ) : (
                 <p className="rounded-2xl bg-accent-soft/60 p-4 font-serif text-2xl text-ink">{it.content}</p>
               )}
-              <button className="absolute right-2 top-2 grid size-8 place-items-center rounded-full bg-card/90 text-muted-foreground shadow" aria-label="Hapus referensi" onClick={() => setBoard({ items: board.items.filter((x) => x.id !== it.id) })}><Trash2 className="size-4" /></button>
+              <button className="absolute right-2 top-2 grid size-8 place-items-center rounded-full bg-card/90 text-muted-foreground shadow" aria-label="Hapus foto referensi" onClick={() => setBoard({ items: board.items.filter((x) => x.id !== it.id) })}><Trash2 className="size-4" /></button>
             </div>
           ))}
         </div>
-        {board.items.length === 0 && <p className="mt-2 text-sm text-muted-foreground">Belum ada referensi.</p>}
+        {board.items.length === 0 && <p className="mt-2 text-sm text-muted-foreground">Belum ada inspirasi yang disimpan. Tambahkan warna, catatan, atau foto yang kalian suka.</p>}
       </section>
     </div>
   )

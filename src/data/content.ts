@@ -4,7 +4,7 @@
 export const BRAND = {
   name: 'Bridesmap',
   product: 'Bridesmap Wedding Planner',
-  tagline: 'Plan with intention. Celebrate your story.',
+  tagline: 'Plan your dream wedding. Enjoy every moment before it.',
 }
 
 export const EVENT_KINDS: { kind: 'lamaran' | 'akad' | 'resepsi' | 'adat'; label: string; hint: string; /** bobot awal pembagian total budget antar acara — ASUMSI, tidak ada di PRD */ weight: number }[] = [
@@ -226,36 +226,24 @@ export const DOC_TEMPLATES: DocTemplate[] = [
 ]
 
 export const DEEP_TALK:{ topic: string; q: string }[] = [
-  { topic: 'Nilai', q: 'Apa tiga nilai hidup yang paling ingin kita jaga di rumah tangga nanti?' },
-  { topic: 'Keuangan', q: 'Bagaimana kita akan mengatur gaji: digabung, dipisah, atau sebagian?' },
-  { topic: 'Keluarga', q: 'Seberapa sering kita ingin berkunjung ke keluarga masing-masing setelah menikah?' },
-  { topic: 'Ekspektasi', q: 'Hal kecil apa yang membuatmu merasa paling dicintai?' },
-  { topic: 'Keuangan', q: 'Berapa batas belanja yang perlu didiskusikan dulu sebelum dibeli?' },
-  { topic: 'Kehidupan setelah menikah', q: 'Kita ingin tinggal di mana dalam 3 tahun pertama?' },
-  { topic: 'Konflik', q: 'Saat sedang marah, kamu butuh apa dariku: diberi ruang atau diajak bicara?' },
-  { topic: 'Anak', q: 'Bagaimana pandanganmu soal punya anak — kapan dan berapa?' },
-  { topic: 'Keuangan', q: 'Apa ada utang atau cicilan yang perlu aku tahu?' },
-  { topic: 'Karier', q: 'Mimpi karier apa yang ingin kamu kejar 5 tahun ke depan, dan bagaimana aku bisa mendukung?' },
-  { topic: 'Keluarga', q: 'Bagaimana kita menyikapi kalau orang tua ikut campur dalam keputusan kita?' },
-  { topic: 'Pekerjaan rumah', q: 'Pembagian pekerjaan rumah seperti apa yang terasa adil buatmu?' },
-  { topic: 'Spiritual', q: 'Kebiasaan ibadah atau spiritual apa yang ingin kita bangun bersama?' },
+  { topic: 'Nilai', q: 'Apa tiga nilai hidup yang paling ingin kita jaga dalam rumah tangga nanti?' },
+  { topic: 'Keuangan', q: 'Setelah menikah, bagaimana enaknya kita mengatur penghasilan: digabung, dipisah, atau sebagian?' },
+  { topic: 'Keluarga', q: 'Seberapa sering kita ingin mengunjungi keluarga masing-masing setelah menikah?' },
+  { topic: 'Ekspektasi', q: 'Hal sederhana apa yang paling membuatmu merasa dicintai?' },
+  { topic: 'Keuangan', q: 'Mulai dari nominal berapa kita perlu ngobrol dulu sebelum membeli sesuatu?' },
+  { topic: 'Kehidupan setelah menikah', q: 'Dalam tiga tahun pertama, kita membayangkan tinggal di mana?' },
+  { topic: 'Konflik', q: 'Saat sedang marah, apa yang paling kamu butuhkan dariku: waktu sendiri atau ditemani bicara?' },
+  { topic: 'Anak', q: 'Bagaimana bayanganmu tentang punya anak? Kapan dan berapa?' },
+  { topic: 'Keuangan', q: 'Ada utang atau cicilan yang sebaiknya kita tahu dan bicarakan bersama?' },
+  { topic: 'Karier', q: 'Apa mimpi karier yang ingin kamu capai dalam lima tahun ke depan? Bagaimana aku bisa mendukungmu?' },
+  { topic: 'Keluarga', q: 'Kalau orang tua ikut memberi masukan dalam keputusan rumah tangga, bagaimana sebaiknya kita menyikapinya?' },
+  { topic: 'Pekerjaan rumah', q: 'Seperti apa pembagian pekerjaan rumah yang terasa adil buat kita berdua?' },
+  { topic: 'Spiritual', q: 'Kebiasaan ibadah atau kegiatan spiritual apa yang ingin kita jalani bersama?' },
   { topic: 'Kenangan', q: 'Momen apa bersamaku yang paling ingin kamu ulang?' },
-  { topic: 'Keuangan', q: 'Berapa persen penghasilan yang ingin kita tabung dan investasikan?' },
-  { topic: 'Ekspektasi', q: 'Apa ketakutan terbesarmu tentang pernikahan?' },
-  { topic: 'Kehidupan setelah menikah', q: 'Bagaimana kita tetap punya waktu untuk diri sendiri dan teman?' },
-  { topic: 'Keluarga', q: 'Apakah kita akan membantu keuangan orang tua? Seberapa besar?' },
-  { topic: 'Konflik', q: 'Kebiasaanku yang mana yang sebenarnya mengganggumu tapi belum kamu sampaikan?' },
-  { topic: 'Nilai', q: 'Apa arti "rumah" buatmu?' },
-  { topic: 'Kesehatan', q: 'Kebiasaan sehat apa yang ingin kita mulai berdua?' },
-  { topic: 'Keuangan', q: 'Bagaimana kita mengambil keputusan untuk pembelian besar seperti rumah atau kendaraan?' },
-  { topic: 'Ekspektasi', q: 'Bagaimana bentuk perayaan ulang tahun pernikahan yang kamu bayangkan?' },
-  { topic: 'Kehidupan setelah menikah', q: 'Tradisi baru apa yang ingin kita ciptakan sebagai keluarga?' },
-  { topic: 'Komunikasi', q: 'Seberapa sering kita perlu "rapat keluarga" untuk membahas rencana dan keuangan?' },
-  { topic: 'Nilai', q: 'Apa yang kamu pelajari dari pernikahan orang tuamu — yang ingin ditiru dan yang tidak?' },
-  { topic: 'Karier', q: 'Kalau salah satu dari kita dapat kesempatan kerja di kota lain, apa yang akan kita lakukan?' },
-  { topic: 'Kenangan', q: 'Kapan pertama kali kamu yakin ingin menikah denganku?' },
-  { topic: 'Keuangan', q: 'Dana darurat kita idealnya berapa bulan pengeluaran?' },
-  { topic: 'Ekspektasi', q: 'Apa satu janji yang ingin kamu pegang seumur hidup untukku?' },
+  { topic: 'Keuangan', q: 'Berapa bagian penghasilan yang ingin kita sisihkan untuk tabungan dan investasi?' },
+  { topic: 'Ekspektasi', q: 'Apa hal yang paling kamu khawatirkan tentang kehidupan setelah menikah?' },
+  { topic: 'Kehidupan setelah menikah', q: 'Bagaimana caranya kita tetap punya waktu untuk diri sendiri dan teman-teman?' },
+  { topic: 'Keluarga', q: 'Apakah kita ingin membantu keuangan orang tua? Kalau iya, seberapa besar yang terasa nyaman untuk kita?' },
 ]
 
 export const RUNDOWN_TEMPLATES: Record<string, { time: string; activity: string; pic?: string }[]> = {
@@ -299,6 +287,61 @@ export const HONEYMOON_PACKING = ['Dokumen & fotokopi buku nikah', 'Obat pribadi
 
 export const TESTIMONIALS: { name: string; city: string; quote: string; url: string }[] = [
   // PRD §6.2 #11: hanya testimoni pasangan nyata yang bertaut ke akun publik. Isi setelah beta.
+]
+
+/** Penawaran di Landing (keputusan product owner 30 Okt 2026): satu paket berbayar, tanpa tier gratis.
+ *  Isi paket sama di semua fase harga; hanya fase berstatus 'active' yang bisa dibeli. */
+export const OFFER = {
+  normalPrice: 347_000,
+  /** Halaman checkout belum ada. Ganti dengan rute checkout saat siap. */
+  checkoutHref: '#',
+  phases: [
+    { name: 'Pre Launching', price: 99_000, status: 'ended' as const },
+    { name: 'Launching', price: 149_000, status: 'active' as const },
+  ],
+  items: [
+    'Undangan digital dengan desain yang tetap cantik dikenang',
+    'Smart RSVP dan undangan personal untuk setiap tamu',
+    'Budget setiap acara, termasuk biaya yang sering terlupakan',
+    'Semua vendor dan jadwal pembayarannya',
+    'Checklist persiapan yang tersinkron dengan Google Calendar',
+    'Undang sebanyak mungkin orang tersayang',
+    'Atur tempat duduk dan kumpulkan wedding inspiration',
+    'Deep Talk untuk berdua, plus persiapan honeymoon',
+    'Simpan dan bagikan rincian budget dalam PDF',
+  ],
+}
+
+/** Pertanyaan umum di Landing (beda dari GUIDE_FAQ yang berisi cara pakai di dalam app). */
+export const LANDING_FAQ: { q: string; a: string }[] = [
+  {
+    q: 'Kalau beli Bridesmap, dapat apa saja?',
+    a: 'Kalian akan mendapatkan semua fitur Bridesmap dalam satu paket. Mulai dari mengatur budget, mencatat vendor dan pembayaran, checklist yang terhubung ke Google Calendar, daftar tamu, Seating Plan, sampai tiga pilihan desain undangan digital.',
+  },
+  {
+    q: 'Bisa dipakai bareng pasangan?',
+    a: 'Bisa! Kalian bisa mengundang pasangan melalui WhatsApp dari halaman Pengaturan. Untuk saat ini, setiap akun masih menyimpan rencananya masing-masing. Jika menggunakan satu perangkat, kalian bisa bergantian melalui avatar pasangan di bagian atas.',
+  },
+  {
+    q: 'Bagaimana cara membuat undangan dan melihat konfirmasi tamu?',
+    a: 'Pilih salah satu desain Sage, Noir, atau Red Retro, lalu tambahkan nama, foto, dan cerita kalian. Setelah selesai, bagikan link undangan personal kepada tamu melalui WhatsApp. Konfirmasi kehadiran dan ucapan mereka akan langsung tercatat di daftar tamu.',
+  },
+  {
+    q: 'Bagaimana kalau daftar tamu sudah kami buat di Excel?',
+    a: 'Nggak perlu input ulang satu per satu. Kalian bisa langsung mengimpor daftar tamu dari file CSV, Excel, atau kontak HP (.vcf). Seluruh rencana juga bisa diekspor kapan saja melalui Pengaturan.',
+  },
+  {
+    q: 'Apakah data dan rencana pernikahan kami aman tersimpan?',
+    a: 'Semua rencana, daftar tamu, vendor, dan foto tersimpan di akun masing-masing. Jadi, kalian bisa membukanya dari perangkat lain tanpa harus mulai mencatat ulang. Jika Google Calendar dihubungkan, hanya judul tugas dan tanggal yang dikirim ke Google.',
+  },
+  {
+    q: 'Apakah Bridesmap bertanggung jawab atas vendor yang kami pilih?',
+    a: 'Bridesmap membantu kalian mencatat kesepakatan harga, jadwal pembayaran, dan bukti transfer vendor. Namun, Bridesmap bukan rekening bersama (escrow) dan tidak memberikan jaminan atas vendor yang kalian pilih.',
+  },
+  {
+    q: 'Masih bisa mendapatkan harga Pre Launching?',
+    a: 'Sayangnya, promo Pre Launching sudah berakhir. Saat ini kalian masih bisa mendapatkan Bridesmap dengan harga Launching Rp149.000, dari harga normal Rp347.000.',
+  },
 ]
 
 export const LEGAL = {

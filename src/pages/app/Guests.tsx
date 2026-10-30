@@ -1,6 +1,7 @@
 import { Copy, Download, FileUp, MessageCircle, Plus, Search, Trash2, Users } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { PanelStat, WithPanel } from '../../components/bento'
 import { ComboInput, Select } from '../../components/select'
 import { HelpHint } from '../../components/HelpHint'
 import { ConfirmButton, Empty, Field, FilterChips, Modal, PageHeader, RoundButton } from '../../components/ui'
@@ -102,7 +103,7 @@ Terima kasih 🙏`
   const avatarTone = (s: GuestSide) => (s === 'A' ? 'bg-primary-soft text-on-primary-soft' : s === 'B' ? 'bg-accent-soft text-accent-ink' : 'bg-muted text-body')
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-3.5">
+    <div className="mx-auto flex max-w-3xl flex-col gap-3.5 xl:max-w-none">
       <PageHeader
         title="Tamu"
         subtitle="Rekap kehadiran untuk katering."
@@ -118,7 +119,51 @@ Terima kasih 🙏`
         }
       />
 
-      <section className="flex flex-col gap-3.5 rounded-[24px] bg-primary px-5 py-[18px] text-white">
+      <WithPanel
+        panel={
+          <aside className="sticky top-24 hidden flex-col gap-4 rounded-[28px] bg-primary p-6 text-white shadow-[var(--shadow-soft)] xl:flex">
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="text-sm font-semibold">
+                {stats.totalPax} tamu · {stats.invited} undangan
+              </span>
+              <span className="text-xs text-[#D5DCCB]">±{catering} porsi katering</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { n: stats.hadir, label: 'Hadir', color: '#C9D4BA' },
+                { n: waiting, label: 'Menunggu', color: '#E7D8B8' },
+                { n: stats.tidak, label: 'Tidak hadir', color: '#E8B9AB' },
+              ].map((x) => (
+                <div key={x.label} className="flex flex-col gap-0.5">
+                  <span className="font-serif text-[36px] leading-none tabular-nums">{x.n}</span>
+                  <span className="inline-flex items-center gap-1.5 text-xs text-[#D5DCCB]">
+                    <span className="size-2 rounded-full" style={{ background: x.color }} />
+                    {x.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="flex h-1.5 gap-0.5 overflow-hidden rounded-full bg-white/15">
+              <div style={{ width: `${(stats.hadir / totalPax) * 100}%`, background: '#C9D4BA' }} />
+              <div style={{ width: `${(waiting / totalPax) * 100}%`, background: '#E7D8B8' }} />
+              <div style={{ width: `${(stats.tidak / totalPax) * 100}%`, background: '#E8B9AB' }} />
+            </div>
+            {pending.length > 0 && (
+              // PRD #31: tautan RSVP dibagikan manual oleh pasangan — bukan pengingat WhatsApp otomatis.
+              <button className="btn min-h-11 bg-white text-[13px] text-ink hover:bg-primary-soft" onClick={() => setFollowOpen(true)}>
+                <MessageCircle className="size-4" strokeWidth={1.8} aria-hidden /> Kirim undangan ke {pending.length} tamu yang belum membalas
+              </button>
+            )}
+                <div className="flex flex-col gap-2">
+              <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#D5DCCB]">Per pihak</span>
+              {(["A", "B", "bersama"] as const).map((sd) => (
+                <PanelStat key={sd} label={sideName(sd)} value={`${guests.filter((g) => g.side === sd).reduce((n, g) => n + g.pax, 0)} orang`} />
+              ))}
+            </div>
+          </aside>
+        }
+      >
+      <section className="flex flex-col gap-3.5 rounded-[24px] bg-primary px-5 py-[18px] text-white xl:hidden">
         <div className="flex items-baseline justify-between gap-3">
           <span className="text-sm font-semibold">
             {stats.totalPax} tamu · {stats.invited} undangan
@@ -225,6 +270,7 @@ Terima kasih 🙏`
           {shown.length === 0 && <li className="p-6 text-center text-sm text-muted-foreground">Tidak ada tamu yang cocok.</li>}
         </ul>
       )}
+      </WithPanel>
 
       <Modal open={followOpen} onClose={() => setFollowOpen(false)} title="Kirim undangan">
           <p className="text-sm text-body">

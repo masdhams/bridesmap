@@ -34,7 +34,8 @@ export function CoverLayer({ src, pos, full }: { src?: string; pos?: PhotoPos; f
 }
 
 /** Tombol kecil di pojok kartu: unggah, ganti, atur posisi, atau hapus foto sampul. */
-export function CoverButton({ src, pos, onChange, onPos, label = 'foto sampul', className }: { src?: string; pos?: PhotoPos; onChange: (src?: string) => void; onPos?: (p: PhotoPos) => void; label?: string; className?: string }) {
+/** `menuUp`: menu terbuka ke atas, untuk tombol di bagian bawah wadah yang memotong isinya (overflow-hidden). */
+export function CoverButton({ src, pos, onChange, onPos, label = 'foto sampul', className, menuUp }: { src?: string; pos?: PhotoPos; onChange: (src?: string) => void; onPos?: (p: PhotoPos) => void; label?: string; className?: string; menuUp?: boolean }) {
   const [menu, setMenu] = useState(false)
   const [adjust, setAdjust] = useState(false)
   const wrap = useRef<HTMLDivElement>(null)
@@ -75,7 +76,7 @@ export function CoverButton({ src, pos, onChange, onPos, label = 'foto sampul', 
         {src ? <Camera className="size-4" strokeWidth={1.8} aria-hidden /> : <ImagePlus className="size-4" strokeWidth={1.8} aria-hidden />}
       </button>
       {menu && (
-        <div role="menu" className="absolute right-0 top-11 w-48 rounded-[14px] border border-border bg-card p-1 text-ink shadow-[var(--shadow-lift)]">
+        <div role="menu" className={cn('absolute right-0 w-48 rounded-[14px] border border-border bg-card p-1 text-ink shadow-[var(--shadow-lift)]', menuUp ? 'bottom-11' : 'top-11')}>
           <button role="menuitem" type="button" className={item} onClick={pick}>
             <Camera className="size-4" aria-hidden /> Ganti foto
           </button>

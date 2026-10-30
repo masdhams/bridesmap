@@ -69,7 +69,7 @@ export default function VendorDetail() {
   }
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-4">
+    <div className="mx-auto flex max-w-2xl flex-col gap-4 xl:grid xl:max-w-none xl:grid-cols-2 xl:items-start xl:gap-5 xl:[&>header]:col-span-2 xl:[&>div]:col-span-2">
       <header className="flex h-11 items-center gap-3">
         <Link to="/app/vendor" aria-label="Kembali ke daftar vendor" className="grid size-11 shrink-0 place-items-center rounded-full border border-border bg-card hover:bg-muted">
           <ArrowLeft className="size-5" strokeWidth={1.8} />

@@ -169,6 +169,9 @@ try {
 /** True kalau penyimpanan browser penuh (biasanya karena banyak foto) sehingga perubahan terbaru gagal tersimpan. */
 export const useStorageStatus = create<{ full: boolean }>(() => ({ full: false }))
 
+// Iframe pratinjau (mis. kartu desain undangan) tidak menulis dan tidak ikut sinkron antar-tab.
+const embedded = typeof window !== 'undefined' && window.self !== window.top
+
 // localStorage dibungkus agar kuota penuh tidak melempar error di tengah aksi; pengguna diberi peringatan jelas.
 const safeStorage: Storage = {
   get length() {
@@ -179,6 +182,8 @@ const safeStorage: Storage = {
   getItem: (k) => localStorage.getItem(k),
   removeItem: (k) => localStorage.removeItem(k),
   setItem: (k, v) => {
+    // Iframe pratinjau hanya membaca rencana. Kalau ikut menulis, state lamanya menimpa pilihan di editor.
+    if (embedded) return
     try {
       localStorage.setItem(k, v)
       if (useStorageStatus.getState().full) useStorageStatus.setState({ full: false })
@@ -376,7 +381,7 @@ export const usePlan = create<PlanState>()(
 // Sinkron antar-tab: perubahan dari tab lain langsung terlihat (simulasi kolaborasi di satu perangkat).
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => {
-    if (e.key === STORAGE_KEY) usePlan.persist.rehydrate()
+    if (e.key === STORAGE_KEY && !embedded) usePlan.persist.rehydrate()
   })
 }
 

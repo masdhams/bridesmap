@@ -46,7 +46,7 @@ export default function Rundown() {
 
   return (
     <div>
-      <PageHeader title="Rundown & timeline hari-H" subtitle="Susunan acara per jam yang bisa dibagikan ke MC, WO, vendor, dan keluarga."
+      <PageHeader back="/app" title="Rundown" subtitle="Susunan acara per jam yang bisa dibagikan ke MC, WO, vendor, dan keluarga."
         actions={
           <>
             <button className="btn-outline btn-sm" onClick={shareText} disabled={!ev}><Copy className="size-4" aria-hidden /> {copied ? 'Tersalin!' : 'Salin untuk WA'}</button>

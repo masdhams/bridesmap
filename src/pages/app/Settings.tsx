@@ -17,7 +17,7 @@ export default function Settings() {
 
   return (
     <div className="max-w-2xl">
-      <PageHeader title="Pengaturan & pasangan" />
+      <PageHeader back="/app" title="Pengaturan & pasangan" />
 
       <section className="card p-5 flex flex-wrap items-center justify-between gap-3">
         <div>

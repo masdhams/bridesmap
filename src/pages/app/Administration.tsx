@@ -1,6 +1,7 @@
-import { ExternalLink, ImagePlus, Link2, Lock, Paperclip, Plus, Search, Trash2, X } from 'lucide-react'
+import { ArrowRight, ExternalLink, ImagePlus, Link2, Lock, Paperclip, Plus, Search, Trash2, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { PanelBar, SidePanel, WithPanel } from '../../components/bento'
 import { IcDocs } from '../../components/icons'
 import { Select } from '../../components/select'
 import { ConfirmButton, Empty, Field, FilterChips, Modal, PageHeader, PartnerAvatar, Segmented } from '../../components/ui'
@@ -85,7 +86,7 @@ export default function Administration() {
   const newDoc = (): Draft => ({ isNew: true, name: '', group: DOC_GROUPS[0], owner: 'both', status: 'belum' })
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-3.5">
+    <div className="mx-auto flex max-w-3xl flex-col gap-3.5 xl:max-w-none">
       <PageHeader
         back="/app"
         title="Administrasi"
@@ -97,7 +98,24 @@ export default function Administration() {
         }
       />
 
-      <section className="flex flex-col gap-2.5 rounded-[20px] border border-border bg-card p-4">
+      <WithPanel
+        panel={
+          <SidePanel title="Kelengkapan dokumen" sub={`${ready} dari ${documents.length} dokumen sudah ada`} value={`${documents.length ? Math.round((ready / documents.length) * 100) : 0}%`}>
+            <PanelBar value={ready} max={documents.length} />
+            {linkedTasks > 0 && (
+              <Link to="/app/checklist" className="inline-flex min-h-10 items-center justify-between rounded-full bg-white px-4 text-sm font-semibold text-primary transition-colors duration-200 hover:bg-[#EEF1E8]">
+                {autoDoneTasks} dari {linkedTasks} tugas checklist selesai
+                <ArrowRight className="size-4" strokeWidth={2} aria-hidden />
+              </Link>
+            )}
+            <p className="flex gap-2 text-xs leading-relaxed text-[#D5DCCB]">
+              <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+              Dokumen disimpan di perangkat ini saja. Kalau perangkatnya dipakai bersama, lebih aman tempel tautan Google Drive pribadi.
+            </p>
+          </SidePanel>
+        }
+      >
+      <section className="flex flex-col gap-2.5 rounded-[20px] border border-border bg-card p-4 xl:hidden">
         <div className="flex items-baseline justify-between gap-3">
           <span className="text-sm text-muted-foreground">
             <span className="text-[22px] font-semibold text-ink tabular-nums">{ready}</span> dari {documents.length} dokumen sudah ada
@@ -113,7 +131,7 @@ export default function Administration() {
         </div>
       </section>
 
-      <p className="flex gap-2.5 rounded-2xl bg-muted px-4 py-3 text-xs leading-relaxed text-body">
+      <p className="flex gap-2.5 rounded-2xl bg-muted px-4 py-3 text-xs leading-relaxed text-body xl:hidden">
         <Lock className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
         <span>Dokumen disimpan di perangkat ini saja, tidak dikirim ke server. Kalau perangkatnya dipakai bersama, lebih aman tempel tautan dari Google Drive pribadi daripada mengunggah foto KTP.</span>
       </p>
@@ -219,6 +237,7 @@ export default function Administration() {
           </section>
         ))
       )}
+      </WithPanel>
 
       <Modal
         open={!!draft}

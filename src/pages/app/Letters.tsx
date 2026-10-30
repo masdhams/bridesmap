@@ -77,7 +77,7 @@ function LetterView({ c, name, wedding, onClose }: { c: TimeCapsule; name: Namer
             Ditulis {fmtDate(c.createdAt.slice(0, 10), 'd MMMM yyyy')} · dibuka {fmtDate((c.openedAt ?? new Date().toISOString()).slice(0, 10), 'd MMMM yyyy')}
           </p>
           <div className="mt-4 flex items-center justify-between gap-2">
-            <ConfirmButton className="btn-ghost btn-sm text-destructive" label="Hapus surat" onConfirm={() => { remove('capsules', c.id); onClose() }}>
+            <ConfirmButton className="btn-ghost btn-sm text-destructive" label="Hapus surat ini?" onConfirm={() => { remove('capsules', c.id); onClose() }}>
               <Trash2 className="size-4" aria-hidden /> Hapus
             </ConfirmButton>
             <button className="btn-soft btn-sm" onClick={onClose}>
@@ -90,14 +90,14 @@ function LetterView({ c, name, wedding, onClose }: { c: TimeCapsule; name: Namer
 
   if (stage === 'locked')
     return (
-      <LetterDialog onClose={onClose} label="Surat terkunci">
+      <LetterDialog onClose={onClose} label="Surat masih tersegel">
         <section className="relative flex flex-col items-center gap-5 rounded-[28px] bg-[#F7F0E3] px-6 pb-6 pt-10 text-center shadow-[var(--shadow-lift)]">
           <CloseX onClose={onClose} tone="dark" />
           <button key={shake} type="button" onClick={() => setShake((s) => s + 1)} aria-label="Coba buka surat" className={cn('w-full max-w-[15rem]', shake > 0 && 'animate-wobble')}>
             <Envelope lock />
           </button>
           <div className="flex flex-col items-center gap-1.5">
-            <p className="eyebrow text-[11px] text-accent-ink">Surat terkunci</p>
+            <p className="eyebrow text-[11px] text-accent-ink">Surat masih tersegel</p>
             <p className="font-serif text-[48px] leading-none tabular-nums">
               {cd.big} {cd.unit && <span className="italic">{cd.unit}</span>}
             </p>
@@ -108,10 +108,10 @@ function LetterView({ c, name, wedding, onClose }: { c: TimeCapsule; name: Namer
             {namedMoment(c.unlockDate, wedding) && <p className="text-sm text-body">{namedMoment(c.unlockDate, wedding)}</p>}
           </div>
           <p role="status" className={cn('min-h-5 text-sm text-accent-ink transition-opacity duration-300', shake > 0 ? 'opacity-100' : 'opacity-0')}>
-            Belum waktunya. Sabar ya, kejutannya akan lebih manis.
+            Belum waktunya dibuka. Simpan dulu rasa penasarannya, ya. Ada kejutan kecil yang menunggu di tanggal itu.
           </p>
           <p className="max-w-[20rem] text-xs leading-relaxed text-muted-foreground">
-            {fromTo(c, name)}. Isinya tersimpan rapat sampai hari itu, tidak bisa dibaca siapa pun, termasuk penulisnya.
+            {fromTo(c, name)}. Surat ini tersimpan rapat sampai waktunya tiba. Bahkan penulisnya pun belum bisa membacanya.
           </p>
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <Link to={`/app/surat/tulis?tanggal=${c.unlockDate}`} className="btn-outline flex-1">
@@ -136,7 +136,7 @@ function LetterView({ c, name, wedding, onClose }: { c: TimeCapsule; name: Namer
         </button>
         <div className="flex flex-col items-center gap-1.5">
           <p className="eyebrow text-[11px] text-accent-ink">{momentTag(c.unlockDate, wedding)}</p>
-          <p className="font-serif text-[32px] leading-[1.1]">{opening ? <span className="italic">Membuka surat…</span> : <>Hari yang <span className="italic">ditunggu</span> sudah tiba</>}</p>
+          <p className="font-serif text-[32px] leading-[1.1]">{opening ? <span className="italic">Membuka surat kalian…</span> : <>Hari yang kalian tunggu <span className="italic">akhirnya tiba</span></>}</p>
           <p className="text-sm text-body">{fromTo(c, name)}</p>
         </div>
         <button className="btn-accent w-full" onClick={openIt} disabled={opening}>
@@ -163,13 +163,13 @@ function LetterRow({ c, name, wedding, onOpen }: { c: TimeCapsule; name: Namer; 
           <span className="eyebrow text-[10px] text-accent-ink">{momentTag(c.unlockDate, wedding)}</span>
           <span className="line-clamp-2 text-[15px] font-semibold leading-tight">{read ? c.title : fromTo(c, name)}</span>
           <span className="truncate text-xs text-muted-foreground">
-            {read ? `${fromTo(c, name)} · dibuka ${fmtDate((c.openedAt ?? '').slice(0, 10), 'd MMM yyyy')}` : `Dibuka ${fmtDate(c.unlockDate, 'd MMMM yyyy')}`}
+            {read ? `${fromTo(c, name)} · dibuka ${fmtDate((c.openedAt ?? '').slice(0, 10), 'd MMM yyyy')}` : `Bisa dibuka ${fmtDate(c.unlockDate, 'd MMMM yyyy')}`}
           </span>
         </span>
         {fresh ? (
           <span className="btn-accent animate-glow min-h-9 shrink-0 px-4 text-[13px]">Buka</span>
         ) : read ? (
-          <span className="badge-neutral min-h-7 shrink-0 px-2.5 text-xs">Dibaca</span>
+          <span className="badge-neutral min-h-7 shrink-0 px-2.5 text-xs">Sudah dibaca</span>
         ) : (
           <span className="flex shrink-0 flex-col items-end">
             <span className="font-serif text-[22px] leading-none tabular-nums">{cd.days > 1 ? cd.days : cd.big}</span>
@@ -204,7 +204,7 @@ export default function Letters() {
         </Link>
       </header>
       <BerduaTabs />
-      <p className="text-sm leading-relaxed text-body">Tulis hari ini, buka di hari yang kalian pilih. Surat terkunci rapat sampai tanggalnya tiba, bahkan untuk penulisnya.</p>
+      <p className="text-sm leading-relaxed text-body">Ada hal yang ingin kalian sampaikan untuk masa depan? Tulis sekarang, lalu pilih kapan surat itu boleh dibuka. Sampai tanggalnya tiba, surat akan tetap tersegel dan tidak bisa dibaca siapa pun, termasuk penulisnya.</p>
 
       {capsules.length === 0 ? (
         <section className="flex flex-col items-center gap-5 rounded-[28px] border border-border bg-card px-6 py-10 text-center">
@@ -215,7 +215,7 @@ export default function Letters() {
             <h2 className="font-serif text-[30px] leading-[1.1]">
               Belum ada <span className="italic">surat</span>
             </h2>
-            <p className="max-w-[22rem] text-sm leading-relaxed text-body">Mulai dengan satu surat untuk hari-H, atau untuk ulang tahun pernikahan pertama. Kalian akan berterima kasih pada diri sendiri nanti.</p>
+            <p className="max-w-[22rem] text-sm leading-relaxed text-body">Coba tulis satu surat untuk dibaca di hari-H, atau saat ulang tahun pernikahan pertama. Siapa tahu, nanti surat sederhana ini jadi salah satu kenangan paling berharga.</p>
           </div>
           <Link to="/app/surat/tulis" className="btn-accent">
             <Mail className="size-4" aria-hidden /> Tulis surat pertama
@@ -232,9 +232,9 @@ export default function Letters() {
                 <p className="font-serif text-[24px] leading-[1.1]">
                   {fresh.length === 1 ? 'Satu surat' : `${fresh.length} surat`} <span className="italic">siap dibuka</span>
                 </p>
-                <p className="text-[13px] text-white/80">Hari yang kalian tunggu sudah tiba.</p>
+                <p className="text-[13px] text-white/80">Hari yang kalian pilih akhirnya tiba.</p>
                 <button className="inline-flex min-h-10 items-center rounded-full bg-white px-4 text-[13px] font-semibold text-accent-ink hover:bg-accent-soft" onClick={() => setViewId(fresh[0].id)}>
-                  Buka sekarang
+                  Buka surat
                 </button>
               </div>
             </section>
@@ -246,14 +246,14 @@ export default function Letters() {
                 <Envelope lock />
               </div>
               <div className="flex flex-col items-center gap-1">
-                <p className="eyebrow text-[11px] text-accent-ink">Surat berikutnya · terkunci</p>
+                <p className="eyebrow text-[11px] text-accent-ink">Surat berikutnya · masih tersegel</p>
                 <p className="font-serif text-[46px] leading-none tabular-nums">
                   {nextCd.big} {nextCd.unit && <span className="italic">{nextCd.unit}</span>}
                 </p>
                 {nextCd.rough && <p className="text-sm text-body">{nextCd.rough}</p>}
               </div>
               <p className="text-sm">
-                Dibuka <strong>{fmtDate(next.unlockDate, 'd MMMM yyyy')}</strong>
+                Bisa dibuka <strong>{fmtDate(next.unlockDate, 'd MMMM yyyy')}</strong>
                 {namedMoment(next.unlockDate, wedding) && ` · ${namedMoment(next.unlockDate, wedding)}`}
               </p>
               <p className="text-xs text-muted-foreground">{fromTo(next, name)}</p>
@@ -263,7 +263,7 @@ export default function Letters() {
           {restLocked.length > 0 && (
             <section className="flex flex-col gap-2.5">
               <h2 className="font-sans text-[15px] font-semibold">
-                Menunggu harinya <span className="font-normal text-muted-foreground">· {restLocked.length}</span>
+                Menunggu waktunya <span className="font-normal text-muted-foreground">· {restLocked.length}</span>
               </h2>
               <ul className="flex flex-col gap-2.5">
                 {restLocked.map((c) => (
@@ -276,7 +276,7 @@ export default function Letters() {
           {(fresh.length > 0 || read.length > 0) && (
             <section className="flex flex-col gap-2.5">
               <h2 className="font-sans text-[15px] font-semibold">
-                Sudah bisa dibuka <span className="font-normal text-muted-foreground">· {fresh.length + read.length}</span>
+                Siap dibuka <span className="font-normal text-muted-foreground">· {fresh.length + read.length}</span>
               </h2>
               <ul className="flex flex-col gap-2.5">
                 {[...fresh, ...read].map((c) => (

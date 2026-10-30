@@ -27,18 +27,18 @@ export default function Berdua() {
 
   const status =
     dt[me] && dt[other]
-      ? { title: 'Jawaban kalian sudah terbuka', body: 'Baca jawaban satu sama lain, lalu lanjutkan obrolannya.' }
+      ? { title: 'Kalian sudah saling bercerita', body: 'Yuk, baca jawaban satu sama lain dan lanjutkan obrolannya.' }
       : dt[other]
-        ? { title: `${name(other)} sudah menjawab`, body: 'Giliranmu menjawab pertanyaan hari ini supaya jawaban terbuka.' }
+        ? { title: `${name(other)} sudah bercerita`, body: 'Sekarang giliranmu. Jawab pertanyaan hari ini untuk membuka cerita kalian.' }
         : dt[me]
-          ? { title: 'Kamu sudah menjawab', body: `Menunggu ${name(other)} menjawab pertanyaan hari ini.` }
-          : { title: 'Pertanyaan baru menunggu kalian', body: 'Satu pertanyaan Deep Talk setiap hari, dijawab sendiri-sendiri dulu.' }
+          ? { title: 'Jawabanmu sudah tersimpan', body: `Tinggal menunggu ${name(other)} ikut menjawab.` }
+          : { title: 'Ada obrolan baru untuk kalian', body: 'Satu pertanyaan kecil setiap hari, untuk saling mengenal lebih dalam.' }
 
   const unlocked = capsules.filter((c) => daysUntil(c.unlockDate) <= 0).length
   const shortcuts = [
-    { to: '/app/deep-talk', label: 'Deep Talk', sub: 'Satu pertanyaan tiap hari', icon: IcDeepTalk },
-    { to: '/app/surat', label: 'Surat untuk Nanti', sub: capsules.length ? `${capsules.length} surat${unlocked ? ` · ${unlocked} siap dibuka` : ''}` : 'Tulis hari ini, buka nanti', icon: IcLetter },
-    { to: '/app/honeymoon', label: 'Honeymoon', sub: honeymoon.destination || 'Itinerary & booking', icon: IcHoneymoon },
+    { to: '/app/deep-talk', label: 'Deep Talk', sub: 'Satu pertanyaan untuk dibahas setiap hari', icon: IcDeepTalk },
+    { to: '/app/surat', label: 'Surat untuk Nanti', sub: capsules.length ? `${capsules.length} surat menunggu${unlocked ? ` · ${unlocked} siap dibaca` : ''}` : 'Tulis surat untuk dibaca di hari yang kalian pilih', icon: IcLetter },
+    { to: '/app/honeymoon', label: 'Honeymoon', sub: honeymoon.destination || 'Rencanakan honeymoon', icon: IcHoneymoon },
   ]
 
   const saveMoment = () => {
@@ -54,7 +54,7 @@ export default function Berdua() {
       <div className="grid gap-6 lg:grid-cols-[19rem_1fr] lg:gap-x-12 lg:gap-y-8">
         <header className="pt-2 text-center lg:col-span-2">
           <h1 className="text-[48px] leading-none text-accent">Momen</h1>
-          <p className="mt-2 text-sm italic text-accent-ink">Hubungan yang baik dibangun dari hal-hal kecil.</p>
+          <p className="mt-2 text-sm italic text-accent-ink">Setiap perjalanan punya cerita yang layak dikenang.</p>
           <p className="mt-1 text-sm text-ink">
             Selamat merayakan cinta, <strong>{profile.partnerA}</strong> &amp; <strong>{profile.partnerB}</strong>
           </p>
@@ -71,7 +71,7 @@ export default function Berdua() {
               ) : (
                 <span className="flex flex-col items-center gap-1.5 text-muted-foreground">
                   <Camera className="size-7" strokeWidth={1.6} aria-hidden />
-                  <span className="text-sm">Ketuk untuk tambah foto</span>
+                  <span className="text-sm">Tambahkan foto kalian</span>
                 </span>
               )}
               {profile.couplePhoto && (
@@ -81,7 +81,7 @@ export default function Berdua() {
               )}
             </span>
             <span className="mt-3 block text-center font-serif text-2xl text-ink">Kita, hari ini</span>
-            <input type="file" accept="image/*" className="sr-only" aria-label="Ganti foto pasangan" onChange={async (e) => {
+            <input type="file" accept="image/*" className="sr-only" aria-label="Ganti foto kalian" onChange={async (e) => {
               const f = e.target.files?.[0]
               if (f) setProfile({ couplePhoto: await compressImage(f, 700, 0.7) })
               e.target.value = ''
@@ -94,7 +94,7 @@ export default function Berdua() {
           <Tape className="-top-2.5 right-6 rotate-3 bg-[#E3B9C0]" />
           <p className="text-[17px] font-semibold">{status.title}</p>
           <p className="mt-1 text-sm leading-relaxed">{status.body}</p>
-          <p className="mt-2 text-xs font-semibold underline underline-offset-4">Buka Deep Talk</p>
+          <p className="mt-2 text-xs font-semibold underline underline-offset-4">Lanjutkan Deep Talk</p>
         </Link>
         </div>
 
@@ -146,7 +146,7 @@ export default function Berdua() {
               </li>
             )}
           </ul>
-          {list.length === 0 && <p className="text-sm text-body">Simpan momen penting kalian, misalnya pertama bertemu, jadian, atau lamaran.</p>}
+          {list.length === 0 && <p className="text-sm text-body">Ada momen yang ingin kalian kenang? Simpan di sini, mulai dari pertama bertemu, hari jadian, sampai lamaran.</p>}
         </section>
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function Berdua() {
           <button className="btn-ghost" onClick={() => setDraft(null)}>Batal</button>
           <button className="btn-accent" onClick={saveMoment} disabled={!draft?.title?.trim() || !draft?.date}>Simpan</button>
         </>}>
-        <Field label="Judul momen" htmlFor="mt"><input id="mt" className="input" value={draft?.title ?? ''} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="mis. Pertama kali bertemu" /></Field>
+        <Field label="Nama momen" htmlFor="mt"><input id="mt" className="input" value={draft?.title ?? ''} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="mis. Pertama kali bertemu" /></Field>
         <Field label="Tanggal" htmlFor="md"><input id="md" type="date" className="input" value={draft?.date ?? ''} onChange={(e) => setDraft({ ...draft, date: e.target.value })} /></Field>
         <div>
           <span className="label">Foto (opsional)</span>

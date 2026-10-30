@@ -37,11 +37,11 @@ export const NAV_GROUPS: { title: string; items: NavItem[] }[] = [
   {
     title: 'Momen',
     items: [
-      { to: '/app/berdua', label: 'Kisah Kita', icon: IcLove, desc: 'Foto, momen, dan ringkasan kalian' },
-      { to: '/app/deep-talk', label: 'Deep Talk', icon: IcDeepTalk, desc: 'Satu pertanyaan tiap hari' },
-      { to: '/app/surat', label: 'Surat untuk Nanti', icon: IcLetter, desc: 'Ditulis hari ini, dibuka nanti' },
-      { to: '/app/vision-board', label: 'Vision board', icon: IcVision, desc: 'Warna, bunga, referensi' },
-      { to: '/app/honeymoon', label: 'Honeymoon', icon: IcHoneymoon, desc: 'Itinerary, booking, packing' },
+      { to: '/app/berdua', label: 'Kisah Kita', icon: IcLove, desc: 'Simpan cerita dan momen-momen berharga kalian.' },
+      { to: '/app/deep-talk', label: 'Deep Talk', icon: IcDeepTalk, desc: 'Satu pertanyaan setiap hari untuk saling mengenal lebih dalam.' },
+      { to: '/app/surat', label: 'Surat untuk Nanti', icon: IcLetter, desc: 'Tulis sekarang, baca saat waktunya tiba.' },
+      { to: '/app/vision-board', label: 'Vision Board', icon: IcVision, desc: 'Kumpulkan inspirasi warna, bunga, dan dekorasi wedding impian.' },
+      { to: '/app/honeymoon', label: 'Honeymoon', icon: IcHoneymoon, desc: 'Siapkan perjalanan pertama kalian sebagai pasangan suami istri.' },
     ],
   },
   {

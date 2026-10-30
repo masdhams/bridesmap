@@ -1,9 +1,11 @@
 import { Gift, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { ConfirmButton, Empty, Field, Modal, MoneyInput, PageHeader, Progress, Segmented } from '../../components/ui'
+import { PanelBar } from '../../components/bento'
+import { IcSeserahan } from '../../components/icons'
+import { ConfirmButton, Empty, Field, Modal, MoneyInput, PageHeader, PartnerAvatar, Progress, Segmented } from '../../components/ui'
 import { usePlan } from '../../lib/store'
 import type { Partner, SeserahanItem } from '../../lib/types'
-import { cn, rupiah, uid } from '../../lib/utils'
+import { cn, rupiah, rupiahShort, uid } from '../../lib/utils'
 
 export default function Seserahan() {
   const { seserahan, profile, add, update, remove } = usePlan()
@@ -21,16 +23,53 @@ export default function Seserahan() {
 
   return (
     <div>
-      <PageHeader title="Seserahan" subtitle="Daftar barang seserahan per pihak beserta perkiraan biaya dan status persiapan."
+      <PageHeader back="/app" title="Seserahan" subtitle="Daftar barang seserahan per pihak beserta perkiraan biaya dan status persiapan."
         actions={<button className="btn-primary btn-sm" onClick={() => setDraft({ from: 'A', budget: 0 })}><Plus className="size-4" aria-hidden /> Barang</button>} />
-      <div className="card mb-5 p-4">
+      <div className="card mb-5 p-4 lg:hidden">
         <div className="flex flex-wrap justify-between gap-2 text-sm"><span className="font-semibold">{ready} dari {seserahan.length} sudah siap</span><span className="tabular-nums text-muted-foreground">Total perkiraan {rupiah(total)}</span></div>
         <div className="mt-2"><Progress value={ready} max={seserahan.length} label="Progres seserahan" /></div>
+      </div>
+      {/* Desktop: tiga kartu ringkasan. */}
+      <div className="mb-6 hidden gap-4 lg:grid lg:grid-cols-3">
+        <section className="flex flex-col gap-4 rounded-[28px] bg-primary p-6 text-white shadow-[var(--shadow-soft)]">
+          <span className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-full bg-white/10">
+              <IcSeserahan className="size-5" strokeWidth={1.8} aria-hidden />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-[17px] font-semibold">Sudah siap</span>
+              <span className="text-xs text-[#D5DCCB]">Total perkiraan {rupiah(total)}</span>
+            </span>
+          </span>
+          <span className="mt-auto font-serif text-[52px] leading-[0.85] tabular-nums">
+            {ready}
+            <span className="text-[26px] text-[#D5DCCB]">/{seserahan.length}</span>
+          </span>
+          <PanelBar value={ready} max={seserahan.length} />
+        </section>
+        {(['A', 'B'] as Partner[]).map((p) => {
+          const list = seserahan.filter((s) => s.from === p)
+          const done = list.filter((s) => s.ready).length
+          return (
+            <section key={p} className="card flex flex-col gap-4 p-6">
+              <span className="flex items-center gap-3">
+                <PartnerAvatar who={p} name={name(p)} size={44} />
+                <span className="flex min-w-0 flex-col">
+                  <span className="truncate text-[17px] font-semibold">Dari pihak {name(p)}</span>
+                  <span className="text-xs text-muted-foreground tabular-nums">{done} dari {list.length} siap</span>
+                </span>
+              </span>
+              <span className="mt-auto font-serif text-[36px] leading-none tabular-nums">{rupiahShort(list.reduce((a, s) => a + s.budget, 0))}</span>
+              <Progress value={done} max={list.length || 1} label={`Progres seserahan pihak ${name(p)}`} />
+            </section>
+          )
+        })}
       </div>
       {seserahan.length === 0 ? (
         <Empty icon={<Gift className="size-6" />} title="Belum ada barang seserahan" />
       ) : (
-        (['A', 'B'] as Partner[]).map((p) => {
+        <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-5">
+        {(['A', 'B'] as Partner[]).map((p) => {
           const list = seserahan.filter((s) => s.from === p)
           if (!list.length) return null
           return (
@@ -50,7 +89,8 @@ export default function Seserahan() {
               </ul>
             </section>
           )
-        })
+        })}
+        </div>
       )}
       <Modal open={!!draft} onClose={() => setDraft(null)} title={draft?.id ? 'Ubah barang' : 'Barang seserahan'}
         footer={<><button className="btn-ghost" onClick={() => setDraft(null)}>Batal</button><button className="btn-primary" onClick={save} disabled={!draft?.name}>Simpan</button></>}>

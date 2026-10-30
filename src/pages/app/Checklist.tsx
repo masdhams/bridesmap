@@ -2,6 +2,7 @@ import { differenceInCalendarDays, parseISO } from 'date-fns'
 import { Check, ChevronDown, FolderOpen, Plus, Trash2 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { PanelBar, PanelStat, SidePanel, WithPanel } from '../../components/bento'
 import { docProgress } from '../../lib/documents'
 import { CalendarButtons, ConfirmButton, Field, FilterChips, Modal, PageHeader, PartnerAvatar, RoundButton, Segmented } from '../../components/ui'
 import { PHASES } from '../../data/content'
@@ -183,7 +184,7 @@ export default function Checklist() {
   }
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-3.5">
+    <div className="mx-auto flex max-w-3xl flex-col gap-3.5 xl:max-w-none">
       <PageHeader
         back="/app"
         title="Checklist"
@@ -197,7 +198,15 @@ export default function Checklist() {
         }
       />
 
-      <section className="flex flex-col gap-2.5 rounded-[20px] border border-border bg-card p-4">
+      <WithPanel
+        panel={
+          <SidePanel title="Progres persiapan" sub={`${done} dari ${tasks.length} tugas selesai`} value={`${tasks.length ? Math.round((done / tasks.length) * 100) : 0}%`}>
+            <PanelBar value={done} max={tasks.length} />
+            <PanelStat label="Status" value={late ? `${late} terlambat` : 'Sesuai jadwal'} tone={late ? 'text-[#F2B8A8]' : undefined} />
+          </SidePanel>
+        }
+      >
+      <section className="flex flex-col gap-2.5 rounded-[20px] border border-border bg-card p-4 xl:hidden">
         <div className="flex items-baseline justify-between gap-3">
           <span className="text-sm text-muted-foreground">
             <span className="text-[22px] font-semibold text-ink tabular-nums">{done}</span> dari {tasks.length} tugas selesai
@@ -280,6 +289,7 @@ export default function Checklist() {
 
       </>
       )}
+      </WithPanel>
 
       <Modal
         open={!!draft}

@@ -152,7 +152,7 @@ export default function Seating() {
 
   return (
     <div>
-      <PageHeader title="Tempat duduk" subtitle={`${tables.length} meja · ${totalSeats} kursi · ${attending} tamu (tidak termasuk yang tidak hadir)`}
+      <PageHeader back="/app" title="Tempat duduk" subtitle={`${tables.length} meja · ${totalSeats} kursi · ${attending} tamu (tidak termasuk yang tidak hadir)`}
         actions={<button className="btn-primary btn-sm" onClick={() => setDraft({ name: `Meja ${tables.length + 1}`, capacity: 8 })}><Plus className="size-4" aria-hidden /> Meja</button>} />
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <Segmented label="Tampilan" value={view} onChange={setView} options={[{ value: 'daftar', label: 'Daftar' }, { value: 'denah', label: 'Denah (drag & drop)' }]} />

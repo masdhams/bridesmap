@@ -7,7 +7,7 @@ export default function More() {
   return (
     <div>
       <PageHeader title="Semua fitur" />
-      <div className="space-y-5">
+      <div className="space-y-5 xl:grid xl:grid-cols-2 xl:items-start xl:gap-5 xl:space-y-0">
         {NAV_GROUPS.map((g) => (
           <section key={g.title}>
             <h2 className="mb-2 px-1 font-sans text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{g.title}</h2>

@@ -48,7 +48,7 @@ export default function Honeymoon() {
   }
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-4">
+    <div className="mx-auto flex max-w-2xl flex-col gap-4 xl:grid xl:max-w-none xl:grid-cols-2 xl:items-start xl:gap-5 xl:[&>*:nth-child(-n+3)]:col-span-2">
       <header className="flex h-11 items-center justify-between gap-3">
         <SplitTitle a="Honey" b="moon" />
         <button
@@ -92,17 +92,17 @@ export default function Honeymoon() {
           </span>
         ) : (
           <span className="pointer-events-none relative font-serif text-[34px] leading-[1.05]">
-            Ke mana <span className="italic">kalian pergi?</span>
+            Ke mana <span className="italic">kalian ingin pergi?</span>
           </span>
         )}
         <span className="pointer-events-none relative text-[13px] text-[#D5DCCB]">
-          {h.startDate && h.endDate ? `${fmtDate(h.startDate, 'EEEE d')} – ${fmtDate(h.endDate, 'EEEE d MMM yyyy')} · ${nights} malam` : 'Isi destinasi & tanggal'}
+          {h.startDate && h.endDate ? `${fmtDate(h.startDate, 'EEEE d')} – ${fmtDate(h.endDate, 'EEEE d MMM yyyy')} · ${nights} malam` : 'Tambahkan destinasi & tanggal'}
         </span>
       </div>
 
       <section className="flex flex-col gap-2.5 rounded-[20px] border border-border bg-card p-4">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[13px] text-muted-foreground">Budget bulan madu</span>
+          <span className="text-[13px] text-muted-foreground">Budget honeymoon</span>
           {linked && <span className="badge-success min-h-6 px-2 text-[11px]">Terhubung ke Budget</span>}
         </div>
         <span className="text-[26px] font-semibold tracking-[-0.01em] tabular-nums">
@@ -115,9 +115,9 @@ export default function Honeymoon() {
 
       <section className="flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
-          <h2 className="font-sans text-[15px] font-semibold">Pemesanan</h2>
+          <h2 className="font-sans text-[15px] font-semibold">Booking & Pemesanan</h2>
           <button className="btn-soft min-h-9 px-3 text-[13px]" onClick={() => setBooking({ label: '', done: false })}>
-            <Plus className="size-4" aria-hidden /> Tambah
+            <Plus className="size-4" aria-hidden /> Tambah pemesanan
           </button>
         </div>
         <ul className="overflow-hidden rounded-[20px] border border-border bg-card">
@@ -137,7 +137,7 @@ export default function Honeymoon() {
                 <button className="flex min-w-0 flex-1 flex-col text-left" onClick={() => setBooking(b)}>
                   <span className="truncate text-sm font-semibold">{b.label}</span>
                   <span className="truncate text-xs text-muted-foreground">
-                    {st === 'lunas' ? `${b.amount ? rupiah(b.amount) : 'Sudah'} · lunas` : st === 'dp' ? `DP ${rupiah(b.paid ?? 0)} dari ${rupiah(b.amount ?? 0)}` : b.amount ? `Perkiraan ${rupiah(b.amount)}` : 'Belum dipesan'}
+                    {st === 'lunas' ? `${b.amount ? `${rupiah(b.amount)} · sudah lunas` : 'Sudah dibayar · lunas'}` : st === 'dp' ? `DP ${rupiah(b.paid ?? 0)} dari ${rupiah(b.amount ?? 0)}` : b.amount ? `Estimasi ${rupiah(b.amount)}` : 'Belum dipesan'}
                   </span>
                 </button>
                 {st === 'dp' ? (
@@ -150,7 +150,7 @@ export default function Honeymoon() {
               </li>
             )
           })}
-          {h.bookings.length === 0 && <li className="px-4 py-5 text-sm text-muted-foreground">Belum ada pemesanan.</li>}
+          {h.bookings.length === 0 && <li className="px-4 py-5 text-sm text-muted-foreground">Belum ada booking. Tambahkan tiket, hotel, atau kebutuhan perjalanan lainnya.</li>}
         </ul>
       </section>
 
@@ -158,7 +158,7 @@ export default function Honeymoon() {
         <Link to="/app/honeymoon/itinerary" className="flex min-h-[96px] flex-col justify-between rounded-[20px] bg-primary p-4 text-white">
           <span className="text-[13px] text-[#D5DCCB]">Itinerary</span>
           <span className="flex items-center justify-between text-base font-semibold">
-            {days ? `${days} hari` : 'Atur hari'} <ArrowRight className="size-4" strokeWidth={1.8} aria-hidden />
+            {days ? `${days} hari` : 'Susun itinerary'} <ArrowRight className="size-4" strokeWidth={1.8} aria-hidden />
           </span>
         </Link>
         <a href="#packing" className="flex min-h-[96px] flex-col justify-between rounded-[20px] border border-border bg-muted p-4">
@@ -191,7 +191,7 @@ export default function Honeymoon() {
               setPackText('')
             }}
           >
-            <input className="input min-h-11" value={packText} onChange={(e) => setPackText(e.target.value)} placeholder="Tambah barang" aria-label="Tambah barang packing" />
+            <input className="input min-h-11" value={packText} onChange={(e) => setPackText(e.target.value)} placeholder="Tambah barang yang perlu dibawa" aria-label="Tambah barang packing" />
             <button className="btn-outline min-h-11 shrink-0 px-4" aria-label="Tambah" disabled={!packText.trim()}>
               <Plus className="size-4" />
             </button>
@@ -206,22 +206,22 @@ export default function Honeymoon() {
         footer={
           <>
             <button className="btn-ghost" onClick={() => setEditTrip(false)}>Batal</button>
-            <button className="btn-primary" onClick={saveTrip}>Simpan</button>
+            <button className="btn-primary" onClick={saveTrip}>Simpan rencana</button>
           </>
         }
       >
-        <Field label="Destinasi" htmlFor="hd" hint="Pakai koma untuk wilayah, mis. Labuan Bajo, NTT"><input id="hd" className="input" value={trip.destination} onChange={(e) => setTrip({ ...trip, destination: e.target.value })} placeholder="mis. Labuan Bajo, NTT" /></Field>
+        <Field label="Destinasi" htmlFor="hd" hint="Tulis nama tempat dan wilayah, mis. Labuan Bajo, NTT"><input id="hd" className="input" value={trip.destination} onChange={(e) => setTrip({ ...trip, destination: e.target.value })} placeholder="mis. Labuan Bajo, NTT" /></Field>
         <div className="grid grid-cols-2 gap-4">
           <Field label="Berangkat" htmlFor="hs"><input id="hs" type="date" className="input" value={trip.startDate ?? ''} onChange={(e) => setTrip({ ...trip, startDate: e.target.value })} /></Field>
           <Field label="Pulang" htmlFor="he"><input id="he" type="date" className="input" value={trip.endDate ?? ''} onChange={(e) => setTrip({ ...trip, endDate: e.target.value })} /></Field>
         </div>
-        <Field label="Budget bulan madu" htmlFor="hb" hint="Otomatis jadi kategori 'Honeymoon' di Budget"><MoneyInput id="hb" value={trip.budget} onChange={(n) => setTrip({ ...trip, budget: n })} /></Field>
+        <Field label="Budget honeymoon" htmlFor="hb" hint="Otomatis masuk sebagai kategori 'Honeymoon' di Budget"><MoneyInput id="hb" value={trip.budget} onChange={(n) => setTrip({ ...trip, budget: n })} /></Field>
       </Modal>
 
       <Modal
         open={!!booking}
         onClose={() => setBooking(null)}
-        title={booking?.id ? 'Ubah pemesanan' : 'Pemesanan baru'}
+        title={booking?.id ? 'Ubah pemesanan' : 'Tambah pemesanan'}
         footer={
           <>
             {booking?.id && (
@@ -234,12 +234,12 @@ export default function Honeymoon() {
           </>
         }
       >
-        <Field label="Nama" htmlFor="bl"><input id="bl" className="input" value={booking?.label ?? ''} onChange={(e) => setBooking({ ...booking, label: e.target.value })} placeholder="mis. Hotel 5 malam" /></Field>
+        <Field label="Nama pemesanan" htmlFor="bl"><input id="bl" className="input" value={booking?.label ?? ''} onChange={(e) => setBooking({ ...booking, label: e.target.value })} placeholder="mis. Hotel untuk 5 malam" /></Field>
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Total" htmlFor="bt"><MoneyInput id="bt" value={booking?.amount ?? 0} onChange={(n) => setBooking({ ...booking, amount: n || undefined })} /></Field>
+          <Field label="Total biaya" htmlFor="bt"><MoneyInput id="bt" value={booking?.amount ?? 0} onChange={(n) => setBooking({ ...booking, amount: n || undefined })} /></Field>
           <Field label="Sudah dibayar" htmlFor="bp"><MoneyInput id="bp" value={booking?.paid ?? 0} onChange={(n) => setBooking({ ...booking, paid: n || undefined })} /></Field>
         </div>
-        <Checkbox checked={!!booking?.done} onChange={(v) => setBooking({ ...booking, done: v })} label="Sudah lunas / beres" strike={false} />
+        <Checkbox checked={!!booking?.done} onChange={(v) => setBooking({ ...booking, done: v })} label="Sudah lunas" strike={false} />
       </Modal>
     </div>
   )

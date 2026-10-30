@@ -2,7 +2,8 @@ import { Select } from '../../components/select'
 import { CategoryPicker } from '../../components/CategoryPicker'
 import { HelpHint } from '../../components/HelpHint'
 import { GUIDE_HINTS } from '../../data/guide'
-import { ChevronDown, ChevronRight, CircleAlert, Pencil, Plus, Printer, RotateCcw, SlidersHorizontal, Store, Trash2 } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ChevronDown, ChevronRight, CircleAlert, Pencil, Plus, Printer, RotateCcw, SlidersHorizontal, Store, Trash2 } from 'lucide-react'
+import { IcBudget } from '../../components/icons'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CategoryIcon, visualKey } from '../../components/budgetVisual'
@@ -12,7 +13,7 @@ import { allocTotals, pctOf } from '../../lib/allocation'
 import { budgetSummary, budgetTotals, vendorCost, type CategorySummary } from '../../lib/selectors'
 import { usePlan } from '../../lib/store'
 import type { BudgetItem } from '../../lib/types'
-import { cn, fmtDate, rupiah, uid } from '../../lib/utils'
+import { cn, fmtDate, rupiah, rupiahShort, uid } from '../../lib/utils'
 
 function CategoryCard({ c, vkey, onEdit }: { c: CategorySummary; vkey: string; onEdit: () => void }) {
   const [open, setOpen] = useState(false)
@@ -123,33 +124,114 @@ function HeroCard({ sum, onEditTotal }: { sum: CategorySummary[]; onEditTotal: (
     { label: 'Sudah dibayar', value: rupiah(t.paid), tone: 'text-success' },
     { label: left < 0 ? 'Melewati budget' : 'Sisa', value: rupiah(Math.abs(left)), tone: left < 0 ? 'text-destructive' : 'text-ink' },
   ]
+  // Meter batang tipis khusus desktop: terbayar (Sirih) · disepakati belum dibayar (Sage) · sisa.
+  const BARS = 48
+  const scale = Math.max(total, t.committed, 1)
+  const paidBars = Math.round((t.paid / scale) * BARS)
+  const usedBars = Math.round((t.committed / scale) * BARS)
   return (
-    <section className="card flex flex-col gap-4 p-5 sm:p-6">
+    <section className="card flex h-full flex-col gap-4 p-5 sm:p-6 lg:gap-5 lg:rounded-[28px] lg:p-7">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1.5">
-          <span className="eyebrow text-[11px]">Total budget</span>
+          <span className="flex items-center gap-2.5">
+            <span className="hidden size-9 place-items-center rounded-full bg-primary-soft text-on-primary-soft lg:grid">
+              <IcBudget className="size-[18px]" strokeWidth={1.8} aria-hidden />
+            </span>
+            <span className="eyebrow text-[11px]">Total budget</span>
+          </span>
           <button onClick={onEditTotal} className="group inline-flex items-center gap-2 text-left" aria-label={`Total budget ${rupiah(total)}. Ketuk untuk mengubah`}>
-            <span className="font-serif text-[34px] leading-none tabular-nums sm:text-[40px]">{rupiah(total)}</span>
+            <span className="font-serif text-[34px] leading-none tabular-nums sm:text-[40px] lg:text-[52px]">{rupiah(total)}</span>
             <Pencil className="size-4 shrink-0 text-muted-foreground transition-colors duration-200 group-hover:text-ink" aria-hidden />
           </button>
         </div>
         <span className={cn(status.cls, 'min-h-[26px] shrink-0 text-xs')}>{status.text}</span>
       </div>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5 lg:hidden">
         <div className="h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={used} aria-valuemin={0} aria-valuemax={100} aria-label="Bagian budget yang sudah disepakati">
           <div className={cn('h-full rounded-full transition-[width] duration-700 bar-grow', left < 0 ? 'bg-destructive' : 'bg-primary')} style={{ width: `${Math.min(100, used)}%` }} />
         </div>
         <span className="text-xs text-muted-foreground tabular-nums">{used}% dari total budget sudah disepakati</span>
       </div>
+      <div className="hidden flex-col gap-2 lg:flex">
+        <div className="flex justify-between text-[11px] tabular-nums text-muted-foreground">
+          <span>{used}% sudah disepakati</span>
+          <span>{rupiahShort(total)}</span>
+        </div>
+        <div className="flex h-16 gap-[3px]" role="img" aria-label={`${used}% dari total budget sudah disepakati`}>
+          {Array.from({ length: BARS }, (_, i) => (
+            <span
+              key={i}
+              className={cn('flex-1 rounded-full', i < paidBars ? (left < 0 ? 'bg-destructive' : 'bg-primary') : i < usedBars ? (left < 0 ? 'bg-[#E8B9AB]' : 'bg-sage') : 'bg-divider')}
+            />
+          ))}
+        </div>
+      </div>
       {/* Mobile: tiga baris (label kiri, nominal kanan) supaya nominal tidak terpotong. Layar lebar: tiga kolom. */}
-      <dl className="flex flex-col gap-2.5 border-t border-divider pt-4 sm:grid sm:grid-cols-3 sm:gap-0">
+      <dl className="mt-auto flex flex-col gap-2.5 border-t border-divider pt-4 sm:grid sm:grid-cols-3 sm:gap-0">
         {stats.map((x, i) => (
           <div key={x.label} className={cn('flex items-baseline justify-between gap-3 sm:flex-col sm:justify-start sm:gap-1', i > 0 && 'sm:border-l sm:border-divider sm:pl-4')}>
             <dt className="text-[13px] text-muted-foreground sm:text-xs">{x.label}</dt>
-            <dd className={cn('whitespace-nowrap text-[15px] font-semibold tabular-nums', x.tone)}>{x.value}</dd>
+            <dd className={cn('whitespace-nowrap text-[15px] font-semibold tabular-nums lg:text-[20px] lg:tracking-tight', x.tone)}>{x.value}</dd>
           </div>
         ))}
       </dl>
+    </section>
+  )
+}
+
+/** Panel gelap desktop: ringkasan alokasi per acara di samping kartu total. */
+function EventsPanel({ sum }: { sum: CategorySummary[] }) {
+  const { profile, events, categories } = usePlan()
+  const reserved = categories.filter((c) => c.hidden).reduce((a, c) => a + c.allocated, 0)
+  const t = allocTotals(profile.totalBudget, events, reserved)
+  return (
+    <section className="hidden h-full flex-col gap-4 rounded-[28px] bg-primary p-6 text-white shadow-[var(--shadow-soft)] lg:flex">
+      <div className="flex items-start justify-between gap-3">
+        <span className="flex flex-col">
+          <span className="text-[17px] font-semibold">Alokasi per acara</span>
+          <span className="text-xs text-[#D5DCCB]">Estimasi awal, bisa diubah kapan saja</span>
+        </span>
+        <span className="font-serif text-[40px] leading-[0.9] tabular-nums">{events.length}</span>
+      </div>
+      {events.length === 0 ? (
+        <p className="rounded-[18px] bg-white/[0.07] px-4 py-5 text-sm text-[#D5DCCB]">Belum ada acara. Rencana lama memakai kategori umum.</p>
+      ) : (
+        <ul className="flex flex-col gap-2">
+          {events.map((e) => {
+            const used = sum.filter((c) => categories.find((x) => x.id === c.id)?.eventId === e.id).reduce((a, c) => a + c.committed, 0)
+            const pct = e.budget > 0 ? Math.min(100, (used / e.budget) * 100) : 0
+            return (
+              <li key={e.id} className="flex flex-col gap-2 rounded-[18px] bg-white/[0.07] px-4 py-3">
+                <span className="flex items-baseline justify-between gap-3">
+                  <span className="truncate text-sm font-semibold">{e.name}</span>
+                  <span className="shrink-0 text-sm font-semibold tabular-nums">{rupiahShort(e.budget)}</span>
+                </span>
+                <span className="h-1.5 overflow-hidden rounded-full bg-white/15" aria-hidden>
+                  <span className={cn('block h-full rounded-full', used > e.budget ? 'bg-[#E8B9AB]' : 'bg-[#C9D4BA]')} style={{ width: `${pct}%` }} />
+                </span>
+                <span className="flex justify-between text-[11px] tabular-nums text-[#D5DCCB]">
+                  <span>{pctOf(e.budget, profile.totalBudget).toString().replace('.', ',')}% dari total</span>
+                  <span>terpakai {rupiahShort(used)}</span>
+                </span>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+      <div className="mt-auto flex flex-col gap-3">
+        {reserved > 0 && (
+          <p className="flex justify-between text-xs text-[#D5DCCB]">
+            <span>Hidden cost disisihkan</span>
+            <span className="font-semibold tabular-nums text-white">{rupiahShort(reserved)}</span>
+          </p>
+        )}
+        <Link to="/app/budget/alokasi" className="inline-flex min-h-10 items-center justify-between rounded-full bg-white px-4 text-sm font-semibold text-primary transition-colors duration-200 hover:bg-[#EEF1E8]">
+          {t.free < 0 ? `Alokasi lewat ${rupiahShort(-t.free)}` : t.free === 0 ? 'Atur alokasi' : `Atur · ${rupiahShort(t.free)} belum teralokasi`}
+          <span className="grid size-7 place-items-center rounded-full bg-primary text-white">
+            <ArrowRight className="size-4" strokeWidth={2} aria-hidden />
+          </span>
+        </Link>
+      </div>
     </section>
   )
 }
@@ -182,7 +264,37 @@ function Overview({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () => void 
         <h2 className="font-sans text-[15px] font-semibold">Pemakaian per kategori</h2>
         <p className="text-xs text-muted-foreground">Biaya yang sudah disepakati dibanding alokasi tiap kategori.</p>
       </div>
-      <ul className="overflow-hidden rounded-[20px] border border-border bg-card">
+      {/* Desktop: kartu bento per kategori. */}
+      <ul className="hidden gap-4 lg:grid lg:grid-cols-2 xl:grid-cols-3">
+        {list.map((g) => {
+          const pct = g.allocated > 0 ? Math.round((g.committed / g.allocated) * 100) : g.committed > 0 ? 100 : 0
+          const over = g.committed > g.allocated && g.allocated > 0
+          return (
+            <li key={g.name}>
+              <button onClick={onOpen} className="group flex h-full w-full flex-col gap-4 rounded-[28px] border border-border bg-card p-5 text-left shadow-[var(--shadow-soft)] transition-shadow duration-200 hover:shadow-[var(--shadow-lift)]">
+                <span className="flex items-start justify-between gap-3">
+                  <CategoryIcon vkey={g.vkey} size={44} />
+                  <span className="grid size-9 place-items-center rounded-full border border-border text-ink">
+                    <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} aria-hidden />
+                  </span>
+                </span>
+                <span className="text-[15px] font-semibold leading-tight">{g.name}</span>
+                <span className="mt-auto flex items-end justify-between gap-3">
+                  <span className={cn('font-serif text-[44px] leading-[0.85] tabular-nums', over && 'text-destructive')}>{pct}%</span>
+                  <span className="text-right text-xs leading-snug text-muted-foreground tabular-nums">
+                    <span className="block font-semibold text-ink">{rupiahShort(g.committed)}</span>
+                    dari {rupiahShort(g.allocated)}
+                  </span>
+                </span>
+                <span className="h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden>
+                  <span className={cn('block h-full rounded-full transition-[width] duration-700 bar-grow', over ? 'bg-destructive' : g.vkey === 'hidden' ? 'bg-accent' : 'bg-primary')} style={{ width: `${Math.min(100, pct)}%` }} />
+                </span>
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+      <ul className="overflow-hidden rounded-[20px] border border-border bg-card lg:hidden">
         {list.map((g) => {
           const pct = g.allocated > 0 ? Math.round((g.committed / g.allocated) * 100) : g.committed > 0 ? 100 : 0
           const over = g.committed > g.allocated && g.allocated > 0
@@ -401,10 +513,17 @@ export default function Budget() {
         <p className="text-sm">Hari-H {fmtDate(s.profile.weddingDate, 'd MMMM yyyy')} · dicetak {fmtDate(new Date().toISOString().slice(0, 10))}</p>
       </div>
 
-      <div className="mx-auto flex max-w-3xl flex-col gap-5">
-        <HeroCard sum={sum} onEditTotal={() => setEditTotal(s.profile.totalBudget)} />
+      <div className="mx-auto flex max-w-3xl flex-col gap-5 lg:max-w-none">
+        <div className="grid gap-5 xl:grid-cols-12">
+          <div className="xl:col-span-7">
+            <HeroCard sum={sum} onEditTotal={() => setEditTotal(s.profile.totalBudget)} />
+          </div>
+          <div className="xl:col-span-5">
+            <EventsPanel sum={sum} />
+          </div>
+        </div>
 
-        <div role="tablist" aria-label="Bagian budget" className="no-print grid grid-cols-3 gap-1 rounded-full border border-border bg-muted p-1">
+        <div role="tablist" aria-label="Bagian budget" className="no-print grid grid-cols-3 gap-1 rounded-full border border-border bg-muted p-1 lg:w-[420px]">
           {([
             { v: 'ringkasan', label: 'Ringkasan' },
             { v: 'kategori', label: 'Kategori' },
@@ -415,7 +534,7 @@ export default function Budget() {
               role="tab"
               aria-selected={tab === t.v}
               onClick={() => setTab(t.v)}
-              className={cn('min-h-10 rounded-full text-[13px]', tab === t.v ? 'bg-card font-semibold text-ink shadow-[var(--shadow-tab)]' : 'font-medium text-body hover:text-ink')}
+              className={cn('min-h-10 rounded-full text-[13px]', tab === t.v ? 'bg-primary font-semibold text-on-primary shadow-[var(--shadow-tab)] lg:bg-card lg:text-ink' : 'font-medium text-body hover:text-ink')}
             >
               {t.label}
             </button>
@@ -432,21 +551,23 @@ export default function Budget() {
                 <Plus className="size-4" aria-hidden /> Kategori
               </button>
             </div>
-            {groups.map((g) => (
-              <div key={g.key} className="flex flex-col gap-1.5">
-                <p className="px-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">{g.title}</p>
-                <ul className="overflow-hidden rounded-[20px] border border-border bg-card">
-                  {g.items.map((c) => (
-                    <CategoryCard key={c.id} c={c} vkey={vkeyOf(c)} onEdit={() => setEdit({ id: c.id, name: c.name, allocated: c.allocated, eventId: s.categories.find((x) => x.id === c.id)?.eventId })} />
-                  ))}
-                </ul>
-              </div>
-            ))}
+            <div className="flex flex-col gap-2.5 lg:grid lg:grid-cols-2 lg:items-start lg:gap-5">
+              {groups.map((g) => (
+                <div key={g.key} className="flex flex-col gap-1.5">
+                  <p className="px-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">{g.title}</p>
+                  <ul className="overflow-hidden rounded-[20px] border border-border bg-card lg:rounded-[24px] lg:shadow-[var(--shadow-soft)]">
+                    {g.items.map((c) => (
+                      <CategoryCard key={c.id} c={c} vkey={vkeyOf(c)} onEdit={() => setEdit({ id: c.id, name: c.name, allocated: c.allocated, eventId: s.categories.find((x) => x.id === c.id)?.eventId })} />
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </section>
         )}
 
         {tab === 'pengaturan' && (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start">
             <AllocationCard sum={sum} />
             <HiddenCosts />
           </div>
