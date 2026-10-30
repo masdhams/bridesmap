@@ -8,10 +8,10 @@ export const BRAND = {
 }
 
 export const EVENT_KINDS: { kind: 'lamaran' | 'akad' | 'resepsi' | 'adat'; label: string; hint: string; /** bobot awal pembagian total budget antar acara — ASUMSI, tidak ada di PRD */ weight: number }[] = [
-  { kind: 'lamaran', label: 'Lamaran', hint: 'Acara lebih kecil, katering paling besar', weight: 8 },
-  { kind: 'akad', label: 'Akad nikah', hint: 'Termasuk administrasi & izin', weight: 17 },
-  { kind: 'resepsi', label: 'Resepsi', hint: 'Acara terbesar', weight: 60 },
-  { kind: 'adat', label: 'Acara adat', hint: 'Siraman, midodareni, sangjit, dll.', weight: 15 },
+  { kind: 'lamaran', label: 'Lamaran', hint: 'Acara yang lebih intim, dengan kebutuhan katering dan dekorasi yang bisa disesuaikan.', weight: 8 },
+  { kind: 'akad', label: 'Akad nikah', hint: 'Termasuk kebutuhan administrasi dan perizinan.', weight: 17 },
+  { kind: 'resepsi', label: 'Resepsi', hint: 'Biasanya menjadi acara dengan jumlah tamu dan kebutuhan terbesar.', weight: 60 },
+  { kind: 'adat', label: 'Acara adat', hint: 'Seperti siraman, midodareni, sangjit, dan lainnya.', weight: 15 },
 ]
 
 /** Default alokasi per kategori (% dari budget acara) sesuai tabel PRD v1.6 §#39.

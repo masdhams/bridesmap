@@ -46,9 +46,9 @@ export function PlanBuilder({ steps, initials, onDone }: { steps: BuildStep[]; i
     <div className="min-h-dvh bg-background">
       <div className="mx-auto flex min-h-dvh max-w-md flex-col px-6 pb-10 pt-16" role="status" aria-live="polite">
         <h1 className="text-center text-[34px] leading-[1.05]">
-          Menyusun rencana
+          Sedang menyiapkan rencana
           <br />
-          <span className="italic text-accent">kalian berdua…</span>
+          <span className="italic text-accent">hari istimewa kalian…</span>
         </h1>
 
         <ul className="mt-10 flex flex-col gap-6">
@@ -76,7 +76,7 @@ export function PlanBuilder({ steps, initials, onDone }: { steps: BuildStep[]; i
         </ul>
 
         <p key={current.detail} className="animate-fade-up mt-8 min-h-12 text-center text-[14px] leading-relaxed text-body">
-          {active === -1 ? 'Selesai. Rencana kalian sudah siap.' : current.detail}
+          {active === -1 ? 'Selesai! Rencana pernikahan kalian sudah siap.' : current.detail}
         </p>
 
         <div aria-hidden className="mt-auto flex items-center justify-center pt-8">

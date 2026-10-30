@@ -32,7 +32,7 @@ export function DateChecker({ open, onClose, value, onPick }: { open: boolean; o
     <Modal
       open={open}
       onClose={onClose}
-      title="Cek tanggal"
+      title="Cek tanggal pernikahan"
       footer={
         <>
           <button className="btn-ghost" onClick={onClose}>
@@ -50,7 +50,7 @@ export function DateChecker({ open, onClose, value, onPick }: { open: boolean; o
         </>
       }
     >
-      <p className="text-sm text-body">Lihat tanggal Hijriah, hari libur nasional, dan pertimbangan musim nikah. Keputusan tanggal tetap milik kalian dan keluarga.</p>
+      <p className="text-sm text-body">Sebelum menentukan hari, cek dulu tanggal Hijriah, hari libur nasional, dan beberapa hal yang mungkin perlu dipertimbangkan. Keputusan akhirnya tetap bisa kalian diskusikan bersama keluarga.</p>
 
       <div className="flex items-center justify-between">
         <button type="button" className="icon-btn" onClick={() => setMonth(addMonths(month, -1))} aria-label="Bulan sebelumnya">
@@ -121,7 +121,7 @@ export function DateChecker({ open, onClose, value, onPick }: { open: boolean; o
           {hijriLabel(picked)} · {Math.max(0, daysUntil(iso(picked)))} hari dari sekarang
         </p>
         <ul className="mt-1 space-y-2">
-          {notes.length === 0 && <li className="text-sm text-muted-foreground">Hari kerja biasa. Harga vendor cenderung lebih fleksibel, tapi tamu mungkin perlu cuti.</li>}
+          {notes.length === 0 && <li className="text-sm text-muted-foreground">Tanggal ini jatuh pada hari kerja. Harga vendor mungkin lebih fleksibel, tetapi sebagian tamu bisa perlu mengambil cuti.</li>}
           {notes.map((n, i) => (
             <li key={i} className={cn('flex gap-2 rounded-xl p-3 text-sm', n.tone === 'warn' ? 'bg-warning-soft text-warning' : n.tone === 'good' ? 'bg-success-soft text-success' : 'bg-card text-ink')}>
               {n.tone === 'warn' ? <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden /> : n.tone === 'good' ? <Users className="mt-0.5 size-4 shrink-0" aria-hidden /> : <Info className="mt-0.5 size-4 shrink-0" aria-hidden />}
@@ -130,7 +130,7 @@ export function DateChecker({ open, onClose, value, onPick }: { open: boolean; o
           ))}
         </ul>
       </section>
-      <p className="text-xs text-muted-foreground">Tanggal Hijriah dihitung dengan kalender Umm al-Qura dan bisa berbeda ±1 hari dari penetapan resmi. Hari libur mengikuti perkiraan SKB 3 Menteri.</p>
+      <p className="text-xs text-muted-foreground">Tanggal Hijriah dihitung menggunakan kalender Umm al-Qura dan bisa berbeda ±1 hari dari penetapan resmi. Hari libur mengikuti perkiraan SKB 3 Menteri.</p>
     </Modal>
   )
 }

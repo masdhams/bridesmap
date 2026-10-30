@@ -74,15 +74,15 @@ export interface DateNote {
 export function dateNotes(d: Date, iso: string): DateNote[] {
   const notes: DateNote[] = []
   const h = HOLIDAYS[iso]
-  if (h) notes.push({ tone: 'warn', text: `Libur nasional: ${h}. Tamu luar kota terbantu, tapi harga vendor & venue biasanya lebih tinggi.` })
+  if (h) notes.push({ tone: 'warn', text: `${h} adalah hari libur nasional. Tamu dari luar kota mungkin lebih mudah hadir, tetapi harga venue dan vendor bisa lebih tinggi.` })
   const dow = d.getDay()
-  if (dow === 0 || dow === 6) notes.push({ tone: 'good', text: 'Akhir pekan — tamu lebih mudah datang. Venue cepat penuh, booking lebih awal.' })
+  if (dow === 0 || dow === 6) notes.push({ tone: 'good', text: 'Akhir pekan biasanya lebih mudah untuk tamu yang bekerja. Namun, venue bisa lebih cepat penuh, jadi sebaiknya pesan lebih awal.' })
   const hm = hijriMonthDay(d)
   if (hm) {
-    if (hm.month === 9) notes.push({ tone: 'warn', text: 'Bulan Ramadan — jarang dipilih untuk resepsi; katering & jam acara perlu menyesuaikan.' })
-    if (hm.month === 10) notes.push({ tone: 'info', text: 'Bulan Syawal — musim nikah. Vendor cepat penuh dan harga cenderung naik.' })
-    if (hm.month === 12) notes.push({ tone: 'info', text: 'Bulan Dzulhijjah — banyak pasangan memilih bulan ini; booking lebih awal.' })
-    if (hm.month === 1) notes.push({ tone: 'info', text: 'Bulan Muharram (Suro) — sebagian keluarga Jawa menghindari menikah di bulan ini. Diskusikan dengan keluarga.' })
+    if (hm.month === 9) notes.push({ tone: 'warn', text: 'Ramadan bisa menjadi pertimbangan khusus untuk acara resepsi. Sesuaikan waktu acara dan pilihan katering dengan kebutuhan keluarga serta tamu.' })
+    if (hm.month === 10) notes.push({ tone: 'info', text: 'Syawal termasuk periode yang banyak dipilih untuk menikah. Vendor dan venue bisa lebih cepat penuh, jadi pertimbangkan untuk booking lebih awal.' })
+    if (hm.month === 12) notes.push({ tone: 'info', text: 'Banyak pasangan memilih bulan Dzulhijjah untuk menikah. Jika memilih tanggal di periode ini, sebaiknya mulai mencari vendor lebih awal.' })
+    if (hm.month === 1) notes.push({ tone: 'info', text: 'Sebagian keluarga Jawa memiliki pertimbangan tersendiri untuk menikah di bulan Muharram atau Suro. Sebaiknya diskusikan tanggal pilihan kalian bersama keluarga.' })
   }
   return notes
 }

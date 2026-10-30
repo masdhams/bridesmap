@@ -122,14 +122,14 @@ export function AllocationEditor(p: AllocationEditorProps) {
             <>
               <li className="flex items-center gap-2.5">
                 <span className="size-2.5 shrink-0 rounded-[3px]" style={{ background: '#9A4E3B' }} />
-                <span className="min-w-0 flex-1 font-medium">Hidden cost</span>
+                <span className="min-w-0 flex-1 font-medium">Biaya tak terduga</span>
                 <span className="flex shrink-0 flex-col items-end leading-tight">
                   <span className="font-semibold tabular-nums">{rupiah(p.reserved)}</span>
                   <span className="text-xs tabular-nums text-muted-foreground">{fmtPct(pctOf(p.reserved, p.total))}% dari total</span>
                 </span>
                 <button
                   type="button"
-                  aria-label="Apa itu hidden cost?"
+                  aria-label="Apa itu biaya tak terduga?"
                   aria-expanded={showHiddenInfo}
                   onClick={() => setShowHiddenInfo((v) => !v)}
                   className="-my-2 -mr-1 grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-ink aria-expanded:bg-accent-soft aria-expanded:text-accent"
@@ -139,9 +139,9 @@ export function AllocationEditor(p: AllocationEditorProps) {
               </li>
               {showHiddenInfo && (
                 <li role="note" className="rounded-2xl bg-accent-soft px-4 py-3 text-[13px] leading-relaxed text-accent-ink">
-                  Biaya yang sering terlupa tapi hampir selalu muncul, seperti {hiddenNames.slice(0, -1).join(', ')}
+                  Ada biaya kecil yang sering luput dari perhitungan, tetapi bisa muncul menjelang hari-H. Misalnya {hiddenNames.slice(0, -1).join(', ')}
                   {hiddenNames.length > 1 ? ' dan ' : ''}
-                  {hiddenNames.at(-1)}. Kami sisihkan sebagian budget dari awal supaya tidak jadi kejutan di akhir. Pos-posnya bisa kalian pilih dan ubah sendiri.
+                  {hiddenNames.at(-1)}. Karena itu, kami sisihkan sebagian budget sebagai antisipasi. Kalian tetap bisa memilih dan mengubah pos biayanya sendiri.
                 </li>
               )}
             </>
@@ -151,7 +151,7 @@ export function AllocationEditor(p: AllocationEditorProps) {
         <div className={cn('flex items-start gap-2 rounded-2xl px-4 py-3 text-sm', over ? 'bg-danger-soft text-danger-ink' : t.free === 0 ? 'bg-primary-soft text-on-primary-soft' : 'bg-muted text-body')} role={over ? 'alert' : 'status'}>
           {over && <CircleAlert className="mt-0.5 size-4 shrink-0" strokeWidth={2} aria-hidden />}
           <span className="flex-1">
-            {over ? 'Alokasi melebihi budget' : t.free === 0 ? 'Semua budget sudah teralokasi' : 'Belum teralokasi'}
+            {over ? 'Alokasi melebihi budget' : t.free === 0 ? 'Semua budget sudah terbagi' : 'Belum teralokasi'}
           </span>
           {t.free !== 0 && <span className="font-semibold tabular-nums">{rupiah(Math.abs(t.free))}</span>}
         </div>
@@ -182,11 +182,11 @@ export function AllocationEditor(p: AllocationEditorProps) {
                   <div>
                     <p className="label">Budget {e.name}</p>
                     <PctRpInput base={p.total} value={e.budget} onChange={(n) => p.onEventBudget(e.id, n)} label={`Budget ${e.name}`} />
-                    <p className="hint">Persentase terhadap total budget. Kategori di bawah ikut menyesuaikan.</p>
+                    <p className="hint">Atur porsi acara ini dari total budget. Pembagian kategori di bawahnya akan ikut menyesuaikan.</p>
                   </div>
 
                   <div>
-                    <p className="label">Per kategori</p>
+                    <p className="label">Pembagian per kategori</p>
                     <ul className="flex flex-col gap-3">
                       {cats.map((c) => (
                         <li key={c.id} className="flex flex-col gap-1.5">
@@ -199,7 +199,7 @@ export function AllocationEditor(p: AllocationEditorProps) {
 
                   <div className={cn('flex items-start gap-2 rounded-2xl px-4 py-3 text-sm', free < 0 ? 'bg-danger-soft text-danger-ink' : free === 0 ? 'bg-primary-soft text-on-primary-soft' : 'bg-muted text-body')} role={free < 0 ? 'alert' : 'status'}>
                     {free < 0 && <CircleAlert className="mt-0.5 size-4 shrink-0" strokeWidth={2} aria-hidden />}
-                    <span className="flex-1">{free < 0 ? 'Kategori melebihi budget acara' : free === 0 ? 'Semua budget acara teralokasi' : 'Belum teralokasi di acara ini'}</span>
+                    <span className="flex-1">{free < 0 ? 'Total kategori melebihi budget acara' : free === 0 ? 'Semua budget acara sudah terbagi' : 'Masih ada budget acara yang belum terbagi'}</span>
                     {free !== 0 && <span className="font-semibold tabular-nums">{rupiah(Math.abs(free))}</span>}
                     <span className="sr-only"> Total kategori {fmtPct(pctOf(sum, e.budget))} persen dari budget acara</span>
                   </div>
@@ -207,7 +207,7 @@ export function AllocationEditor(p: AllocationEditorProps) {
 
                   <div className="flex flex-wrap items-center gap-2">
                     <button className="btn-outline btn-sm" onClick={() => p.onReset(e.id)}>
-                      <RotateCcw className="size-4" aria-hidden /> Kembalikan ke default
+                      <RotateCcw className="size-4" aria-hidden /> Pulihkan pembagian awal
                     </button>
                     {p.onRemove && p.events.length > 1 && (
                       <ConfirmButton
@@ -246,11 +246,11 @@ export function AllocationEditor(p: AllocationEditorProps) {
           <>
             <div>
               <PctRpInput base={p.total} value={editEv.budget} onChange={(n) => p.onEventBudget(editEv.id, n)} label={`Atur ${editEv.name}`} />
-              <p className="hint">Persentase dihitung dari total budget {rupiah(p.total)}. Kategori di dalam acara ikut menyesuaikan dengan persentase tetap.</p>
+              <p className="hint">Persentase dihitung dari total budget {rupiah(p.total)}. Pembagian setiap kategori di dalam acara ini akan ikut menyesuaikan.</p>
             </div>
             <div className={cn('flex items-start gap-2 rounded-2xl px-4 py-3 text-sm', over ? 'bg-danger-soft text-danger-ink' : t.free === 0 ? 'bg-primary-soft text-on-primary-soft' : 'bg-muted text-body')} role={over ? 'alert' : 'status'}>
               {over && <CircleAlert className="mt-0.5 size-4 shrink-0" strokeWidth={2} aria-hidden />}
-              <span className="flex-1">{over ? 'Alokasi melebihi budget' : t.free === 0 ? 'Semua budget sudah teralokasi' : 'Belum teralokasi'}</span>
+              <span className="flex-1">{over ? 'Alokasi melebihi budget' : t.free === 0 ? 'Semua budget sudah terbagi' : 'Belum teralokasi'}</span>
               {t.free !== 0 && <span className="font-semibold tabular-nums">{rupiah(Math.abs(t.free))}</span>}
             </div>
           </>
@@ -276,10 +276,10 @@ export function AllocationEditor(p: AllocationEditorProps) {
                 </button>
               ))}
             </div>
-            <Field label="Nama acara (opsional)" htmlFor="evn" hint={kind === 'adat' ? 'mis. Siraman, Midodareni, Sangjit' : undefined}>
+            <Field label="Nama acara (opsional)" htmlFor="evn" hint={kind === 'adat' ? 'Petunjuk untuk acara adat: misalnya Siraman, Midodareni, atau Sangjit.' : undefined}>
               <input id="evn" className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder={kindLabel(kind)} />
             </Field>
-            <p className="hint -mt-2">Budget awalnya diambil dari yang belum teralokasi, dengan persentase default {kindLabel(kind).toLowerCase()}.</p>
+            <p className="hint -mt-2">Budget awal akan diambil dari sisa budget yang belum terbagi, mengikuti persentase awal untuk {kindLabel(kind).toLowerCase()}.</p>
             <div className="flex gap-2">
               <button type="button" className="btn-ghost flex-1" onClick={() => setAdding(false)}>
                 Batal

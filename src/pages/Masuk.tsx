@@ -6,10 +6,12 @@ import { supabase } from '../lib/supabase'
 import { usePlan } from '../lib/store'
 
 const ERRORS: Record<string, string> = {
-  'Invalid login credentials': 'Email atau kata sandi salah.',
-  'User already registered': 'Email ini sudah terdaftar. Coba masuk.',
-  'Password should be at least 6 characters.': 'Kata sandi minimal 6 karakter.',
+  'Invalid login credentials': 'Email atau kata sandi belum sesuai. Coba periksa lagi, ya.',
+  'User already registered': 'Email ini sudah terdaftar. Yuk, masuk menggunakan akunmu.',
+  'Password should be at least 6 characters.': 'Kata sandi harus terdiri dari minimal 6 karakter.',
 }
+
+const FALLBACK_ERROR = 'Sepertinya ada kendala. Coba lagi sebentar, ya.'
 
 export default function Masuk() {
   const session = useAuth((s) => s.session)
@@ -39,10 +41,10 @@ export default function Masuk() {
         : await supabase.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: `${location.origin}/masuk` } })
     setBusy(false)
     if (result.error) {
-      setMsg({ text: ERRORS[result.error.message] ?? 'Gagal, coba lagi sebentar lagi.', ok: false })
+      setMsg({ text: ERRORS[result.error.message] ?? FALLBACK_ERROR, ok: false })
       return
     }
-    if (mode === 'daftar' && !result.data.session) setMsg({ text: 'Cek email kamu untuk konfirmasi, lalu kembali ke halaman ini untuk masuk.', ok: true })
+    if (mode === 'daftar' && !result.data.session) setMsg({ text: 'Kami sudah mengirim email konfirmasi. Buka emailmu untuk mengonfirmasi akun, lalu kembali ke sini untuk masuk.', ok: true })
   }
 
   return (
@@ -51,15 +53,15 @@ export default function Masuk() {
       <section className="w-full max-w-md">
         <div className="card p-6 space-y-5">
           <div className="space-y-1">
-            <h1 className="text-3xl font-semibold">{mode === 'masuk' ? 'Masuk ke rencana kalian' : 'Mulai rencana kalian'}</h1>
-            <p className="text-sm text-muted-foreground">Rencana kalian tersimpan di akun ini dan bisa dibuka dari perangkat mana pun.</p>
+            <h1 className="text-3xl font-semibold">{mode === 'masuk' ? 'Lanjutkan rencana pernikahan kalian' : 'Mulai siapkan hari istimewa kalian'}</h1>
+            <p className="text-sm text-muted-foreground">Simpan semua persiapan pernikahan kalian di satu tempat. Bisa dibuka kapan saja, dari perangkat mana saja.</p>
           </div>
 
           <form className="space-y-4" onSubmit={submit}>
             <Field label="Email" htmlFor="masuk-email">
               <input id="masuk-email" type="email" required autoComplete="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
             </Field>
-            <Field label="Kata sandi" htmlFor="masuk-password" hint={mode === 'daftar' ? 'Minimal 6 karakter.' : undefined}>
+            <Field label="Kata sandi" htmlFor="masuk-password" hint={mode === 'daftar' ? 'Gunakan minimal 6 karakter.' : undefined}>
               <input
                 id="masuk-password"
                 type="password"
@@ -77,14 +79,14 @@ export default function Masuk() {
               </p>
             )}
             <button type="submit" className="btn-primary w-full" disabled={busy}>
-              {busy ? 'Memproses…' : mode === 'masuk' ? 'Masuk' : 'Daftar'}
+              {busy ? 'Sedang menyiapkan…' : mode === 'masuk' ? 'Masuk' : 'Buat akun'}
             </button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground">
             {mode === 'masuk' ? 'Belum punya akun?' : 'Sudah punya akun?'}{' '}
             <button type="button" className="font-semibold text-primary underline-offset-4 hover:underline" onClick={() => setMode(mode === 'masuk' ? 'daftar' : 'masuk')}>
-              {mode === 'masuk' ? 'Daftar' : 'Masuk'}
+              {mode === 'masuk' ? 'Daftar sekarang' : 'Masuk di sini'}
             </button>
           </p>
         </div>

@@ -23,18 +23,18 @@ const GUEST_RANGES = [
 const nearestRange = (n: number) => GUEST_RANGES.reduce((a, r) => (Math.abs(r.value - n) < Math.abs(a.value - n) ? r : a)).value
 
 const WELCOME_FEATURES = [
-  { icon: Wallet, label: 'Budget per acara', desc: 'Bagi budget ke akad, resepsi, dan adat, lengkap dengan biaya tersembunyi.' },
-  { icon: Store, label: 'Vendor & pembayaran', desc: 'Catat DP, termin, dan pelunasan lengkap dengan bukti transfer.' },
-  { icon: ListChecks, label: 'Checklist 12 bulan', desc: 'Tugas dari H-12 bulan sampai hari-H, bisa dikirim ke kalender.' },
-  { icon: Users, label: 'Tamu & RSVP', desc: 'Impor daftar tamu, kirim undangan per orang, pantau konfirmasinya.' },
-  { icon: MailOpen, label: 'Undangan digital', desc: 'Pilih desain, isi dengan foto dan cerita kalian, lalu bagikan.' },
-  { icon: Heart, label: 'Momen berdua', desc: 'Deep talk harian, surat untuk nanti, dan vision board bersama.' },
+  { icon: Wallet, label: 'Budget per acara', desc: 'Atur budget untuk akad, resepsi, dan acara adat. Biaya-biaya kecil yang sering terlupa juga ikut diperhitungkan.' },
+  { icon: Store, label: 'Vendor & pembayaran', desc: 'Simpan vendor pilihan, catat DP, termin, dan pelunasan, lengkap dengan bukti transfer.' },
+  { icon: ListChecks, label: 'Checklist 12 bulan', desc: 'Tahu apa yang perlu disiapkan dari H-12 bulan sampai hari-H. Tugasnya juga bisa ditambahkan ke kalender.' },
+  { icon: Users, label: 'Tamu & RSVP', desc: 'Kelola daftar tamu, bagikan undangan, dan pantau siapa saja yang sudah mengonfirmasi kehadiran.' },
+  { icon: MailOpen, label: 'Undangan digital', desc: 'Pilih desain, ceritakan kisah kalian, tambahkan foto, lalu bagikan undangannya.' },
+  { icon: Heart, label: 'Momen berdua', desc: 'Luangkan waktu untuk deep talk, menulis surat untuk nanti, dan mengumpulkan inspirasi bersama.' },
 ]
 
 const WELCOME_STEPS = [
-  { title: 'Isi detail pernikahan', desc: 'Nama, tanggal, kota, budget, dan perkiraan jumlah tamu.' },
-  { title: 'Atur alokasi budget', desc: 'Tentukan porsi budget untuk tiap acara. Bisa diubah kapan saja.' },
-  { title: 'Undang pasangan', desc: 'Kirim tautan ke pasangan supaya kalian bisa mengatur rencana bersama.' },
+  { title: 'Isi detail pernikahan', desc: 'Masukkan nama, tanggal, kota, budget, dan perkiraan jumlah tamu.' },
+  { title: 'Atur budget', desc: 'Bagi budget ke setiap acara. Tenang, pembagiannya masih bisa kalian ubah nanti.' },
+  { title: 'Undang pasangan', desc: 'Ajak pasangan bergabung supaya kalian bisa menyiapkan semuanya bersama.' },
 ]
 
 /** Garis progres langkah 1/3 s.d. 3/3. */
@@ -129,7 +129,7 @@ export default function Onboarding() {
   const detailsValid = form.partnerA.trim() && form.partnerB.trim() && form.weddingDate && form.totalBudget > 0 && picked.length > 0
 
   const invite = `${location.origin}/mulai?undangan=${encodeURIComponent(form.partnerA.trim())}`
-  const message = `Hai ${form.partnerB.trim() || 'sayang'}! Aku sudah mulai rencana pernikahan kita di Bridesmap. Yuk gabung supaya kita bisa atur bareng: ${invite}`
+  const message = `Hai ${form.partnerB.trim() || 'sayang'}! Aku sudah mulai menyiapkan pernikahan kita di Bridesmap. Yuk, gabung supaya kita bisa mengatur semuanya bareng: ${invite}`
   const waNumber = phone.replace(/[^\d]/g, '').replace(/^0/, '').replace(/^62/, '')
 
   const reserved = alloc.defaultReserved(form.totalBudget, form.guestEstimate)
@@ -163,24 +163,24 @@ export default function Onboarding() {
             Brides<span className="italic">map</span>
           </Link>
           <h1 className="relative mt-10 text-[38px] leading-[1.02] text-white">
-            Satu rencana,
+            Satu tempat untuk menyiapkan
             <br />
-            <span className="italic">untuk berdua.</span>
+            <span className="italic">hari kalian.</span>
           </h1>
           <p className="relative mt-3 text-[15px] leading-relaxed text-[#E3E8DA]">
-            Dari budget dan vendor sampai undangan digital, semuanya ada di satu tempat.
+            Dari budget dan vendor sampai undangan digital, semua persiapan pernikahan bisa kalian atur bersama di sini.
           </p>
         </section>
 
         <div className="flex flex-1 flex-col gap-7 px-5 pb-8 pt-4">
           {existing.onboarded && (
             <p className="rounded-2xl bg-warning-soft p-3.5 text-[13px] text-warning">
-              Kalian sudah punya rencana untuk <strong>{existing.partnerA} &amp; {existing.partnerB}</strong>. Membuat rencana baru akan menggantinya.
+              Kalian sudah punya rencana untuk <strong>{existing.partnerA} &amp; {existing.partnerB}</strong>. Kalau membuat rencana baru, rencana yang sekarang akan digantikan.
             </p>
           )}
 
           <section className="grid gap-3">
-            <h2 className="text-[22px] leading-tight">Yang bisa kalian lakukan</h2>
+            <h2 className="text-[22px] leading-tight">Semua persiapan, lebih mudah diatur</h2>
             <ul className="grid grid-cols-2 gap-2.5">
               {WELCOME_FEATURES.map((f) => (
                 <li key={f.label} className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-3.5">
@@ -193,7 +193,7 @@ export default function Onboarding() {
           </section>
 
           <section className="grid gap-3">
-            <h2 className="text-[22px] leading-tight">Cara mulainya</h2>
+            <h2 className="text-[22px] leading-tight">Mulai dari tiga langkah sederhana</h2>
             <ol className="grid gap-3">
               {WELCOME_STEPS.map((t, i) => (
                 <li key={t.title} className="flex gap-3">
@@ -209,12 +209,12 @@ export default function Onboarding() {
 
           <div className="mt-auto flex flex-col gap-3 pt-2">
             <button className="btn-primary w-full" onClick={() => setStep(1)}>
-              Mulai rencana kita <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
+              Yuk, mulai rencana kita <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
             </button>
-            <p className="m-0 text-center text-[12px] text-muted-foreground">Gratis. Butuh sekitar dua menit.</p>
+            <p className="m-0 text-center text-[12px] text-muted-foreground">Gratis. Hanya butuh sekitar 2 menit untuk memulai.</p>
             {existing.onboarded && (
               <Link to="/app" className="btn-outline w-full">
-                Buka rencana yang ada
+                Lanjutkan rencana yang ada
               </Link>
             )}
           </div>
@@ -237,9 +237,9 @@ export default function Onboarding() {
         <div className="flex flex-col gap-1.5">
           <p className="eyebrow">Detail pernikahan</p>
           <h1 className="text-[34px] leading-[1.05]">
-            Ceritakan tentang
+            Ceritakan sedikit tentang
             <br />
-            <span className="italic">hari kalian.</span>
+            <span className="italic">hari istimewa kalian.</span>
           </h1>
         </div>
 
@@ -256,7 +256,7 @@ export default function Onboarding() {
 
         <div className="flex flex-col gap-2">
           <label htmlFor="od" className="text-sm font-semibold">
-            {tentative ? 'Perkiraan bulan' : 'Tanggal hari-H'}
+            {tentative ? 'Perkiraan bulan pernikahan' : 'Tanggal pernikahan'}
           </label>
           <div className="relative">
             <CalendarDays className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-muted-foreground" strokeWidth={1.8} aria-hidden />
@@ -268,20 +268,20 @@ export default function Onboarding() {
           </div>
           <label className="flex min-h-9 cursor-pointer items-center gap-2.5 text-[13px] text-body">
             <input type="checkbox" className="check-square" checked={tentative} onChange={(e) => setTentative(e.target.checked)} />
-            Belum pasti, pakai perkiraan bulan saja
+            Tanggalnya belum pasti, gunakan perkiraan bulan dulu
           </label>
           {!tentative && Number.isFinite(days) && (
             <p className="text-xs text-muted-foreground">
               {fmtDate(form.weddingDate, 'EEEE, d MMMM yyyy')} · {days} hari lagi ·{' '}
               <button type="button" onClick={() => setCheckDate(true)} className="font-semibold text-primary underline-offset-4 hover:underline">
-                cek Hijriah & libur
+                Cek Hijriah & hari libur
               </button>
             </p>
           )}
         </div>
 
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold">Perkiraan jumlah tamu</p>
+          <p className="text-sm font-semibold">Kira-kira berapa tamu yang akan diundang?</p>
           <div role="radiogroup" aria-label="Perkiraan jumlah tamu" className="grid grid-cols-4 gap-1 rounded-full border border-border bg-muted p-1">
             {GUEST_RANGES.map((r) => (
               <button
@@ -299,7 +299,7 @@ export default function Onboarding() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold">Acara yang direncanakan</p>
+          <p className="text-sm font-semibold">Acara apa saja yang akan kalian adakan?</p>
           <div role="group" aria-label="Acara yang direncanakan" className="grid grid-cols-2 gap-2">
             {EVENT_KINDS.map((k) => {
               const on = picked.includes(k.kind)
@@ -317,15 +317,15 @@ export default function Onboarding() {
               )
             })}
           </div>
-          <p className="text-xs text-muted-foreground">Budget otomatis dibagi per acara dan per kategori. Angkanya estimasi dan bisa kalian ubah (persen atau Rupiah).</p>
+          <p className="text-xs text-muted-foreground">Bridesmap akan membagi budget ke setiap acara dan kategorinya sebagai perkiraan awal. Kalian bebas mengubah nominal atau persentasenya nanti.</p>
         </div>
 
         <div className="flex flex-col gap-2">
           <label htmlFor="ob" className="text-sm font-semibold">
-            Total budget
+            Perkiraan total budget
           </label>
           <MoneyInput id="ob" value={form.totalBudget} onChange={(n) => set('totalBudget', n)} />
-          <p className="text-xs text-muted-foreground">Belum yakin? Isi perkiraan dulu, bisa diubah kapan saja.</p>
+          <p className="text-xs text-muted-foreground">Belum punya angka pasti? Tidak apa-apa. Masukkan perkiraan dulu, nanti bisa disesuaikan.</p>
         </div>
 
         <button type="submit" className="btn-primary mt-auto w-full" disabled={!detailsValid}>
@@ -346,13 +346,13 @@ export default function Onboarding() {
         <div className="flex flex-col gap-1.5">
           <p className="eyebrow">Alokasi budget</p>
           <h1 className="text-[34px] leading-[1.05]">
-            Atur pembagian
+            Sekarang, bagi budget
             <br />
-            <span className="italic">budget kalian.</span>
+            <span className="italic">sesuai prioritas kalian.</span>
           </h1>
         </div>
         <p className="text-[15px] leading-relaxed text-body">
-          Kami bagi {rupiah(form.totalBudget)} ke {plan.events.length} acara dan tiap kategorinya. Angka ini estimasi awal — ubah dalam persen atau Rupiah, dan bisa diubah lagi kapan saja.
+          Kami sudah membagi {rupiah(form.totalBudget)} ke {plan.events.length} acara dan kategori sebagai titik awal. Kalian bisa mengubahnya dalam persen atau Rupiah, dan menyesuaikannya lagi kapan saja.
         </p>
 
         <AllocationEditor
@@ -371,9 +371,9 @@ export default function Onboarding() {
         />
 
         <div className="sticky bottom-0 -mx-5 mt-auto flex flex-col gap-2 border-t border-border bg-background/95 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur">
-          {t.free < 0 && <p className="text-center text-xs text-danger-ink">Alokasi melebihi budget {rupiah(-t.free)}. Boleh lanjut, tapi sebaiknya disesuaikan.</p>}
+          {t.free < 0 && <p className="text-center text-xs text-danger-ink">Alokasi melebihi budget {rupiah(-t.free)}. Kalian tetap bisa lanjut, tetapi sebaiknya periksa kembali pembagiannya.</p>}
           <button className="btn-primary w-full" onClick={createPlan} disabled={plan.events.length === 0}>
-            Buat rencana <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
+            Lanjut buat rencana <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
           </button>
         </div>
       </div>
@@ -388,12 +388,12 @@ export default function Onboarding() {
         <div className="flex flex-col gap-1.5">
           <p className="eyebrow">Undang pasangan</p>
           <h1 className="text-[34px] leading-[1.05]">
-            Rencanakan
+            Persiapannya akan lebih menyenangkan
             <br />
-            <span className="italic text-accent">berdua.</span>
+            <span className="italic text-accent">kalau dijalani berdua.</span>
           </h1>
         </div>
-        <p className="text-[15px] leading-relaxed text-body">{form.partnerB} bisa ikut mengisi budget, checklist, dan tamu di rencana yang sama.</p>
+        <p className="text-[15px] leading-relaxed text-body">Ajak {form.partnerB} bergabung. Nanti, kalian bisa mengatur budget, checklist, dan daftar tamu dari rencana yang sama.</p>
         <div aria-hidden className="flex items-center justify-center gap-0 py-2">
           <span className="grid size-16 place-items-center rounded-full bg-primary-soft font-serif text-[26px] text-on-primary-soft">{form.partnerA.trim()[0]?.toUpperCase()}</span>
           <span className="-mx-2 z-10 grid size-10 place-items-center rounded-full bg-accent text-white">
@@ -412,10 +412,10 @@ export default function Onboarding() {
           </div>
         </div>
         <div className="rounded-2xl bg-muted p-4">
-          <p className="text-xs font-semibold text-muted-foreground">Preview pesan</p>
+          <p className="text-xs font-semibold text-muted-foreground">Pesan undangan</p>
           <p className="mt-1.5 text-[13px] leading-relaxed text-body">{message}</p>
         </div>
-        <p className="text-xs text-muted-foreground">Pesan dikirim dari WhatsApp-mu sendiri. Sinkronisasi dua akun aktif setelah login tersedia.</p>
+        <p className="text-xs text-muted-foreground">Pesan akan dikirim melalui WhatsApp-mu sendiri. Fitur sinkronisasi antara dua akun akan aktif setelah pasangan login.</p>
 
         <div className="mt-auto flex flex-col gap-3">
           <a
@@ -428,7 +428,7 @@ export default function Onboarding() {
               finish()
             }}
           >
-            <MessageCircle className="size-[18px]" strokeWidth={1.8} aria-hidden /> Kirim lewat WhatsApp
+            <MessageCircle className="size-[18px]" strokeWidth={1.8} aria-hidden /> Undang lewat WhatsApp
           </a>
           <div className="grid grid-cols-2 gap-3">
             <button
@@ -440,10 +440,10 @@ export default function Onboarding() {
                 })
               }
             >
-              <Copy className="size-4" aria-hidden /> {copied ? 'Tersalin' : 'Salin tautan'}
+              <Copy className="size-4" aria-hidden /> {copied ? 'Tautan tersalin' : 'Salin tautan'}
             </button>
             <button className="btn-ghost" onClick={finish}>
-              Nanti saja
+              Lewati dulu
             </button>
           </div>
         </div>
@@ -457,10 +457,10 @@ export default function Onboarding() {
       <PlanBuilder
         initials={[(existing.partnerA || form.partnerA).trim()[0]?.toUpperCase() ?? '', (existing.partnerB || form.partnerB).trim()[0]?.toUpperCase() ?? '']}
         steps={[
-          { label: 'Profil pernikahan', detail: `Mencatat tanggal ${fmtDate(form.weddingDate, 'd MMMM yyyy')}${form.city ? ` di ${form.city}` : ''}.` },
-          { label: 'Alokasi budget', detail: `Membagi ${rupiah(form.totalBudget)} ke ${plan.events.length} acara dan kategorinya.` },
-          { label: 'Checklist & timeline', detail: `Menyusun ${tasks.length} tugas dari H-12 bulan sampai hari-H.` },
-          { label: 'Ruang berdua', detail: 'Menyiapkan deep talk, surat untuk nanti, dan vision board.' },
+          { label: 'Profil pernikahan', detail: `Menyimpan tanggal ${fmtDate(form.weddingDate, 'd MMMM yyyy')}${form.city ? ` di ${form.city}` : ''}.` },
+          { label: 'Alokasi budget', detail: `Membagi ${rupiah(form.totalBudget)} ke ${plan.events.length} acara dan kategori.` },
+          { label: 'Checklist & timeline', detail: `Menyiapkan ${tasks.length} tugas dari H-12 bulan sampai hari-H.` },
+          { label: 'Ruang berdua', detail: 'Menyiapkan Deep Talk, surat untuk nanti, dan Vision Board untuk kalian.' },
         ]}
         onDone={() => setBuilding(false)}
       />
@@ -472,22 +472,22 @@ export default function Onboarding() {
           Brides<span className="italic">map</span>
         </span>
         <div className="mt-6 flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#D5DCCB]">Rencana kalian siap</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#D5DCCB]">Rencana kalian sudah siap</p>
           <span className="font-serif text-[96px] leading-[0.9] tabular-nums">{Math.max(0, days)}</span>
           <p className="font-serif text-[34px] italic leading-[1.05]">
-            hari lagi,
+            hari lagi menuju hari istimewa
             <br />
             {existing.partnerA || form.partnerA} &amp; {existing.partnerB || form.partnerB}.
           </p>
         </div>
         <ul className="flex flex-col gap-3.5 text-[15px] leading-snug">
           {[
-            { done: true, text: `${tasks.length} tugas sudah disusun per fase, mulai dari minggu ini` },
-            { done: true, text: `Budget ${rupiah(form.totalBudget)} sudah dibagi ke ${plan.events.length} acara dan tiap kategorinya (estimasi, bisa kalian ubah)` },
-            { done: true, text: `${hiddenCount} dari ${HIDDEN_COSTS.length} hidden cost sudah masuk budget, sisanya siap kalian cek` },
+            { done: true, text: `${tasks.length} tugas sudah disiapkan bertahap, mulai dari minggu ini sampai hari-H.` },
+            { done: true, text: `Budget ${rupiah(form.totalBudget)} sudah dibagi ke ${plan.events.length} acara dan setiap kategorinya. Ini masih estimasi dan bisa kalian ubah kapan saja.` },
+            { done: true, text: `${hiddenCount} dari ${HIDDEN_COSTS.length} biaya tak terduga sudah masuk dalam perhitungan. Sisanya bisa kalian periksa dan sesuaikan.` },
             existing.partnerInvited
-              ? { done: false, text: `Undangan untuk ${form.partnerB} terkirim, menunggu dia bergabung` }
-              : { done: false, text: `Undang ${form.partnerB} kapan saja dari Pengaturan` },
+              ? { done: false, text: `Undangan untuk ${form.partnerB} sudah dikirim. Tinggal menunggu ${form.partnerB} bergabung.` }
+              : { done: false, text: `Kalian bisa mengundang ${form.partnerB} kapan saja melalui Pengaturan.` },
           ].map((x, i) => (
             <li key={x.text} className="animate-fade-up flex items-start gap-3" style={{ animationDelay: `${150 + i * 140}ms` }}>
               <span className={cn('mt-0.5 grid size-[22px] shrink-0 place-items-center rounded-full', x.done ? 'animate-pop bg-white/90 text-primary' : 'border-[1.5px] border-dashed border-white/60')} style={{ animationDelay: `${250 + i * 140}ms` }}>
@@ -502,9 +502,9 @@ export default function Onboarding() {
               clearDraft()
               navigate('/app', { replace: true })
             }}>
-            Buka rencana kami <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
+            Lihat rencana kita <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
           </button>
-          <p className="text-center text-xs text-[#C9CFC0]">Semua bisa diubah nanti dari Pengaturan</p>
+          <p className="text-center text-xs text-[#C9CFC0]">Belum semuanya harus sempurna sekarang. Kalian bisa mengubah detail rencana kapan saja melalui Pengaturan.</p>
         </div>
       </div>
     </div>
