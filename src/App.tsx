@@ -5,6 +5,7 @@ import { useAuth } from './lib/auth'
 import { usePlan } from './lib/store'
 import About from './pages/About'
 import Landing from './pages/Landing'
+import LupaSandi from './pages/LupaSandi'
 import Masuk from './pages/Masuk'
 import Onboarding from './pages/Onboarding'
 import LiveInvitation from './pages/LiveInvitation'
@@ -79,6 +80,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/tentang" element={<About />} />
         <Route path="/masuk" element={<Masuk />} />
+        <Route path="/lupa-sandi" element={<LupaSandi />} />
         <Route
           path="/mulai"
           element={
