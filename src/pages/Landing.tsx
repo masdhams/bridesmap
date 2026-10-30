@@ -1,4 +1,4 @@
-import { Armchair, ArrowRight, Check, ChevronDown, FileText, Images, Lock, Mail, Menu, MessageCircleHeart, Plane, Store, Users, X } from 'lucide-react'
+import { Armchair, ArrowRight, Check, ChevronDown, FileText, Images, LogIn, Lock, Mail, Menu, MessageCircleHeart, Plane, Store, Users, X } from 'lucide-react'
 import { addDays, format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -197,7 +197,12 @@ function OfferCard({ phase, index }: { phase: (typeof OFFER.phases)[number]; ind
         <ul className={cn('flex flex-1 flex-col gap-3 border-t pt-6 text-[15px]', ended ? 'border-divider' : 'border-white/15')}>
           {OFFER.items.map((t) => (
             <li key={t} className="flex gap-3">
-              <Check className={cn('mt-0.5 size-[18px] shrink-0', ended ? 'text-primary' : 'text-[#C9D4BA]')} strokeWidth={2.2} aria-hidden />
+              <span
+                aria-hidden
+                className={cn('mt-0.5 grid size-[22px] shrink-0 place-items-center rounded-[7px]', ended ? 'bg-muted text-primary' : 'bg-white/15 text-[#C9D4BA]')}
+              >
+                <Check className="size-3.5" strokeWidth={2.5} />
+              </span>
               {t}
             </li>
           ))}
@@ -297,7 +302,7 @@ export default function Landing() {
   return (
     <div ref={root} className="min-h-dvh bg-background px-3 pt-3">
       {/* Hero foto penuh dengan navigasi di dalamnya */}
-      <section className="relative isolate flex min-h-[min(calc(100svh-24px),920px)] flex-col overflow-hidden rounded-[28px] bg-[#2B3627] px-5 pb-6 pt-6 text-white sm:px-[clamp(20px,4vw,48px)]">
+      <section className="relative isolate z-40 flex min-h-[min(calc(100svh-24px),920px)] flex-col overflow-hidden rounded-[28px] bg-[#2B3627] px-5 pb-6 pt-[104px] text-white sm:px-[clamp(20px,4vw,48px)]">
         <img
           src={HERO_PHOTO}
           alt=""
@@ -306,7 +311,7 @@ export default function Landing() {
         />
         <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(22_28_19/0.66)_0%,rgb(22_28_19/0.42)_40%,rgb(22_28_19/0.5)_68%,rgb(22_28_19/0.86)_100%)]" />
 
-        <nav aria-label="Navigasi situs" className="flex items-center justify-between gap-4">
+        <nav aria-label="Navigasi situs" className="fixed inset-x-3 top-3 z-50 flex items-center justify-between gap-4 rounded-[20px] bg-[#1f281c]/85 px-5 py-3 backdrop-blur-md sm:px-[clamp(20px,4vw,48px)]">
           <Link to="/" className="font-serif text-[26px] tracking-[0.02em]">
             Brides<span className="italic">map</span>
           </Link>
@@ -324,12 +329,10 @@ export default function Landing() {
               </Link>
             ) : (
               <>
-                <Link to="/masuk" className="hidden min-h-11 items-center px-3 text-[15px] transition-opacity duration-200 hover:opacity-75 sm:inline-flex">
-                  Masuk
+                <Link to="/masuk" className="inline-flex min-h-11 items-center gap-2 px-3 text-[15px] transition-opacity duration-200 hover:opacity-75">
+                  <LogIn className="size-[18px]" strokeWidth={1.8} aria-hidden />
+                  <span className="hidden sm:inline">Login</span>
                 </Link>
-                <a href={OFFER_HREF} className="btn hidden h-12 min-h-12 bg-white px-[22px] text-ink hover:bg-primary-soft sm:inline-flex">
-                  {CTA_LABEL} <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
-                </a>
               </>
             )}
             <button className="grid size-11 place-items-center rounded-full border border-white/25 lg:hidden" onClick={() => setMenu((m) => !m)} aria-expanded={menu} aria-label="Menu">
@@ -338,7 +341,7 @@ export default function Landing() {
           </div>
         </nav>
         {menu && (
-          <div className="mt-4 flex flex-col rounded-2xl bg-[#1f281c]/90 p-2 backdrop-blur-md lg:hidden">
+          <div className="fixed inset-x-3 top-[84px] z-50 flex flex-col rounded-2xl bg-[#1f281c]/95 p-2 backdrop-blur-md lg:hidden">
             {NAV.map((n) => (
               <a key={n.label} href={n.href} onClick={() => setMenu(false)} className="flex min-h-11 items-center rounded-xl px-3 text-[15px] hover:bg-white/10">
                 {n.label}

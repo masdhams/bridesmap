@@ -59,6 +59,9 @@
   html {
     -webkit-text-size-adjust: 100%;
   }
+  [id] {
+    scroll-margin-top: 6rem;
+  }
   body {
     @apply bg-background text-ink font-sans antialiased;
     font-size: 16px;
