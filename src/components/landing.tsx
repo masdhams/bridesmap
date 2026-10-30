@@ -48,8 +48,8 @@ export function SectionHead({ eyebrow, title, italic, text, align = 'left', tone
   const dark = tone === 'dark'
   return (
     <div data-reveal className={cn('flex flex-col gap-4', align === 'center' && 'items-center text-center', className)}>
-      {eyebrow && <p className={cn('text-xs font-semibold uppercase tracking-[0.18em]', dark ? 'text-[#D5DCCB]' : 'text-muted-foreground')}>{eyebrow}</p>}
-      <h2 className={cn('text-[clamp(38px,5.2vw,60px)] leading-[1]', dark && 'text-white')}>
+      {eyebrow && <p className={cn('text-[11px] font-semibold uppercase tracking-[0.14em] sm:text-xs sm:tracking-[0.18em]', dark ? 'text-[#D5DCCB]' : 'text-muted-foreground')}>{eyebrow}</p>}
+      <h2 className={cn('text-[30px] leading-[1.05] sm:text-[clamp(38px,5.2vw,60px)] sm:leading-[1]', dark && 'text-white')}>
         {title}
         <br />
         <span className="italic">{italic}</span>
@@ -210,7 +210,7 @@ export function HowItWorks({ ctaHref, ctaLabel }: { ctaHref: string; ctaLabel: s
                   className={cn('flex min-h-16 w-full items-center gap-4 py-4 text-left text-[18px] transition-colors duration-200', open ? 'font-semibold text-ink' : 'text-muted-foreground hover:text-ink')}
                 >
                   <span className={cn('grid size-8 shrink-0 place-items-center rounded-full border text-[13px] font-semibold tabular-nums', open ? 'border-primary bg-primary text-white' : 'border-line')}>{i + 1}</span>
-                  {s.title}
+                  <span>{s.title.replace(/ (\S+)$/, ' $1')}</span>
                 </button>
               </h3>
               <div

@@ -100,7 +100,7 @@ export default function Berdua() {
 
         <div className="flex min-w-0 flex-col gap-6">
         {/* Pintasan fitur */}
-        <nav aria-label="Fitur berdua" className="grid gap-2.5">
+        <nav aria-label="Fitur berdua" className="grid grid-cols-1 gap-2.5">
           {shortcuts.map((s) => (
             <Link key={s.to} to={s.to} className="flex min-h-[68px] items-center gap-3.5 rounded-[18px] border border-white/70 bg-white/60 px-4 py-3 transition-colors duration-200 hover:bg-white/90">
               <span className="grid size-11 shrink-0 place-items-center rounded-full bg-accent text-white">

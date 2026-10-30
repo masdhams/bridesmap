@@ -15,7 +15,7 @@ export default function Allocation() {
       {s.events.length === 0 ? (
         <div className="card flex flex-col gap-3 p-6 text-sm text-body">
           <p>Rencana ini dibuat sebelum alokasi per acara tersedia, jadi belum ada daftar acara.</p>
-          <Link to="/mulai" className="btn-primary self-start">
+          <Link to="/mulai" className="btn-primary h-auto max-w-full self-start whitespace-normal py-3 text-left">
             Buat rencana baru dengan acara
           </Link>
         </div>

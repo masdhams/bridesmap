@@ -177,9 +177,9 @@ function OfferCard({ phase, index }: { phase: (typeof OFFER.phases)[number]; ind
       data-reveal
       style={delay(index * 120)}
       aria-disabled={ended || undefined}
-      className={cn('relative flex flex-col gap-6 rounded-[24px] p-7 sm:p-8', ended ? 'border border-border bg-card' : 'bg-primary text-white shadow-[var(--shadow-lift)]')}
+      className={cn('relative flex min-w-0 flex-col gap-6 rounded-[24px] p-6 sm:p-8', ended ? 'border border-border bg-card' : 'bg-primary text-white shadow-[var(--shadow-lift)]')}
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
         <div className="flex flex-col gap-1.5">
           <span className={cn('font-serif text-[30px] leading-none', !ended && 'text-white')}>{phase.name}</span>
           <span className={cn('text-[15px]', ended ? 'text-body' : 'text-[#E3E8DA]')}>{ended ? 'Harga spesial untuk early buyers.' : 'Special Launch Price'}</span>
@@ -188,11 +188,11 @@ function OfferCard({ phase, index }: { phase: (typeof OFFER.phases)[number]; ind
       </div>
       <div className={cn('flex flex-1 flex-col gap-6', ended && 'pointer-events-none select-none opacity-50 grayscale')}>
         <div className="flex flex-col gap-2">
-          <span className="flex items-center gap-2.5">
+          <span className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
             <s className={cn('text-[17px] tabular-nums', ended ? 'text-muted-foreground' : 'text-[#D5DCCB]')}>{rupiah(OFFER.normalPrice)}</s>
-            <span className={cn('chip min-h-6 px-2.5 text-[11px]', ended ? 'bg-muted text-body' : 'bg-accent-soft text-accent-ink')}>Hemat {rupiah(OFFER.normalPrice - phase.price)} dari harga normal</span>
+            <span className={cn('chip min-h-6 whitespace-normal px-2.5 py-1 text-[11px]', ended ? 'bg-muted text-body' : 'bg-accent-soft text-accent-ink')}>Hemat {rupiah(OFFER.normalPrice - phase.price)} dari harga normal</span>
           </span>
-          <span className="text-[48px] font-semibold leading-none tracking-tight tabular-nums">{rupiah(phase.price)}</span>
+          <span className="text-[40px] font-semibold leading-none tracking-tight tabular-nums sm:text-[48px]">{rupiah(phase.price)}</span>
         </div>
         <ul className={cn('flex flex-1 flex-col gap-3 border-t pt-6 text-[15px]', ended ? 'border-divider' : 'border-white/15')}>
           {OFFER.items.map((t) => (
@@ -203,7 +203,7 @@ function OfferCard({ phase, index }: { phase: (typeof OFFER.phases)[number]; ind
               >
                 <Check className="size-3.5" strokeWidth={2.5} />
               </span>
-              {t}
+              <span className="text-balance">{t}</span>
             </li>
           ))}
         </ul>
@@ -300,18 +300,18 @@ export default function Landing() {
   }, [hash])
 
   return (
-    <div ref={root} className="min-h-dvh bg-background px-3 pt-3">
+    <div ref={root} className="landing-type min-h-dvh bg-background px-3 pt-3">
       {/* Hero foto penuh dengan navigasi di dalamnya */}
-      <section className="relative isolate z-40 flex min-h-[min(calc(100svh-24px),920px)] flex-col overflow-hidden rounded-[28px] bg-[#2B3627] px-5 pb-6 pt-[104px] text-white sm:px-[clamp(20px,4vw,48px)]">
+      <section className="relative isolate flex min-h-[min(calc(100svh-24px),920px)] flex-col overflow-hidden rounded-[28px] bg-[#2B3627] px-5 pb-6 pt-6 text-white sm:px-[clamp(20px,4vw,48px)]">
         <img
           src={HERO_PHOTO}
           alt=""
           fetchPriority="high"
-          className="absolute inset-0 -z-10 size-full object-cover object-[52%_62%]"
+          className="absolute inset-0 -z-10 size-full object-cover object-[64%_50%] sm:object-[52%_62%]"
         />
         <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(22_28_19/0.66)_0%,rgb(22_28_19/0.42)_40%,rgb(22_28_19/0.5)_68%,rgb(22_28_19/0.86)_100%)]" />
 
-        <nav aria-label="Navigasi situs" className="fixed inset-x-3 top-3 z-50 flex items-center justify-between gap-4 rounded-[20px] bg-[#1f281c]/85 px-5 py-3 backdrop-blur-md sm:px-[clamp(20px,4vw,48px)]">
+        <nav aria-label="Navigasi situs" className="flex items-center justify-between gap-4">
           <Link to="/" className="font-serif text-[26px] tracking-[0.02em]">
             Brides<span className="italic">map</span>
           </Link>
@@ -341,7 +341,7 @@ export default function Landing() {
           </div>
         </nav>
         {menu && (
-          <div className="fixed inset-x-3 top-[84px] z-50 flex flex-col rounded-2xl bg-[#1f281c]/95 p-2 backdrop-blur-md lg:hidden">
+          <div className="mt-4 flex flex-col rounded-2xl bg-[#1f281c]/90 p-2 backdrop-blur-md lg:hidden">
             {NAV.map((n) => (
               <a key={n.label} href={n.href} onClick={() => setMenu(false)} className="flex min-h-11 items-center rounded-xl px-3 text-[15px] hover:bg-white/10">
                 {n.label}
@@ -354,8 +354,8 @@ export default function Landing() {
         )}
 
         <div className="mx-auto mt-14 flex max-w-[880px] flex-col items-center gap-6 text-center sm:mt-20">
-          <p className="hero-in text-xs font-semibold uppercase tracking-[0.18em] text-[#E3E8DA]">Your Wedding Planner, Made for Two</p>
-          <h1 className="hero-in text-[clamp(44px,7vw,96px)] leading-[0.98] tracking-[-0.015em] text-white" style={delay(120)}>
+          <p className="hero-in text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E3E8DA] sm:text-xs sm:tracking-[0.18em]">Your Wedding Planner, Made for Two</p>
+          <h1 className="hero-in text-[36px] leading-[1.02] tracking-[-0.03em] text-white sm:text-[clamp(44px,7vw,96px)] sm:leading-[0.98]" style={delay(120)}>
             Wujudkan wedding dream kalian.
             <br />
             <span className="italic">Tanpa bikin keuangan berantakan.</span>
@@ -458,7 +458,7 @@ export default function Landing() {
           </div>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-sm text-[#D5DCCB]">Contoh tampilan dengan data fiktif. Angka di rencana kalian akan berbeda.</p>
-            <a href={OFFER_HREF} className="btn h-12 min-h-12 bg-white px-6 text-ink hover:bg-primary-soft">
+            <a href={OFFER_HREF} className="btn h-auto min-h-12 max-w-full whitespace-normal bg-white px-6 py-3 text-center text-ink hover:bg-primary-soft">
               {CTA_LABEL} <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
             </a>
           </div>
@@ -586,8 +586,8 @@ export default function Landing() {
 
         {/* Penutup */}
         <section className="my-28 flex flex-col items-center gap-6 rounded-[28px] bg-[#2B3627] px-6 py-[clamp(56px,8vw,96px)] text-center text-white">
-          <p data-reveal className="text-xs font-semibold uppercase tracking-[0.18em] text-[#D5DCCB]">Your Wedding Journey Starts Here</p>
-          <h2 data-reveal style={delay(100)} className="text-[clamp(38px,5.6vw,68px)] leading-[1] text-white">
+          <p data-reveal className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#D5DCCB] sm:text-xs sm:tracking-[0.18em]">Your Wedding Journey Starts Here</p>
+          <h2 data-reveal style={delay(100)} className="text-[32px] leading-[1.05] text-white sm:text-[clamp(38px,5.6vw,68px)] sm:leading-[1]">
             Fokus ke hari bahagianya.
             <br />
             <span className="italic">Biar urusan persiapannya, Bridesmap bantu.</span>
@@ -595,7 +595,7 @@ export default function Landing() {
           <p data-reveal style={delay(200)} className="max-w-[460px] text-[17px] leading-relaxed text-[#E3E8DA]">
             Mulai persiapkan hari istimewa kalian tanpa harus mengorbankan waktu berharga bersama pasangan.
           </p>
-          <a data-reveal style={delay(300)} href={OFFER_HREF} className="btn h-[54px] bg-white px-7 text-base text-ink hover:bg-primary-soft">
+          <a data-reveal style={delay(300)} href={OFFER_HREF} className="btn h-auto min-h-[54px] max-w-full whitespace-normal bg-white px-7 py-3 text-center text-base text-ink hover:bg-primary-soft">
             Yuk, Mulai Susun Wedding Dream Kalian <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
           </a>
         </section>

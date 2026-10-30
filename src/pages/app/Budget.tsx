@@ -130,8 +130,8 @@ function HeroCard({ sum, onEditTotal }: { sum: CategorySummary[]; onEditTotal: (
   const paidBars = Math.round((t.paid / scale) * BARS)
   const usedBars = Math.round((t.committed / scale) * BARS)
   return (
-    <section className="card flex h-full flex-col gap-4 p-5 sm:p-6 lg:gap-5 lg:rounded-[28px] lg:p-7">
-      <div className="flex items-start justify-between gap-3">
+    <section className="card flex h-full min-w-0 flex-col gap-4 p-5 sm:p-6 lg:gap-5 lg:rounded-[28px] lg:p-7">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1.5">
           <span className="flex items-center gap-2.5">
             <span className="hidden size-9 place-items-center rounded-full bg-primary-soft text-on-primary-soft lg:grid">
@@ -514,7 +514,7 @@ export default function Budget() {
       </div>
 
       <div className="mx-auto flex max-w-3xl flex-col gap-5 lg:max-w-none">
-        <div className="grid gap-5 xl:grid-cols-12">
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
           <div className="xl:col-span-7">
             <HeroCard sum={sum} onEditTotal={() => setEditTotal(s.profile.totalBudget)} />
           </div>
