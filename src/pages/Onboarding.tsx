@@ -211,7 +211,7 @@ export default function Onboarding() {
             <button className="btn-primary w-full" onClick={() => setStep(1)}>
               Yuk, mulai rencana kita <ArrowRight className="size-[18px]" strokeWidth={1.8} aria-hidden />
             </button>
-            <p className="m-0 text-center text-[12px] text-muted-foreground">Gratis. Hanya butuh sekitar 2 menit untuk memulai.</p>
+            <p className="m-0 text-center text-[12px] text-muted-foreground">Hanya butuh sekitar 2 menit untuk memulai.</p>
             {existing.onboarded && (
               <Link to="/app" className="btn-outline w-full">
                 Lanjutkan rencana yang ada
