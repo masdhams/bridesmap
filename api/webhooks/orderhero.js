@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'invalid_json' })
   }
 
-  if (event.test) return res.status(200).json({ ok: true, test: true })
+  if (event.test || event.data?.test) return res.status(200).json({ ok: true, test: true })
   if (event.event !== 'order_paid' || event.data?.payment_status !== 'paid') return res.status(200).json({ ignored: true })
 
   const orderId = event.data.order_id
