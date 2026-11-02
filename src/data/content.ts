@@ -40,39 +40,41 @@ export interface HiddenCost {
   missed?: boolean
 }
 
+// Rumus dikalibrasi (2 Nov 2026) supaya total ke-14 pos ±9–13% untuk budget 100–150 juta, sejalan dengan patokan
+// umum 9–15% di luar harga vendor (Zola). Sebagian besar ikut skala budget/jumlah tamu, bukan nominal tetap.
 export const HIDDEN_COSTS: HiddenCost[] = [
   {
     key: 'transport-keluarga', missed: true,
     name: 'Transportasi keluarga besar',
-    why: 'Sewa bus/mobil untuk rombongan keluarga dari luar kota, bensin, tol, dan parkir — sering dibayar dadakan dari kantong pribadi.',
-    estimate: ({ budget }) => budget * 0.02,
+    why: 'Sewa mobil atau bus untuk rombongan keluarga dari luar kota, plus bensin, tol, dan parkir. Perkiraan awal: 1% dari total budget.',
+    estimate: ({ budget }) => budget * 0.01,
     defaultOn: true,
   },
   {
     key: 'konsumsi-vendor',
     name: 'Konsumsi vendor, kru & penghulu',
-    why: 'Fotografer, dekor, MUA, band, dan panitia juga perlu makan. Biasanya 20–40 porsi di luar hitungan tamu.',
-    estimate: () => 30 * 50000,
+    why: 'Fotografer, dekor, MUA, band, dan panitia juga perlu makan. Perkiraan awal: 1 porsi untuk tiap 20 tamu (minimal 15 porsi), Rp40.000 per porsi.',
+    estimate: ({ guests }) => Math.max(15, Math.round(guests * 0.05)) * 40000,
     defaultOn: true,
   },
   {
     key: 'seragam', missed: true,
     name: 'Seragam keluarga & panitia',
-    why: 'Kain/batik seragam untuk orang tua, saudara, dan among tamu. Sering disepakati keluarga tapi tidak masuk budget pasangan.',
-    estimate: () => 20 * 250000,
+    why: 'Kain atau batik seragam untuk orang tua, saudara, dan among tamu. Sering disepakati keluarga tapi belum masuk budget. Perkiraan awal: 3 orang per 100 tamu (minimal 6 orang), Rp150.000 per orang.',
+    estimate: ({ guests }) => Math.max(6, Math.round(guests * 0.03)) * 150000,
     defaultOn: true,
   },
   {
     key: 'tip',
     name: 'Tip kru dekor, katering & WO',
-    why: 'Uang terima kasih untuk kru yang kerja sejak subuh sampai bongkar malam.',
-    estimate: () => 1500000,
+    why: 'Uang terima kasih untuk kru yang kerja sejak subuh sampai bongkar malam. Perkiraan awal: 0,5% dari total budget.',
+    estimate: ({ budget }) => budget * 0.005,
   },
   {
     key: 'overtime', missed: true,
     name: 'Overtime venue, fotografer & MUA',
-    why: 'Acara molor 1–2 jam bisa kena biaya tambahan per jam dari venue dan vendor dokumentasi.',
-    estimate: () => 2000000,
+    why: 'Acara molor 1–2 jam bisa kena biaya tambahan per jam dari venue dan vendor dokumentasi. Perkiraan awal: 0,8% dari total budget.',
+    estimate: ({ budget }) => budget * 0.008,
   },
   {
     key: 'nikah-luar-kua',
@@ -83,38 +85,38 @@ export const HIDDEN_COSTS: HiddenCost[] = [
   {
     key: 'pajak-service', missed: true,
     name: 'Pajak & service charge venue/katering',
-    why: 'Venue hotel dan sebagian katering mencantumkan harga belum termasuk pajak & service (bisa ±21%).',
-    estimate: ({ budget }) => budget * 0.48 * 0.21 * 0.5,
+    why: 'Sebagian venue hotel dan katering mencantumkan harga belum termasuk pajak & service (bisa ±21% dari tagihannya). Perkiraan awal: 2,5% dari total budget.',
+    estimate: ({ budget }) => budget * 0.025,
   },
   {
     key: 'mua-keluarga',
     name: 'MUA & busana keluarga inti',
-    why: 'Rias untuk ibu, saudara, dan pagar ayu sering tidak termasuk paket MUA pengantin.',
-    estimate: () => 6 * 400000,
+    why: 'Rias untuk ibu, saudara, dan pagar ayu sering nggak termasuk paket MUA pengantin. Perkiraan awal: 0,8% dari total budget.',
+    estimate: ({ budget }) => budget * 0.008,
   },
   {
     key: 'souvenir-lebih',
     name: 'Souvenir & porsi cadangan',
-    why: 'Tamu bawa keluarga tanpa konfirmasi. Siapkan 10% lebih dari jumlah undangan.',
+    why: 'Tamu kadang datang bersama keluarga tanpa konfirmasi. Perkiraan awal: lebihkan 10% dari jumlah tamu, Rp15.000 per souvenir.',
     estimate: ({ guests }) => Math.round(guests * 0.1) * 15000,
   },
   {
     key: 'listrik',
     name: 'Genset / tambahan daya listrik',
-    why: 'Sound system, lighting, dan katering di rumah atau gedung kecil sering butuh genset terpisah.',
-    estimate: () => 1500000,
+    why: 'Sound system, lighting, dan katering di rumah atau gedung kecil sering butuh genset terpisah. Perkiraan awal: 0,6% dari total budget.',
+    estimate: ({ budget }) => budget * 0.006,
   },
   {
     key: 'parkir-keamanan',
     name: 'Parkir, keamanan & kebersihan',
-    why: 'Juru parkir, petugas keamanan lingkungan, dan kebersihan setelah acara.',
-    estimate: () => 1000000,
+    why: 'Juru parkir, petugas keamanan lingkungan, dan kebersihan setelah acara. Perkiraan awal: Rp2.000 per tamu.',
+    estimate: ({ guests }) => guests * 2000,
   },
   {
     key: 'rapat-keluarga',
     name: 'Konsumsi rapat & persiapan keluarga',
-    why: 'Pertemuan keluarga, lamaran, dan rapat panitia sebelum hari-H.',
-    estimate: () => 1500000,
+    why: 'Pertemuan keluarga, lamaran, dan rapat panitia sebelum hari-H. Perkiraan awal: 0,5% dari total budget.',
+    estimate: ({ budget }) => budget * 0.005,
   },
   {
     key: 'admin',
@@ -125,8 +127,8 @@ export const HIDDEN_COSTS: HiddenCost[] = [
   {
     key: 'kirim-barang',
     name: 'Pengiriman seserahan & barang',
-    why: 'Ongkos kirim atau sewa mobil untuk seserahan, hantaran, dan barang dekor milik keluarga.',
-    estimate: () => 500000,
+    why: 'Ongkos kirim atau sewa mobil untuk seserahan, hantaran, dan barang dekor milik keluarga. Perkiraan awal: 0,3% dari total budget.',
+    estimate: ({ budget }) => budget * 0.003,
   },
 ]
 
