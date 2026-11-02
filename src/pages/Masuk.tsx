@@ -166,10 +166,21 @@ export default function Masuk() {
       </form>
 
       <p className="text-center text-sm text-muted-foreground">
-        {mode === 'masuk' ? 'Belum punya akun?' : 'Sudah punya akun?'}{' '}
-        <button type="button" className="font-semibold text-primary underline-offset-4 hover:underline" onClick={() => setMode(mode === 'masuk' ? 'daftar' : 'masuk')}>
-          {mode === 'masuk' ? 'Daftar sekarang' : 'Masuk di sini'}
-        </button>
+        {mode === 'masuk' ? (
+          <>
+            Belum punya akun?{' '}
+            <Link to="/" className="font-semibold text-primary underline-offset-4 hover:underline">
+              Daftar sekarang
+            </Link>
+          </>
+        ) : (
+          <>
+            Sudah punya akun?{' '}
+            <button type="button" className="font-semibold text-primary underline-offset-4 hover:underline" onClick={() => setMode('masuk')}>
+              Masuk di sini
+            </button>
+          </>
+        )}
       </p>
 
       <p className="border-t border-divider pt-4 text-center text-xs leading-relaxed text-muted-foreground">
