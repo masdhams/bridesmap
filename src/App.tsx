@@ -5,6 +5,7 @@ import { useAuth } from './lib/auth'
 import { usePlan } from './lib/store'
 import About from './pages/About'
 import Landing from './pages/Landing'
+import AksesBelumAktif from './pages/AksesBelumAktif'
 import LupaSandi from './pages/LupaSandi'
 import Masuk from './pages/Masuk'
 import Onboarding from './pages/Onboarding'
@@ -40,10 +41,11 @@ import SageInvitation from './pages/invitations/SageInvitation'
 import ToolsIndex from './pages/tools/ToolsIndex'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
-  const { session, ready, planReady } = useAuth()
+  const { session, ready, planReady, access } = useAuth()
   const { pathname, search } = useLocation()
   if (!ready || (session && !planReady)) return <div className="min-h-dvh" />
   if (!session) return <Navigate to={`/masuk?next=${encodeURIComponent(pathname + search)}`} replace />
+  if (access === 'denied') return <AksesBelumAktif />
   return <>{children}</>
 }
 

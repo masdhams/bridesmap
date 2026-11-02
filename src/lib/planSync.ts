@@ -1,4 +1,4 @@
-import { useAuth } from './auth'
+import { accessToken, useAuth, type Access } from './auth'
 import { supabase } from './supabase'
 import { exportData, usePlan } from './store'
 
@@ -37,17 +37,31 @@ async function load(uid: string) {
   if (!data) await save()
 }
 
+async function checkAccess(): Promise<Access> {
+  const token = await accessToken()
+  if (!token) return 'denied'
+  try {
+    const res = await fetch('/api/access', { headers: { authorization: `Bearer ${token}` } })
+    if (!res.ok) return 'denied'
+    const body = (await res.json()) as { paid?: boolean }
+    return body.paid ? 'granted' : 'denied'
+  } catch {
+    return 'denied'
+  }
+}
+
 export function startPlanSync() {
   useAuth.subscribe(async ({ session, ready }) => {
     const uid = session?.user.id ?? null
     if (!ready || uid === userId) return
     userId = uid
     loaded = false
-    useAuth.setState({ planReady: false })
+    useAuth.setState({ planReady: false, access: 'unknown' })
     clearTimeout(timer)
     if (uid) await load(uid)
     else usePlan.getState().reset()
-    if (userId === uid) useAuth.setState({ planReady: true })
+    const access: Access = uid ? await checkAccess() : 'denied'
+    if (userId === uid) useAuth.setState({ access, planReady: true })
   })
   usePlan.subscribe(schedule)
   window.addEventListener('pagehide', () => {
