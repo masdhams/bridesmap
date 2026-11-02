@@ -293,8 +293,8 @@ export const TESTIMONIALS: { name: string; city: string; quote: string; url: str
  *  Isi paket sama di semua fase harga; hanya fase berstatus 'active' yang bisa dibeli. */
 export const OFFER = {
   normalPrice: 347_000,
-  /** Halaman checkout belum ada. Ganti dengan rute checkout saat siap. */
-  checkoutHref: '#',
+  /** Checkout di OrderHero. */
+  checkoutHref: 'https://bridesmap.orderhero.id/form/order-bridesmap',
   phases: [
     { name: 'Pre Launching', price: 99_000, status: 'ended' as const },
     { name: 'Launching', price: 149_000, status: 'active' as const },

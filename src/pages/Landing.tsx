@@ -167,7 +167,7 @@ function WorkspacePreview({ tab }: { tab: number }) {
   )
 }
 
-const OFFER_HREF = 'https://bridesmap.orderhero.id/form/order-bridesmap'
+const OFFER_HREF = '#penawaran'
 const CTA_LABEL = 'Mulai Rencanakan Pernikahan'
 
 function OfferCard({ phase, index }: { phase: (typeof OFFER.phases)[number]; index: number }) {
