@@ -398,14 +398,18 @@ function HiddenCosts() {
   const { profile, categories, toggleHiddenCost, update } = usePlan()
   const [showAll, setShowAll] = useState(false)
   const byKey = new Map(categories.filter((c) => c.hiddenKey).map((c) => [c.hiddenKey!, c]))
-  const est = (key: string) => HIDDEN_COSTS.find((h) => h.key === key)!.estimate({ budget: profile.totalBudget, guests: profile.guestEstimate })
+  // Kategori dari daftar lama (kuncinya sudah tidak ada) tidak punya rumus: dibiarkan dengan nominal yang tersimpan.
+  const est = (key: string) => HIDDEN_COSTS.find((h) => h.key === key)?.estimate({ budget: profile.totalBudget, guests: profile.guestEstimate })
   // Yang sudah dicentang tampil dulu, lalu beberapa saran; sisanya di balik "Lihat semua".
   const ordered = [...HIDDEN_COSTS].sort((a, b) => Number(byKey.has(b.key)) - Number(byKey.has(a.key)))
   const checkedCount = byKey.size
   const visible = showAll ? ordered : ordered.slice(0, Math.max(4, checkedCount + 2))
 
   const recalc = () => {
-    for (const c of categories) if (c.hiddenKey) update('categories', c.id, { allocated: Math.round(est(c.hiddenKey) / 10000) * 10000 })
+    for (const c of categories) {
+      const value = c.hiddenKey ? est(c.hiddenKey) : undefined
+      if (value !== undefined) update('categories', c.id, { allocated: Math.round(value / 10000) * 10000 })
+    }
   }
 
   return (
@@ -439,7 +443,7 @@ function HiddenCosts() {
                       </span>
                     )
                   ) : (
-                    <span className="text-xs text-muted-foreground">Disarankan {rupiah(Math.round(est(h.key) / 10000) * 10000)}</span>
+                    <span className="text-xs text-muted-foreground">Disarankan {rupiah(Math.round(h.estimate({ budget: profile.totalBudget, guests: profile.guestEstimate }) / 10000) * 10000)}</span>
                   )}
                 </span>
                 {cat ? (
