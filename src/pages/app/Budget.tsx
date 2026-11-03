@@ -2,8 +2,9 @@ import { Select } from '../../components/select'
 import { CategoryPicker } from '../../components/CategoryPicker'
 import { HelpHint } from '../../components/HelpHint'
 import { BudgetReport } from '../../components/BudgetReport'
+import { exportBudgetExcel } from '../../lib/budgetExcel'
 import { GUIDE_HINTS } from '../../data/guide'
-import { ArrowRight, ArrowUpRight, ChevronDown, ChevronRight, CircleAlert, Pencil, Plus, Printer, RotateCcw, SlidersHorizontal, Store, Trash2 } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ChevronDown, ChevronRight, CircleAlert, FileSpreadsheet, Pencil, Plus, Printer, RotateCcw, SlidersHorizontal, Store, Trash2 } from 'lucide-react'
 import { IcBudget } from '../../components/icons'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -480,6 +481,7 @@ export default function Budget() {
   const [editTotal, setEditTotal] = useState<number | null>(null)
   const [newItem, setNewItem] = useState<Partial<BudgetItem> | null>(null)
   const [tab, setTab] = useState<'ringkasan' | 'kategori' | 'pengaturan'>('ringkasan')
+  const [exporting, setExporting] = useState(false)
   const vkeyOf = (c: CategorySummary) => visualKey({ name: c.name, hidden: c.hidden, key: s.categories.find((x) => x.id === c.id)?.key })
   const sum = budgetSummary(s)
   // Kelompok daftar kategori: tiap acara, lalu kategori umum/kustom, lalu biaya tersembunyi.
@@ -512,6 +514,23 @@ export default function Budget() {
           <>
             <button className="btn-outline btn-sm hidden sm:inline-flex" onClick={() => window.print()}>
               <Printer className="size-4" aria-hidden /> Ekspor PDF
+            </button>
+            <button
+              className="btn-outline btn-sm"
+              disabled={exporting}
+              onClick={async () => {
+                setExporting(true)
+                try {
+                  await exportBudgetExcel(usePlan.getState())
+                } catch (e) {
+                  console.error('[excel]', e)
+                  alert('File Excel belum bisa dibuat. Coba lagi sebentar, ya.')
+                } finally {
+                  setExporting(false)
+                }
+              }}
+            >
+              <FileSpreadsheet className="size-4" aria-hidden /> {exporting ? 'Menyiapkan…' : 'Ekspor Excel'}
             </button>
             <button className="btn-primary min-h-11 px-4 text-sm" onClick={() => setNewItem({ categoryId: s.categories[0]?.id, amount: 0, paid: false })}>
               <Plus className="size-4" strokeWidth={2} aria-hidden /> Biaya
