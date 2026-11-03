@@ -4,6 +4,7 @@
 import {
   AirplaneTilt,
   Armchair,
+  Basket,
   BookOpenText,
   Buildings,
   CalendarCheck,
@@ -61,7 +62,7 @@ export const IcRundown = duo(CalendarCheck, 'IcRundown')
 export const IcBudget = duo(Wallet, 'IcBudget')
 export const IcVendor = duo(Storefront, 'IcVendor')
 export const IcSavings = duo(PiggyBank, 'IcSavings')
-export const IcSeserahan = duo(Gift, 'IcSeserahan')
+export const IcSeserahan = duo(Basket, 'IcSeserahan')
 export const IcGuests = duo(UsersThree, 'IcGuests')
 export const IcSeating = duo(Armchair, 'IcSeating')
 export const IcWebsite = duo(Globe, 'IcWebsite')
