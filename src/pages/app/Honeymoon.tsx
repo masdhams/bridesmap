@@ -100,6 +100,7 @@ export default function Honeymoon() {
         </span>
       </div>
 
+      <div className="contents xl:flex xl:flex-col xl:gap-4">
       <section className="flex flex-col gap-2.5 rounded-[20px] border border-border bg-card p-4">
         <div className="flex items-center justify-between gap-2">
           <span className="text-[13px] text-muted-foreground">Budget honeymoon</span>
@@ -113,6 +114,54 @@ export default function Honeymoon() {
         </div>
       </section>
 
+      <div className="grid grid-cols-2 gap-3">
+        <Link to="/app/honeymoon/itinerary" className="flex min-h-[96px] flex-col justify-between rounded-[20px] bg-primary p-4 text-white">
+          <span className="text-[13px] text-[#D5DCCB]">Itinerary</span>
+          <span className="flex items-center justify-between text-base font-semibold">
+            {days ? `${days} hari` : 'Susun itinerary'} <ArrowRight className="size-4" strokeWidth={1.8} aria-hidden />
+          </span>
+        </Link>
+        <a href="#packing" className="flex min-h-[96px] flex-col justify-between rounded-[20px] border border-border bg-muted p-4">
+          <span className="text-[13px] text-muted-foreground">Daftar packing</span>
+          <span className="text-base font-semibold tabular-nums">
+            {packed} / {h.packing.length} barang
+          </span>
+        </a>
+      </div>
+
+      <section className="flex flex-col gap-2.5">
+        <div className="flex items-center justify-between">
+          <h2 className="font-sans text-[15px] font-semibold">Rencana per hari</h2>
+          <Link to="/app/honeymoon/itinerary" className="link-arrow text-[13px]">
+            Lihat semua <ArrowRight className="size-3.5" strokeWidth={1.8} aria-hidden />
+          </Link>
+        </div>
+        {h.itinerary.length === 0 ? (
+          <p className="rounded-[20px] border border-border bg-card px-4 py-5 text-sm text-muted-foreground">Belum ada itinerary. Susun rencana per hari supaya perjalanan kalian lebih tenang.</p>
+        ) : (
+          <ol className="overflow-hidden rounded-[20px] border border-border bg-card">
+            {[...h.itinerary]
+              .sort((a, b) => a.day - b.day)
+              .map((day) => {
+                const acts = [...(day.items ?? [])].sort((a, b) => a.time.localeCompare(b.time))
+                return (
+                  <li key={day.id} className="flex gap-3 border-b border-divider px-4 py-3 last:border-0">
+                    <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary-soft text-xs font-semibold tabular-nums text-on-primary-soft" aria-hidden>
+                      {day.day}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="m-0 truncate text-sm font-semibold">{day.title || `Hari ${day.day}`}</p>
+                      <p className="m-0 truncate text-xs text-muted-foreground">{acts.length > 0 ? `${acts.length} kegiatan · mulai ${acts[0].time}` : day.plan || 'Belum ada kegiatan'}</p>
+                    </div>
+                  </li>
+                )
+              })}
+          </ol>
+        )}
+      </section>
+      </div>
+
+      <div className="contents xl:flex xl:flex-col xl:gap-4">
       <section className="flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
           <h2 className="font-sans text-[15px] font-semibold">Booking & Pemesanan</h2>
@@ -154,21 +203,6 @@ export default function Honeymoon() {
         </ul>
       </section>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Link to="/app/honeymoon/itinerary" className="flex min-h-[96px] flex-col justify-between rounded-[20px] bg-primary p-4 text-white">
-          <span className="text-[13px] text-[#D5DCCB]">Itinerary</span>
-          <span className="flex items-center justify-between text-base font-semibold">
-            {days ? `${days} hari` : 'Susun itinerary'} <ArrowRight className="size-4" strokeWidth={1.8} aria-hidden />
-          </span>
-        </Link>
-        <a href="#packing" className="flex min-h-[96px] flex-col justify-between rounded-[20px] border border-border bg-muted p-4">
-          <span className="text-[13px] text-muted-foreground">Daftar packing</span>
-          <span className="text-base font-semibold tabular-nums">
-            {packed} / {h.packing.length} barang
-          </span>
-        </a>
-      </div>
-
       <section id="packing" className="flex scroll-mt-6 flex-col gap-2.5">
         <h2 className="font-sans text-[15px] font-semibold">Daftar packing</h2>
         <div className="rounded-[20px] border border-border bg-card px-4 py-1">
@@ -198,6 +232,7 @@ export default function Honeymoon() {
           </form>
         </div>
       </section>
+      </div>
 
       <Modal
         open={editTrip}
