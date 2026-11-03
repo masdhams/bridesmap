@@ -1,10 +1,9 @@
 import { Select } from '../../components/select'
 import { CategoryPicker } from '../../components/CategoryPicker'
 import { HelpHint } from '../../components/HelpHint'
-import { BudgetReport } from '../../components/BudgetReport'
 import { exportBudgetExcel } from '../../lib/budgetExcel'
 import { GUIDE_HINTS } from '../../data/guide'
-import { ArrowRight, ArrowUpRight, ChevronDown, ChevronRight, CircleAlert, FileSpreadsheet, Pencil, Plus, Printer, RotateCcw, SlidersHorizontal, Store, Trash2 } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ChevronDown, ChevronRight, CircleAlert, FileSpreadsheet, Pencil, Plus, RotateCcw, SlidersHorizontal, Store, Trash2 } from 'lucide-react'
 import { IcBudget } from '../../components/icons'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -506,15 +505,11 @@ export default function Budget() {
 
   return (
     <div>
-      <div className="no-print">
       <PageHeader
         title="Budget"
         subtitle="Biaya vendor yang sudah booked otomatis tersambung ke kategori. Pengeluaran lain bisa dicatat manual."
         actions={
           <>
-            <button className="btn-outline btn-sm hidden sm:inline-flex" onClick={() => window.print()}>
-              <Printer className="size-4" aria-hidden /> Ekspor PDF
-            </button>
             <button
               className="btn-outline btn-sm"
               disabled={exporting}
@@ -538,10 +533,8 @@ export default function Budget() {
           </>
         }
       />
-      </div>
-      <BudgetReport />
 
-      <div className="no-print mx-auto flex max-w-3xl flex-col gap-5 lg:max-w-none">
+      <div className="mx-auto flex max-w-3xl flex-col gap-5 lg:max-w-none">
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
           <div className="xl:col-span-7">
             <HeroCard sum={sum} onEditTotal={() => setEditTotal(s.profile.totalBudget)} />
