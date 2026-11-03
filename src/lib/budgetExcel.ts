@@ -29,6 +29,9 @@ const PCT = '0%'
 const DATE = 'd mmm yyyy'
 
 const fill = (argb: string): Fill => ({ type: 'pattern', pattern: 'solid', fgColor: { argb } })
+/** Rumus beserta hasilnya. Hasil disimpan supaya pratinjau dan aplikasi yang tidak menghitung ulang tetap menampilkan angka. */
+type F = { formula: string; result: number | string }
+const f = (formula: string, result: number | string): F => ({ formula, result })
 const font = (o: Partial<Font> = {}): Partial<Font> => ({ name: FONT, size: 11, color: { argb: C.ink }, ...o })
 const line = { style: 'thin' as const, color: { argb: C.border } }
 const bottomLine: Partial<Borders> = { bottom: line }
@@ -53,7 +56,7 @@ function heading(ws: Worksheet, title: string, sub: string, span: number) {
 }
 
 /** Tabel dengan header hijau, baris belang, format angka, dan filter. Mengembalikan nomor baris pertama dan terakhir data. */
-function table(ws: Worksheet, startRow: number, cols: Col[], rows: (string | number | Date | { formula: string } | null)[][], opts: { filter?: boolean } = {}) {
+function table(ws: Worksheet, startRow: number, cols: Col[], rows: (string | number | Date | F | null)[][], opts: { filter?: boolean } = {}) {
   const head = ws.getRow(startRow)
   cols.forEach((c, i) => {
     const cell = head.getCell(i + 1)
@@ -83,7 +86,7 @@ function table(ws: Worksheet, startRow: number, cols: Col[], rows: (string | num
 }
 
 /** Baris total tebal dengan latar Sage muda. */
-function totalRow(ws: Worksheet, rowNo: number, span: number, label: string, values: Record<number, { formula: string } | number | string>, fmts: Record<number, string>) {
+function totalRow(ws: Worksheet, rowNo: number, span: number, label: string, values: Record<number, F | number | string>, fmts: Record<number, string>) {
   const row = ws.getRow(rowNo)
   for (let i = 1; i <= span; i++) {
     const cell = row.getCell(i)
@@ -119,6 +122,10 @@ export async function exportBudgetExcel(s: PlanState) {
   const wb = new ExcelJS.Workbook()
   wb.creator = 'Bridesmap'
   wb.created = new Date()
+  // Excel menghitung ulang semua rumus saat file dibuka.
+  wb.calcProperties.fullCalcOnLoad = true
+  const sumOf = (xs: number[]) => xs.reduce((a, x) => a + x, 0)
+  const ratio = (a: number, b: number) => (b === 0 ? 0 : a / b)
 
   const sum = budgetSummary(s)
   const total = s.profile.totalBudget
@@ -160,7 +167,7 @@ export async function exportBudgetExcel(s: PlanState) {
     ['TOTAL BUDGET', total, C.primary],
     ['DISEPAKATI', committedAll, C.ink],
     ['SUDAH DIBAYAR', paidAll, C.success],
-    ['SISA BUDGET', { formula: 'A5-B5' } as Cell['value'], C.ink],
+    ['SISA BUDGET', f('A5-B5', total - committedAll) as Cell['value'], total - committedAll < 0 ? C.danger : C.ink],
   ]
   kpis.forEach(([label, value, color], i) => {
     const l = ws1.getCell(4, i + 1)
@@ -179,7 +186,8 @@ export async function exportBudgetExcel(s: PlanState) {
   ws1.getRow(4).height = 20
   ws1.getRow(5).height = 32
   const st = ws1.getCell(6, 1)
-  st.value = { formula: 'IF(B5>A5,"Status: Over budget",IF(B5>=A5*0.9,"Status: Mendekati batas","Status: Sesuai rencana"))' }
+  const statusText = committedAll > total ? 'Status: Over budget' : committedAll >= total * 0.9 ? 'Status: Mendekati batas' : 'Status: Sesuai rencana'
+  st.value = f('IF(B5>A5,"Status: Over budget",IF(B5>=A5*0.9,"Status: Mendekati batas","Status: Sesuai rencana"))', statusText)
   st.font = font({ bold: true, color: { argb: C.primary } })
   ws1.getRow(6).height = 22
   statusRule(ws1, 'A6', 'Over budget', C.dangerSoft, C.danger)
@@ -188,23 +196,31 @@ export async function exportBudgetExcel(s: PlanState) {
   const sec = ws1.getCell(8, 1)
   sec.value = 'Ringkasan per acara'
   sec.font = font({ size: 13, bold: true, color: { argb: C.primary } })
-  const evRows = s.events.map((e) => {
+  const evRows: { name: string; budget: number; used: number; paid: number }[] = s.events.map((e) => {
     const cs = sum.filter((c) => catById.get(c.id)?.eventId === e.id)
-    return [e.name, e.budget, cs.reduce((a, c) => a + c.committed, 0), cs.reduce((a, c) => a + c.paid, 0)]
+    return { name: e.name, budget: e.budget, used: sumOf(cs.map((c) => c.committed)), paid: sumOf(cs.map((c) => c.paid)) }
   })
   const hidden = sum.filter((c) => c.hidden)
-  if (hidden.length) evRows.push(['Hidden cost', hidden.reduce((a, c) => a + c.allocated, 0), hidden.reduce((a, c) => a + c.committed, 0), hidden.reduce((a, c) => a + c.paid, 0)])
+  if (hidden.length) evRows.push({ name: 'Hidden cost', budget: sumOf(hidden.map((c) => c.allocated)), used: sumOf(hidden.map((c) => c.committed)), paid: sumOf(hidden.map((c) => c.paid)) })
   const t1 = table(
     ws1,
     9,
     cols1,
     evRows.map((r, i) => {
       const n = 10 + i
-      return [...r, { formula: `B${n}-C${n}` }, { formula: `IF(B${n}=0,0,C${n}/B${n})` }]
+      return [r.name, r.budget, r.used, r.paid, f(`B${n}-C${n}`, r.budget - r.used), f(`IF(B${n}=0,0,C${n}/B${n})`, ratio(r.used, r.budget))]
     }),
   )
   const tr1 = t1.last + 1
-  totalRow(ws1, tr1, 6, 'Total', { 2: { formula: `SUM(B${t1.first}:B${t1.last})` }, 3: { formula: `SUM(C${t1.first}:C${t1.last})` }, 4: { formula: `SUM(D${t1.first}:D${t1.last})` }, 5: { formula: `B${tr1}-C${tr1}` }, 6: { formula: `IF(B${tr1}=0,0,C${tr1}/B${tr1})` } }, { 2: RP, 3: RP, 4: RP, 5: RP, 6: PCT })
+  const ev = { budget: sumOf(evRows.map((r) => r.budget)), used: sumOf(evRows.map((r) => r.used)), paid: sumOf(evRows.map((r) => r.paid)) }
+  totalRow(
+    ws1,
+    tr1,
+    6,
+    'Total',
+    { 2: f(`SUM(B${t1.first}:B${t1.last})`, ev.budget), 3: f(`SUM(C${t1.first}:C${t1.last})`, ev.used), 4: f(`SUM(D${t1.first}:D${t1.last})`, ev.paid), 5: f(`B${tr1}-C${tr1}`, ev.budget - ev.used), 6: f(`IF(B${tr1}=0,0,C${tr1}/B${tr1})`, ratio(ev.used, ev.budget)) },
+    { 2: RP, 3: RP, 4: RP, 5: RP, 6: PCT },
+  )
   ws1.addConditionalFormatting({ ref: `F${t1.first}:F${tr1}`, rules: [{ type: 'cellIs', operator: 'greaterThan', formulae: ['1'], priority: 1, style: { font: { color: { argb: C.danger }, bold: true } } }] })
 
   // Cara membaca, supaya file tetap jelas saat dibagikan ke orang lain.
@@ -242,11 +258,29 @@ export async function exportBudgetExcel(s: PlanState) {
     .sort((a, b) => eventOrder(a.ev) - eventOrder(b.ev))
     .map(({ c, ev }, i) => {
       const n = 5 + i
-      return [ev, c.name, c.allocated, c.committed, c.paid, { formula: `C${n}-D${n}` }, { formula: `IF(C${n}=0,0,D${n}/C${n})` }, { formula: `IF(AND(C${n}>0,D${n}>C${n}),"Lewat",IF(D${n}=0,"Belum ada biaya","Aman"))` }]
+      const status = c.allocated > 0 && c.committed > c.allocated ? 'Lewat' : c.committed === 0 ? 'Belum ada biaya' : 'Aman'
+      return [
+        ev,
+        c.name,
+        c.allocated,
+        c.committed,
+        c.paid,
+        f(`C${n}-D${n}`, c.allocated - c.committed),
+        f(`IF(C${n}=0,0,D${n}/C${n})`, ratio(c.committed, c.allocated)),
+        f(`IF(AND(C${n}>0,D${n}>C${n}),"Lewat",IF(D${n}=0,"Belum ada biaya","Aman"))`, status),
+      ]
     })
   const t2 = table(ws2, 4, cols2, catRows, { filter: true })
   const tr2 = t2.last + 1
-  totalRow(ws2, tr2, 8, 'Total', { 3: { formula: `SUM(C${t2.first}:C${t2.last})` }, 4: { formula: `SUM(D${t2.first}:D${t2.last})` }, 5: { formula: `SUM(E${t2.first}:E${t2.last})` }, 6: { formula: `C${tr2}-D${tr2}` } }, { 3: RP, 4: RP, 5: RP, 6: RP })
+  const ct = { alloc: sumOf(sum.map((c) => c.allocated)), used: sumOf(sum.map((c) => c.committed)), paid: sumOf(sum.map((c) => c.paid)) }
+  totalRow(
+    ws2,
+    tr2,
+    8,
+    'Total',
+    { 3: f(`SUM(C${t2.first}:C${t2.last})`, ct.alloc), 4: f(`SUM(D${t2.first}:D${t2.last})`, ct.used), 5: f(`SUM(E${t2.first}:E${t2.last})`, ct.paid), 6: f(`C${tr2}-D${tr2}`, ct.alloc - ct.used) },
+    { 3: RP, 4: RP, 5: RP, 6: RP },
+  )
   statusRule(ws2, `H${t2.first}:H${t2.last}`, 'Lewat', C.dangerSoft, C.danger)
   statusRule(ws2, `H${t2.first}:H${t2.last}`, 'Aman', C.successSoft, C.success)
   ws2.views = [{ showGridLines: false, state: 'frozen', ySplit: 4 }]
@@ -278,12 +312,15 @@ export async function exportBudgetExcel(s: PlanState) {
     cols3,
     lines.map((l, i) => {
       const n = 5 + i
-      return [eventName(l.cat), catName(l.cat), l.jenis, l.nama, l.amount, l.paid, { formula: `E${n}-F${n}` }, { formula: `IF(G${n}<=0,"Lunas",IF(F${n}>0,"DP","Belum dibayar"))` }, l.note]
+      const rest = l.amount - l.paid
+      const status = rest <= 0 ? 'Lunas' : l.paid > 0 ? 'DP' : 'Belum dibayar'
+      return [eventName(l.cat), catName(l.cat), l.jenis, l.nama, l.amount, l.paid, f(`E${n}-F${n}`, rest), f(`IF(G${n}<=0,"Lunas",IF(F${n}>0,"DP","Belum dibayar"))`, status), l.note]
     }),
     { filter: true },
   )
   const tr3 = t3.last + 1
-  totalRow(ws3, tr3, 9, 'Total', { 5: { formula: `SUM(E${t3.first}:E${t3.last})` }, 6: { formula: `SUM(F${t3.first}:F${t3.last})` }, 7: { formula: `E${tr3}-F${tr3}` } }, { 5: RP, 6: RP, 7: RP })
+  const lt = { amount: sumOf(lines.map((l) => l.amount)), paid: sumOf(lines.map((l) => l.paid)) }
+  totalRow(ws3, tr3, 9, 'Total', { 5: f(`SUM(E${t3.first}:E${t3.last})`, lt.amount), 6: f(`SUM(F${t3.first}:F${t3.last})`, lt.paid), 7: f(`E${tr3}-F${tr3}`, lt.amount - lt.paid) }, { 5: RP, 6: RP, 7: RP })
   statusRule(ws3, `H${t3.first}:H${t3.last}`, 'Lunas', C.successSoft, C.success)
   statusRule(ws3, `H${t3.first}:H${t3.last}`, 'DP', C.warningSoft, C.warning)
   statusRule(ws3, `H${t3.first}:H${t3.last}`, 'Belum', C.muted, C.body)
@@ -314,17 +351,19 @@ export async function exportBudgetExcel(s: PlanState) {
     { filter: true },
   )
   const tr4 = t4.last + 1
-  totalRow(ws4, tr4, 7, 'Total semua termin', { 5: { formula: `SUM(E${t4.first}:E${t4.last})` } }, { 5: RP })
-  const label = (r: number, text: string, f: string) => {
+  const payAll = sumOf(pays.map(({ p }) => p.amount))
+  const payDone = sumOf(pays.filter(({ p }) => p.paidDate).map(({ p }) => p.amount))
+  totalRow(ws4, tr4, 7, 'Total semua termin', { 5: f(`SUM(E${t4.first}:E${t4.last})`, payAll) }, { 5: RP })
+  const label = (r: number, text: string, value: F) => {
     ws4.getCell(r, 4).value = text
     ws4.getCell(r, 4).font = font({ bold: true })
     const c = ws4.getCell(r, 5)
-    c.value = { formula: f }
+    c.value = value
     c.numFmt = RP
     c.font = font({ bold: true })
   }
-  label(tr4 + 1, 'Sudah dibayar', `SUMIF(F${t4.first}:F${t4.last},"Lunas",E${t4.first}:E${t4.last})`)
-  label(tr4 + 2, 'Belum dibayar', `E${tr4}-E${tr4 + 1}`)
+  label(tr4 + 1, 'Sudah dibayar', f(`SUMIF(F${t4.first}:F${t4.last},"Lunas",E${t4.first}:E${t4.last})`, payDone))
+  label(tr4 + 2, 'Belum dibayar', f(`E${tr4}-E${tr4 + 1}`, payAll - payDone))
   statusRule(ws4, `F${t4.first}:F${t4.last}`, 'Lunas', C.successSoft, C.success)
   statusRule(ws4, `F${t4.first}:F${t4.last}`, 'Terlambat', C.dangerSoft, C.danger)
   statusRule(ws4, `F${t4.first}:F${t4.last}`, 'Belum', C.warningSoft, C.warning)
