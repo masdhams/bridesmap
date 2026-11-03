@@ -73,6 +73,7 @@ export const IcHoneymoon = duo(AirplaneTilt, 'IcHoneymoon')
 export const IcSettings = duo(GearSix, 'IcSettings')
 export const IcAllFeatures = duo(SquaresFour, 'IcAllFeatures')
 export const IcGuide = duo(BookOpenText, 'IcGuide')
+export const IcBonus = duo(Gift, 'IcBonus')
 
 // Kategori budget
 export const IcVenue = duo(Buildings, 'IcVenue')

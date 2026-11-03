@@ -1,4 +1,4 @@
-import { IcBudget, IcChecklist, IcDocs, IcDeepTalk, IcGuests, IcHome, IcGuide, IcHoneymoon, IcLetter, IcLove, IcRundown, IcSavings, IcSeating, IcSeserahan, IcSettings, IcVendor, IcVision, type AppIcon } from './icons'
+import { IcBonus, IcBudget, IcChecklist, IcDocs, IcDeepTalk, IcGuests, IcHome, IcGuide, IcHoneymoon, IcLetter, IcLove, IcRundown, IcSavings, IcSeating, IcSeserahan, IcSettings, IcVendor, IcVision, type AppIcon } from './icons'
 
 export interface NavItem {
   to: string
@@ -47,6 +47,7 @@ export const NAV_GROUPS: { title: string; items: NavItem[] }[] = [
   {
     title: 'Akun',
     items: [
+      { to: '/app/bonus', label: 'Bonus', icon: IcBonus, desc: 'Panduan tambahan untuk pembeli Bridesmap' },
       { to: '/app/pengaturan', label: 'Pengaturan & pasangan', icon: IcSettings },
       { to: '/app/panduan', label: 'Panduan', icon: IcGuide, desc: 'Mulai cepat & pertanyaan umum' },
     ],

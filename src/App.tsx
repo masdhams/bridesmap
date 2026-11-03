@@ -13,6 +13,7 @@ import LiveInvitation from './pages/LiveInvitation'
 import InvitationEditor from './pages/app/InvitationEditor'
 import Allocation from './pages/app/Allocation'
 import Berdua from './pages/app/Berdua'
+import Bonus from './pages/app/Bonus'
 import Budget from './pages/app/Budget'
 import Checklist from './pages/app/Checklist'
 import Administration from './pages/app/Administration'
@@ -136,6 +137,7 @@ export default function App() {
           <Route path="lainnya" element={<More />} />
           <Route path="pengaturan" element={<Settings />} />
           <Route path="panduan" element={<Guide />} />
+          <Route path="bonus" element={<Bonus />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
