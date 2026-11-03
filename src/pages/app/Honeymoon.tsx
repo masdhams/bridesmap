@@ -202,10 +202,12 @@ export default function Honeymoon() {
           {h.bookings.length === 0 && <li className="px-4 py-5 text-sm text-muted-foreground">Belum ada booking. Tambahkan tiket, hotel, atau kebutuhan perjalanan lainnya.</li>}
         </ul>
       </section>
+      </div>
 
-      <section id="packing" className="flex scroll-mt-6 flex-col gap-2.5">
+      <section id="packing" className="flex scroll-mt-6 flex-col gap-2.5 xl:col-span-2">
         <h2 className="font-sans text-[15px] font-semibold">Daftar packing</h2>
         <div className="rounded-[20px] border border-border bg-card px-4 py-1">
+          <div className="grid md:grid-cols-2 md:gap-x-8 xl:grid-cols-3">
           {h.packing.map((p) => (
             <div key={p.id} className="flex items-center gap-2 border-b border-divider last:border-0">
               <div className="flex-1">
@@ -216,6 +218,7 @@ export default function Honeymoon() {
               </ConfirmButton>
             </div>
           ))}
+          </div>
           <form
             className="flex gap-2 py-3"
             onSubmit={(e) => {
@@ -232,7 +235,6 @@ export default function Honeymoon() {
           </form>
         </div>
       </section>
-      </div>
 
       <Modal
         open={editTrip}
