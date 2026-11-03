@@ -187,7 +187,7 @@
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 min-h-[52px] text-[15px] font-semibold select-none whitespace-nowrap disabled:cursor-not-allowed disabled:bg-disabled disabled:text-disabled-foreground disabled:border-transparent;
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 min-h-[52px] text-[15px] text-center font-semibold select-none whitespace-normal disabled:cursor-not-allowed disabled:bg-disabled disabled:text-disabled-foreground disabled:border-transparent;
 }
 
 @utility chip {
