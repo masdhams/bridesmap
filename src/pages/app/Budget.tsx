@@ -1,6 +1,7 @@
 import { Select } from '../../components/select'
 import { CategoryPicker } from '../../components/CategoryPicker'
 import { HelpHint } from '../../components/HelpHint'
+import { BudgetReport } from '../../components/BudgetReport'
 import { GUIDE_HINTS } from '../../data/guide'
 import { ArrowRight, ArrowUpRight, ChevronDown, ChevronRight, CircleAlert, Pencil, Plus, Printer, RotateCcw, SlidersHorizontal, Store, Trash2 } from 'lucide-react'
 import { IcBudget } from '../../components/icons'
@@ -13,7 +14,7 @@ import { allocTotals, pctOf } from '../../lib/allocation'
 import { budgetSummary, budgetTotals, vendorCost, type CategorySummary } from '../../lib/selectors'
 import { usePlan } from '../../lib/store'
 import type { BudgetItem } from '../../lib/types'
-import { cn, fmtDate, rupiah, rupiahShort, uid } from '../../lib/utils'
+import { cn, rupiah, rupiahShort, uid } from '../../lib/utils'
 
 function CategoryCard({ c, vkey, onEdit }: { c: CategorySummary; vkey: string; onEdit: () => void }) {
   const [open, setOpen] = useState(false)
@@ -503,6 +504,7 @@ export default function Budget() {
 
   return (
     <div>
+      <div className="no-print">
       <PageHeader
         title="Budget"
         subtitle="Biaya vendor yang sudah booked otomatis tersambung ke kategori. Pengeluaran lain bisa dicatat manual."
@@ -517,12 +519,10 @@ export default function Budget() {
           </>
         }
       />
-      <div className="print-only mb-4">
-        <p className="font-serif text-2xl">Budget pernikahan {s.profile.partnerA} &amp; {s.profile.partnerB}</p>
-        <p className="text-sm">Hari-H {fmtDate(s.profile.weddingDate, 'd MMMM yyyy')} · dicetak {fmtDate(new Date().toISOString().slice(0, 10))}</p>
       </div>
+      <BudgetReport />
 
-      <div className="mx-auto flex max-w-3xl flex-col gap-5 lg:max-w-none">
+      <div className="no-print mx-auto flex max-w-3xl flex-col gap-5 lg:max-w-none">
         <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
           <div className="xl:col-span-7">
             <HeroCard sum={sum} onEditTotal={() => setEditTotal(s.profile.totalBudget)} />
