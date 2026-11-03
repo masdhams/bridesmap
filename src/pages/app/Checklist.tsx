@@ -233,6 +233,7 @@ export default function Checklist() {
       ) : (
       <>
       <FilterChips
+        wrap
         label="Fase persiapan"
         value={phase}
         onChange={(p) => {

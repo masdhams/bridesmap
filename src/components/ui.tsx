@@ -244,9 +244,9 @@ export function ConfirmButton({ onConfirm, children, className, label = 'Hapus' 
 }
 
 /** Chip filter ala layar Tamu/Checklist: aktif = Arang solid, sisanya garis Pasir. Bisa digeser di mobile. */
-export function FilterChips<T extends string>({ value, onChange, options, label, bleed = true }: { value: T; onChange: (v: T) => void; options: { value: T; label: ReactNode }[]; label: string; bleed?: boolean }) {
+export function FilterChips<T extends string>({ value, onChange, options, label, bleed = true, wrap = false }: { value: T; onChange: (v: T) => void; options: { value: T; label: ReactNode }[]; label: string; bleed?: boolean; /** Chip turun ke baris berikutnya, bukan digeser horizontal. */ wrap?: boolean }) {
   return (
-    <div role="tablist" aria-label={label} className={cn('flex gap-1.5 overflow-x-auto [scrollbar-width:none]', bleed && '-mx-5 px-5 sm:mx-0 sm:px-0')}>
+    <div role="tablist" aria-label={label} className={cn(wrap ? 'flex flex-wrap gap-1.5' : 'flex gap-1.5 overflow-x-auto [scrollbar-width:none]', bleed && !wrap && '-mx-5 px-5 sm:mx-0 sm:px-0')}>
       {options.map((o) => (
         <button
           key={o.value}
