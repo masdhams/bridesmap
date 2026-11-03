@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useStartSteps } from '../../components/StartHere'
 import { PageHeader } from '../../components/ui'
 import { LEGAL } from '../../data/content'
-import { GUIDE_CONTACT, GUIDE_FAQ, GUIDE_INTRO } from '../../data/guide'
+import { GUIDE_CONTACT, GUIDE_FAQ, GUIDE_INTRO, GUIDE_TOPICS } from '../../data/guide'
 import { NAV_GROUPS } from '../../components/nav'
 import { usePlan } from '../../lib/store'
 import { cn } from '../../lib/utils'
@@ -75,6 +75,46 @@ export default function Guide() {
           ))}
         </ol>
       </section>
+
+      {GUIDE_TOPICS.map((t) => (
+        <section key={t.id} id={t.id} aria-labelledby={`h-${t.id}`} className="flex scroll-mt-24 flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div className="min-w-0">
+              <h2 id={`h-${t.id}`} className="text-[26px]">
+                {t.title} <span className="italic">{t.italic}</span>
+              </h2>
+              <p className="mt-1 max-w-xl text-sm leading-relaxed text-body">{t.intro}</p>
+            </div>
+            <Link to={t.to} className="btn-outline btn-sm shrink-0 self-start">
+              {t.cta}
+            </Link>
+          </div>
+          <div className="grid gap-3">
+            {t.blocks.map((b) => {
+              const List = b.ordered ? 'ol' : 'ul'
+              return (
+                <div key={b.heading} className="card p-4 sm:p-5">
+                  <p className="eyebrow">{b.heading}</p>
+                  <List className="mt-3 flex flex-col gap-2.5">
+                    {b.items.map((it, i) => (
+                      <li key={i} className="flex gap-3 text-sm leading-relaxed text-body">
+                        {b.ordered ? (
+                          <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-full bg-primary-soft text-xs font-semibold text-on-primary-soft">
+                            {i + 1}
+                          </span>
+                        ) : (
+                          <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
+                        )}
+                        <span className="min-w-0">{it}</span>
+                      </li>
+                    ))}
+                  </List>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+      ))}
 
       <section id="fitur" aria-labelledby="h-fitur" className="flex scroll-mt-24 flex-col gap-4">
         <h2 id="h-fitur" className="text-[26px]">

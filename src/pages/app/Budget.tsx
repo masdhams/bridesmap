@@ -262,7 +262,12 @@ function Overview({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () => void 
     <section className="flex flex-col gap-2.5">
       <div className="flex flex-col gap-0.5 px-1">
         <h2 className="font-sans text-[15px] font-semibold">Pemakaian per kategori</h2>
-        <p className="text-xs text-muted-foreground">Biaya yang sudah disepakati dibanding alokasi tiap kategori.</p>
+        <p className="text-xs text-muted-foreground">
+          Biaya yang sudah disepakati dibanding alokasi tiap kategori. Angka di sini gabungan semua acara.{' '}
+          <Link to="/app/panduan#budget" className="font-semibold text-primary underline-offset-4 hover:underline">
+            Cara membaca halaman ini
+          </Link>
+        </p>
       </div>
       {/* Desktop: kartu bento per kategori. */}
       <ul className="hidden gap-4 lg:grid lg:grid-cols-2 xl:grid-cols-3">

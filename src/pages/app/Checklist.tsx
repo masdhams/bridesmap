@@ -227,6 +227,11 @@ export default function Checklist() {
           { value: 'kategori', label: 'Kategori' },
         ]}
       />
+      <p className="m-0 px-1 text-xs text-muted-foreground">
+        <Link to="/app/panduan#checklist" className="font-semibold text-primary underline-offset-4 hover:underline">
+          Cara membaca dan mengisi checklist
+        </Link>
+      </p>
 
       {view === 'kategori' ? (
         <CategoryView tasks={tasks} profile={profile} Row={Row} openCat={openCat} setOpenCat={setOpenCat} />

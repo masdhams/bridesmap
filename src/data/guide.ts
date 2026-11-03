@@ -62,11 +62,108 @@ export const GUIDE_STEPS: GuideStep[] = [
   },
 ]
 
+/** Penjelasan satu fitur: cara kerja, cara mengisi, dan cara membaca angkanya. */
+export interface GuideTopic {
+  id: string
+  title: string
+  /** Bagian judul yang dicetak miring, mengikuti gaya judul lain di Panduan. */
+  italic: string
+  intro: string
+  to: string
+  cta: string
+  blocks: { heading: string; ordered?: boolean; items: string[] }[]
+}
+
+export const GUIDE_TOPICS: GuideTopic[] = [
+  {
+    id: 'budget',
+    title: 'Budget:',
+    italic: 'cara kerja, isi, dan baca',
+    intro: 'Budget membantu kalian melihat tiga hal sekaligus: uang yang direncanakan, uang yang sudah disepakati dengan vendor, dan uang yang sudah keluar.',
+    to: '/app/budget',
+    cta: 'Buka Budget',
+    blocks: [
+      {
+        heading: 'Cara kerjanya',
+        items: [
+          'Total budget kalian bagi ke tiap acara (lamaran, akad, resepsi, dan acara adat kalau ada). Tiap acara dibagi lagi ke kategorinya, seperti venue, katering, dan dekorasi.',
+          'Pembagian awal hanya perkiraan. Kalian bisa mengubahnya dalam persen atau Rupiah di tab Pengaturan, bagian Atur alokasi.',
+          'Vendor yang statusnya Booked masuk ke budget dengan sendirinya. Angka yang dipakai adalah harga yang disepakati, atau harga penawaran kalau belum ada kesepakatan. Jadi harga vendor tidak perlu dicatat dua kali.',
+          'Biaya di luar vendor, misalnya sewa tenda atau doorprize, kalian catat sendiri sebagai biaya di kategori yang sesuai.',
+          'Hidden cost adalah biaya yang sering terlupa, seperti pajak dan service charge, overtime vendor, atau konsumsi kru. Centang yang kalian perlukan di tab Pengaturan. Nominalnya dihitung dari total budget dan jumlah tamu, dan masih bisa diubah.',
+        ],
+      },
+      {
+        heading: 'Cara mengisinya',
+        ordered: true,
+        items: [
+          'Isi total budget dan tanggal hari-H di Pengaturan.',
+          'Buka Budget, tab Pengaturan, lalu cek pembagian per acara. Ubah kalau perlu.',
+          'Catat vendor di menu Vendor & pembayaran. Ubah statusnya ke Booked setelah kalian sepakat.',
+          'Untuk biaya lain, buka tab Kategori, ketuk kategorinya, lalu pilih Tambah biaya.',
+          'Setiap ada pembayaran, centang Sudah dibayar. Untuk vendor, isi tanggal bayar di jadwal pembayarannya.',
+        ],
+      },
+      {
+        heading: 'Cara membacanya',
+        items: [
+          'Disepakati adalah biaya vendor Booked ditambah biaya lain yang sudah kalian catat. Sudah dibayar adalah bagian yang benar-benar sudah keluar. Sisa adalah total budget dikurangi Disepakati.',
+          'Status di bagian atas ada tiga. Sesuai rencana berarti masih aman. Mendekati batas berarti yang disepakati sudah mencapai 90% dari total. Over budget berarti sudah melewati total.',
+          'Ringkasan menjumlahkan kategori yang sama dari semua acara. Katering lamaran, akad, dan resepsi jadi satu angka, jadi angkanya bisa lebih besar dari katering satu acara.',
+          'Kategori menampilkan angka per acara. Pakai tab ini untuk melihat acara mana yang paling banyak memakai biaya.',
+          'Tanda lewat dan batang merah berarti biaya di kategori itu sudah melebihi alokasinya. Geser alokasi dari kategori yang masih longgar, atau naikkan total budget.',
+          'Kategori yang tampil 0 belum punya vendor atau biaya. Itu wajar, misalnya venue untuk acara lamaran di rumah.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'checklist',
+    title: 'Checklist:',
+    italic: 'cara kerja, isi, dan baca',
+    intro: 'Checklist adalah daftar tugas dari 12 bulan sebelum hari-H sampai sesudahnya, supaya kalian tahu apa yang perlu dikerjakan dan kapan.',
+    to: '/app/checklist',
+    cta: 'Buka Checklist',
+    blocks: [
+      {
+        heading: 'Cara kerjanya',
+        items: [
+          'Tanggal tiap tugas dihitung dari hari-H. Kalau hari-H berubah, semua tanggal ikut bergeser.',
+          'Kalau hari-H kurang dari 12 bulan lagi, jadwal dipadatkan dan tugas pertama mulai hari ini.',
+          'Tugas dikelompokkan dalam tujuh fase, dari H-12 bulan sampai Hari-H dan setelahnya. Tab Timeline menampilkan per fase. Tab Kategori mengelompokkan tugas berdasarkan jenisnya, misalnya undangan dan tamu.',
+          'Sebagian tugas terhubung ke halaman Administrasi. Tugas itu tercentang sendiri begitu semua dokumennya berstatus Ada.',
+          'Setiap tugas bisa dipegang satu orang atau berdua, ditandai dengan avatar di sebelah kanan.',
+        ],
+      },
+      {
+        heading: 'Cara mengisinya',
+        ordered: true,
+        items: [
+          'Centang tugas yang sudah selesai. Kalau salah, centang sekali lagi untuk membatalkan.',
+          'Ketuk tugasnya untuk mengubah nama, deadline, penanggung jawab, kategori, atau catatan.',
+          'Untuk tugas sendiri, tekan tombol + di kanan atas, lalu isi nama tugas, deadline, dan siapa yang mengerjakan.',
+          'Untuk tugas yang terhubung dokumen, lengkapi dokumennya di Administrasi. Tugasnya akan selesai otomatis.',
+        ],
+      },
+      {
+        heading: 'Cara membacanya',
+        items: [
+          'Kartu Progres persiapan menunjukkan jumlah tugas yang selesai dan persentasenya. Di bawahnya ada Status: Sesuai jadwal, atau jumlah tugas yang terlambat.',
+          'Terlambat berarti deadline sudah lewat dan tugasnya belum dicentang. Tanda ini juga muncul di baris tugasnya.',
+          'Centang di tab fase berarti semua tugas di fase itu sudah selesai. Saat halaman dibuka, tab yang tampil adalah fase dengan tugas terdekat yang belum selesai.',
+          'Bagian Selesai di fase ini menyimpan tugas yang sudah beres. Buka kalau kalian ingin melihatnya atau membatalkan centangnya.',
+          'Mau diingatkan di HP? Hubungkan Google Calendar di Pengaturan, dan tugas yang belum selesai bisa dikirim sebagai pengingat.',
+        ],
+      },
+    ],
+  },
+]
+
 export const GUIDE_FAQ: GuideFaq[] = [
   {
     id: 'akun',
-    q: 'Bagaimana cara daftar dan masuk?',
-    a: 'Buka halaman Masuk, pilih Daftar, lalu isi email dan kata sandi (minimal 6 karakter). Buka link konfirmasi yang dikirim ke email kamu, lalu masuk dengan email dan kata sandi yang sama. Untuk keluar, pilih Keluar di bagian Akun pada Pengaturan. Fitur lupa kata sandi belum tersedia.',
+    q: 'Bagaimana cara masuk, dan apa yang dilakukan kalau lupa kata sandi?',
+    a: 'Akun dibuat dari email yang kalian pakai saat membeli. Setelah pembelian, kalian menerima email untuk membuat kata sandi. Lalu buka halaman Masuk dan masuk dengan email dan kata sandi itu. Kalau lupa kata sandi, pilih Lupa / belum punya kata sandi di halaman Masuk, dan tautan untuk membuat kata sandi baru akan dikirim ke email kalian. Untuk keluar, pilih Keluar di bagian Akun pada Pengaturan.',
   },
   {
     id: 'data',
