@@ -8,6 +8,7 @@ import { GUIDE_CONTACT, GUIDE_FAQ, GUIDE_INTRO, GUIDE_TOPICS } from '../../data/
 import { NAV_GROUPS } from '../../components/nav'
 import { usePlan } from '../../lib/store'
 import { cn } from '../../lib/utils'
+import { DEMO, exitDemo } from '../../lib/demo'
 
 /** Halaman Panduan: data contoh, mulai cepat, fitur, pertanyaan umum, dan kontak. Teks ada di src/data/guide.ts. */
 export default function Guide() {
@@ -32,19 +33,24 @@ export default function Guide() {
             Data contoh
           </h2>
           <p className="mt-0.5 text-sm text-body">
-            {hasDemo
-              ? 'Vendor dan tamu contoh masih ada. Hapus kalau sudah selesai melihat-lihat.'
-              : 'Ingin melihat app terisi dulu? Isi contoh vendor dan tamu, lalu hapus kapan saja.'}
+            {DEMO
+              ? 'Kalian sedang melihat demo. Semua halaman bisa dibuka, tapi tidak ada yang bisa diubah.'
+              : 'Ingin melihat Bridesmap yang sudah terisi penuh? Buka demo rencana pernikahan contoh di tab baru. Demo hanya untuk dilihat, rencana kalian tidak berubah.'}
           </p>
+          {hasDemo && !DEMO && (
+            <button className="mt-2 text-sm font-semibold text-primary underline-offset-4 hover:underline" onClick={s.clearDemo}>
+              Hapus data contoh lama
+            </button>
+          )}
         </div>
-        {hasDemo ? (
-          <button className="btn-outline btn-sm shrink-0 self-start sm:self-center" onClick={s.clearDemo}>
-            Hapus data contoh
+        {DEMO ? (
+          <button className="btn-outline btn-sm shrink-0 self-start sm:self-center" onClick={exitDemo}>
+            Keluar demo
           </button>
         ) : (
-          <button className="btn-soft btn-sm shrink-0 self-start sm:self-center" onClick={s.loadDemo}>
-            <Sparkles className="size-4" aria-hidden /> Isi data contoh
-          </button>
+          <a href="/demo" target="_blank" rel="noopener" className="btn-soft btn-sm shrink-0 self-start sm:self-center">
+            <Sparkles className="size-4" aria-hidden /> Lihat demo
+          </a>
         )}
       </section>
 

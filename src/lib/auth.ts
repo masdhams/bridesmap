@@ -1,5 +1,6 @@
 import type { Session } from '@supabase/supabase-js'
 import { create } from 'zustand'
+import { DEMO } from './demo'
 import { supabase } from './supabase'
 
 export type Access = 'unknown' | 'granted' | 'denied'
@@ -16,8 +17,12 @@ interface AuthState {
 
 export const useAuth = create<AuthState>(() => ({ session: null, ready: false, planReady: false, recovery: false, access: 'unknown' }))
 
-supabase.auth.onAuthStateChange((event, session) => {
-  useAuth.setState({ session, ready: true, ...(event === 'PASSWORD_RECOVERY' ? { recovery: true } : {}) })
-})
+// Mode demo memakai sesi palsu dari demoBoot; sesi login asli tidak dibaca supaya tidak menimpanya.
+if (!DEMO) {
+  supabase.auth.onAuthStateChange((event, session) => {
+    useAuth.setState({ session, ready: true, ...(event === 'PASSWORD_RECOVERY' ? { recovery: true } : {}) })
+  })
+}
 
-export const accessToken = async () => (await supabase.auth.getSession()).data.session?.access_token ?? null
+// Di mode demo tidak ada token: permintaan ke server tidak boleh memakai akun asli pengunjung.
+export const accessToken = async () => (DEMO ? null : ((await supabase.auth.getSession()).data.session?.access_token ?? null))

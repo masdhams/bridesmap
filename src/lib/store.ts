@@ -32,6 +32,7 @@ import type {
   Website,
 } from './types'
 import { slugify, todayISO, uid } from './utils'
+import { DEMO, notifyDemo } from './demo'
 
 export interface Collections {
   events: WeddingEvent[]
@@ -191,6 +192,19 @@ const safeStorage: Storage = {
       useStorageStatus.setState({ full: true })
     }
   },
+}
+
+// Mode demo: rencana hanya disimpan di memori tab ini, tidak pernah menimpa localStorage pengunjung.
+const memory = new Map<string, string>()
+const memoryStorage: Storage = {
+  get length() {
+    return memory.size
+  },
+  clear: () => memory.clear(),
+  key: (i) => [...memory.keys()][i] ?? null,
+  getItem: (k) => memory.get(k) ?? null,
+  removeItem: (k) => void memory.delete(k),
+  setItem: (k, v) => void memory.set(k, v),
 }
 
 /** Perkiraan pemakaian penyimpanan rencana (byte). Kuota browser umumnya ±5 MB. */
@@ -374,14 +388,24 @@ export const usePlan = create<PlanState>()(
 
       reset: () => set(emptyState()),
     }),
-    { name: STORAGE_KEY, version: 1, storage: createJSONStorage(() => safeStorage) },
+    { name: STORAGE_KEY, version: 1, storage: createJSONStorage(() => (DEMO ? memoryStorage : safeStorage)) },
   ),
 )
+
+// Mode demo hanya untuk dilihat: semua aksi yang mengubah rencana diganti pesan "perubahan tidak disimpan".
+if (DEMO) {
+  const locked = Object.fromEntries(
+    Object.entries(usePlan.getState())
+      .filter(([, v]) => typeof v === 'function')
+      .map(([k]) => [k, () => (notifyDemo(), false)]),
+  )
+  usePlan.setState(locked as Partial<PlanState>)
+}
 
 // Sinkron antar-tab: perubahan dari tab lain langsung terlihat (simulasi kolaborasi di satu perangkat).
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => {
-    if (e.key === STORAGE_KEY && !embedded) usePlan.persist.rehydrate()
+    if (e.key === STORAGE_KEY && !embedded && !DEMO) usePlan.persist.rehydrate()
   })
 }
 

@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { usePlan, useSession, useStorageStatus } from '../lib/store'
 import { cn, daysUntil } from '../lib/utils'
+import { DemoBanner } from './DemoBanner'
 import { NAV_GROUPS } from './nav'
 import { Logo, PartnerAvatar } from './ui'
 
@@ -143,6 +144,7 @@ export default function AppLayout() {
         </header>
 
         <main className="mx-auto w-full max-w-6xl flex-1 px-5 pt-4 pb-32 sm:px-6 lg:px-10 lg:pt-6 lg:pb-14">
+          <DemoBanner />
           {storageFull && (
             <div role="alert" className="no-print mb-4 rounded-2xl bg-danger-soft px-4 py-3 text-sm text-danger-ink">
               <strong>Penyimpanan di perangkat ini penuh</strong> — perubahan terbaru belum tersimpan. Hapus beberapa foto, atau{' '}

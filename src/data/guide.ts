@@ -182,8 +182,8 @@ export const GUIDE_FAQ: GuideFaq[] = [
   },
   {
     id: 'contoh',
-    q: 'Apa itu data contoh, dan bisa dihapus?',
-    a: 'Di Panduan, tombol Isi data contoh menambahkan beberapa vendor dan tamu contoh supaya aplikasi terlihat terisi. Data contoh diberi tanda (contoh) di namanya. Tombol Hapus data contoh menghapusnya lagi, dan data kalian yang asli tidak ikut terhapus.',
+    q: 'Apa itu demo, dan apakah mengubah rencana kami?',
+    a: 'Di Panduan, tombol Lihat demo membuka contoh rencana pernikahan yang sudah terisi penuh di tab baru. Semua halaman bisa dibuka untuk melihat cara kerjanya, tapi tidak ada yang bisa diubah. Demo memakai data contoh terpisah, jadi rencana kalian tidak tersentuh. Tutup tabnya atau pilih Keluar demo kalau sudah selesai.',
   },
   {
     id: 'ekspor',

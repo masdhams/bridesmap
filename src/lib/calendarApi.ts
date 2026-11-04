@@ -1,4 +1,5 @@
 import { accessToken } from './auth'
+import { DEMO, notifyDemo } from './demo'
 
 export interface CalendarStatus {
   connected: boolean
@@ -29,6 +30,11 @@ export class ServerOffline extends Error {
 }
 
 async function call<T>(path: string, init?: RequestInit): Promise<{ status: number; body: T }> {
+  // Mode demo: menghubungkan, sinkron, dan memutuskan kalender tidak dijalankan.
+  if (DEMO && path !== '/api/calendar/status') {
+    notifyDemo()
+    throw new ServerOffline()
+  }
   const token = await accessToken()
   let res: Response
   try {

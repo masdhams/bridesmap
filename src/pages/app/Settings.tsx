@@ -5,6 +5,7 @@ import { CalendarCard } from '../../components/CalendarCard'
 import { ConfirmButton, Field, MoneyInput, PageHeader, PartnerAvatar } from '../../components/ui'
 import { useAuth } from '../../lib/auth'
 import { supabase } from '../../lib/supabase'
+import { DEMO, exitDemo } from '../../lib/demo'
 import { exportData, storageUsageBytes, usePlan } from '../../lib/store'
 import { compressImage, downloadFile, todayISO } from '../../lib/utils'
 
@@ -24,8 +25,8 @@ export default function Settings() {
           <h2 className="text-2xl font-semibold">Akun</h2>
           <p className="text-sm text-muted-foreground">{useAuth.getState().session?.user.email}</p>
         </div>
-        <button className="btn-ghost btn-sm" onClick={() => supabase.auth.signOut()}>
-          Keluar
+        <button className="btn-ghost btn-sm" onClick={() => (DEMO ? exitDemo() : supabase.auth.signOut())}>
+          {DEMO ? 'Keluar demo' : 'Keluar'}
         </button>
       </section>
 
