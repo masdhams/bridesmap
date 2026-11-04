@@ -20,6 +20,11 @@ export default function InvitationEditor() {
   const slots = TEMPLATE_PHOTOS[inv.template]
   const usesStoryPhoto = slots.includes('story')
 
+  // Mempelai pria dipilih pengguna; urutan di form dan di undangan: pria lebih dulu, lalu wanita.
+  const groomWho = inv.groom ?? 'A'
+  const roleOf = (who: 'A' | 'B') => (who === groomWho ? 'Mempelai pria' : 'Mempelai wanita')
+  const personOrder: ('A' | 'B')[] = groomWho === 'A' ? ['A', 'B'] : ['B', 'A']
+
   const setPerson = (who: 'A' | 'B', patch: Partial<InvitationPersonInput>) =>
     setInvitation(who === 'A' ? { personA: { ...inv.personA, ...patch } } : { personB: { ...inv.personB, ...patch } })
 
@@ -29,8 +34,8 @@ export default function InvitationEditor() {
   const patchEvent = (id: string, patch: Partial<InvitationEventInput>) => setEvents(events.map((e) => (e.id === id ? { ...e, ...patch } : e)))
 
   const missing = [
-    !inv.personA.parents && `Nama orang tua ${profile.partnerA || 'mempelai pertama'}`,
-    !inv.personB.parents && `Nama orang tua ${profile.partnerB || 'mempelai kedua'}`,
+    !inv.personA.parents && `Nama orang tua ${profile.partnerA || roleOf('A').toLowerCase()}`,
+    !inv.personB.parents && `Nama orang tua ${profile.partnerB || roleOf('B').toLowerCase()}`,
     events.some((e) => !e.venue) && 'Tempat acara',
     !inv.photos.hero && 'Foto utama',
     !inv.photos.personA && !inv.photos.personB && 'Foto mempelai',
@@ -84,14 +89,26 @@ export default function InvitationEditor() {
 
           {/* Mempelai */}
           <Card title="Mempelai" sub="Nama panggilan tampil besar di sampul. Kosongkan untuk memakai nama dari profil.">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <span className="text-sm font-semibold">Siapa mempelai pria?</span>
+              <Segmented<'A' | 'B'>
+                label="Mempelai pria"
+                value={groomWho}
+                onChange={(v) => setInvitation({ groom: v })}
+                options={[
+                  { value: 'A', label: profile.partnerA || 'Pasangan 1' },
+                  { value: 'B', label: profile.partnerB || 'Pasangan 2' },
+                ]}
+              />
+            </div>
             <div className="grid gap-5 sm:grid-cols-2">
-              {(['A', 'B'] as const).map((who) => {
+              {personOrder.map((who) => {
                 const p = who === 'A' ? inv.personA : inv.personB
                 const name = who === 'A' ? profile.partnerA : profile.partnerB
                 const id = `inv-p${who}`
                 return (
                   <div key={who} className="space-y-3">
-                    <p className="eyebrow">{who === 'A' ? 'Mempelai pertama' : 'Mempelai kedua'}</p>
+                    <p className="eyebrow">{roleOf(who)}</p>
                     <Field label="Nama panggilan" htmlFor={`${id}-nick`}>
                       <input id={`${id}-nick`} className="input" value={p.nick ?? ''} placeholder={name.split(' ')[0]} onChange={(e) => setPerson(who, { nick: e.target.value })} />
                     </Field>
@@ -99,7 +116,7 @@ export default function InvitationEditor() {
                       <input id={`${id}-full`} className="input" value={p.full ?? ''} placeholder={name} onChange={(e) => setPerson(who, { full: e.target.value })} />
                     </Field>
                     <Field label="Keterangan" htmlFor={`${id}-child`}>
-                      <input id={`${id}-child`} className="input" value={p.childOf ?? ''} placeholder="Putra pertama dari" onChange={(e) => setPerson(who, { childOf: e.target.value })} />
+                      <input id={`${id}-child`} className="input" value={p.childOf ?? ''} placeholder={who === groomWho ? 'Putra pertama dari' : 'Putri pertama dari'} onChange={(e) => setPerson(who, { childOf: e.target.value })} />
                     </Field>
                     <Field label="Nama orang tua" htmlFor={`${id}-par`}>
                       <input id={`${id}-par`} className="input" value={p.parents ?? ''} placeholder="Bapak … & Ibu …" onChange={(e) => setPerson(who, { parents: e.target.value })} />
@@ -385,8 +402,8 @@ function TemplateCard({ template: t, slug, active, onPick }: { template: (typeof
 }
 
 const slotLabel = (slot: Exclude<PhotoSlot, 'story' | 'gallery'>, tpl: InvitationSettings['template'], p: { partnerA: string; partnerB: string }) => {
-  if (slot === 'personA') return `Foto ${p.partnerA || 'mempelai pertama'}`
-  if (slot === 'personB') return `Foto ${p.partnerB || 'mempelai kedua'}`
+  if (slot === 'personA') return `Foto ${p.partnerA || 'mempelai'}`
+  if (slot === 'personB') return `Foto ${p.partnerB || 'mempelai'}`
   return PHOTO_LABEL[slot][tpl] || PHOTO_LABEL[slot].default
 }
 
