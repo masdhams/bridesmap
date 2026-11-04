@@ -25,8 +25,8 @@ export const PHOTO_LABEL: Record<Exclude<PhotoSlot, 'story' | 'gallery'>, Record
   envelope2: { default: 'Foto amplop 2', sage: 'Foto di amplop sampul (kanan)', noir: '', 'red-retro': '' },
   hero: { default: 'Foto utama', sage: 'Foto pembuka (besar)', noir: 'Foto sampul & pembuka', 'red-retro': 'Foto di buku sampul' },
   heroSmall: { default: 'Foto kedua', sage: 'Foto pembuka (kecil)', noir: 'Foto Kisah Kami', 'red-retro': 'Foto di buku "Untuk Kamu"' },
-  personA: { default: 'Foto mempelai', sage: '', noir: '', 'red-retro': '' },
-  personB: { default: 'Foto mempelai', sage: '', noir: '', 'red-retro': '' },
+  personA: { default: 'Foto Mempelai Pria', sage: '', noir: '', 'red-retro': '' },
+  personB: { default: 'Foto Mempelai Wanita', sage: '', noir: '', 'red-retro': '' },
   closing: { default: 'Foto penutup', sage: '', noir: '', 'red-retro': '' },
 }
 export const GALLERY_MAX = 6
@@ -60,15 +60,13 @@ export function eventsFromRundown(rundown: RundownEvent[]): InvitationEventInput
 
 export function buildInvitation(s: Pick<PlanState, 'profile' | 'rundown' | 'invitation'>): Invitation {
   const { profile: p, invitation: inv } = s
-  const groomWho = inv.groom ?? 'A'
-  const brideWho = groomWho === 'A' ? 'B' : 'A'
   const person = (who: 'A' | 'B') => {
     const input = who === 'A' ? inv.personA : inv.personB
     const name = who === 'A' ? p.partnerA : p.partnerB
     return {
-      nick: input.nick?.trim() || firstWord(name) || (who === groomWho ? 'Mempelai pria' : 'Mempelai wanita'),
+      nick: input.nick?.trim() || firstWord(name) || (who === 'A' ? 'Mempelai pria' : 'Mempelai wanita'),
       full: input.full?.trim() || name,
-      childOf: input.parents?.trim() ? input.childOf?.trim() || (who === groomWho ? 'Putra dari' : 'Putri dari') : '',
+      childOf: input.parents?.trim() ? input.childOf?.trim() || (who === 'A' ? 'Putra dari' : 'Putri dari') : '',
       parents: input.parents?.trim() ?? '',
       instagram: input.instagram?.trim().replace(/^@/, '') || undefined,
     }
@@ -84,8 +82,8 @@ export function buildInvitation(s: Pick<PlanState, 'profile' | 'rundown' | 'invi
   }))
   const lastPlace = [...events].reverse().find((e) => e.venue || e.address)
   return {
-    groom: person(groomWho),
-    bride: person(brideWho),
+    groom: person('A'),
+    bride: person('B'),
     date,
     timezone: inv.timezone,
     utcOffset: TZ_OFFSET[inv.timezone],
@@ -103,8 +101,8 @@ export function buildInvitation(s: Pick<PlanState, 'profile' | 'rundown' | 'invi
       envelope: [inv.photos.envelope1, inv.photos.envelope2],
       hero: inv.photos.hero,
       heroSmall: inv.photos.heroSmall,
-      groom: groomWho === 'A' ? inv.photos.personA : inv.photos.personB,
-      bride: groomWho === 'A' ? inv.photos.personB : inv.photos.personA,
+      groom: inv.photos.personA,
+      bride: inv.photos.personB,
       gallery: inv.photos.gallery,
       closing: inv.photos.closing,
     },

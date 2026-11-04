@@ -343,11 +343,9 @@ export interface InvitationAccount {
 /** Pengaturan undangan pasangan. Tanggal & kota mengikuti profil; acara mengikuti rundown kecuali diatur sendiri. */
 export interface InvitationSettings {
   template: InvitationTemplate
-  /** Data pasangan A dan B sesuai profil. Peran di undangan (pria atau wanita) ditentukan oleh `groom`. */
+  /** personA = mempelai pria, personB = mempelai wanita. */
   personA: InvitationPersonInput
   personB: InvitationPersonInput
-  /** Siapa mempelai pria: pasangan A atau B. Kosong dianggap A (akun lama). */
-  groom?: Partner
   timezone: InvitationTimezone
   quote: { text: string; by: string }
   story: InvitationStoryInput[]
