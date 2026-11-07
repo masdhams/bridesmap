@@ -1,6 +1,7 @@
-import { ArrowRight, CircleAlert } from 'lucide-react'
+import { CircleAlert, Download } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { BudgetPrint } from './BudgetPrint'
 import { AllocationEditor } from '../../components/allocation'
 import { PublicPage } from '../../components/PublicLayout'
 import { Field, MoneyInput } from '../../components/ui'
@@ -42,11 +43,11 @@ export default function BudgetCalculator() {
     return catering / Math.max(1, guests * 2)
   }, [state.categories, guests])
 
-  const query = new URLSearchParams({ budget: String(total), tamu: String(guests), acara: picked.join(',') }).toString()
 
   return (
     <PublicPage>
-      <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+      <BudgetPrint total={total} guests={guests} reserved={reserved} hidden={HIDDEN_COSTS.filter((h) => on.has(h.key)).map((h) => ({ name: h.name, amount: h.estimate({ budget: total, guests }) }))} events={state.events} categories={state.categories} cateringPerGuest={cateringPerGuest} />
+      <section className="print:hidden mx-auto max-w-5xl px-4 py-12 sm:px-6">
         <Link to="/alat" className="text-sm font-semibold text-primary hover:underline">← Alat gratis</Link>
         <h1 className="mt-2 text-5xl">Kalkulator budget nikah</h1>
         <p className="mt-2 max-w-2xl text-body">Pilih acara yang kalian rencanakan. Budget dibagi per acara, lalu per kategori. Semua angka awal adalah <strong>estimasi</strong> — ubah dalam persen atau Rupiah, sisanya otomatis menyesuaikan.</p>
@@ -80,7 +81,8 @@ export default function BudgetCalculator() {
             </div>
             {t.free < 0 && <p className="flex gap-2 text-sm text-destructive" role="alert"><CircleAlert className="mt-0.5 size-4 shrink-0" aria-hidden /> Alokasi melebihi total budget. Kurangi salah satu acara atau kategori.</p>}
             <p className="text-xs text-muted-foreground">Katering ±{rupiah(cateringPerGuest)} per orang.</p>
-            <Link to={`/mulai?${query}`} className="btn-primary w-full">Simpan ke rencana gratis <ArrowRight className="size-4" aria-hidden /></Link>
+            <button type="button" className="btn-primary w-full" onClick={() => window.print()}>Simpan sebagai PDF <Download className="size-4" aria-hidden /></button>
+            <p className="-mt-2 text-xs text-muted-foreground">Di jendela cetak, pilih “Simpan sebagai PDF”.</p>
           </aside>
 
           <div className="space-y-8">

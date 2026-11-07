@@ -16,7 +16,7 @@ export function PublicHeader() {
   const onboarded = usePlan((s) => s.profile.onboarded)
   const [open, setOpen] = useState(false)
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
+    <header className="print:hidden sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" aria-label="Bridesmap — beranda">
           <Logo className="text-xl" />
@@ -51,7 +51,7 @@ export function PublicHeader() {
 /** Footer ala layar Landing: logo + tagline di kiri, tautan kepercayaan di kanan. */
 export function PublicFooter() {
   return (
-    <footer className="mx-auto max-w-[1200px] border-t border-border px-[clamp(16px,2vw,24px)] pb-12 pt-10">
+    <footer className="print:hidden mx-auto max-w-[1200px] border-t border-border px-[clamp(16px,2vw,24px)] pb-12 pt-10">
       <div className="flex flex-wrap items-center justify-between gap-5">
         <div className="flex flex-col gap-1">
           <span className="font-serif text-2xl">
