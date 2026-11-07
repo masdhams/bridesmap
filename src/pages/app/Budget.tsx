@@ -4,7 +4,7 @@ import { HelpHint } from '../../components/HelpHint'
 import { exportBudgetExcel } from '../../lib/budgetExcel'
 import { GUIDE_HINTS } from '../../data/guide'
 import { ArrowRight, ArrowUpRight, ChevronDown, ChevronRight, CircleAlert, FileSpreadsheet, Pencil, Plus, RotateCcw, SlidersHorizontal, Store, Trash2 } from 'lucide-react'
-import { IcBudget } from '../../components/icons'
+import { IcBudget, IcHiddenCost } from '../../components/icons'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CategoryIcon, visualKey } from '../../components/budgetVisual'
@@ -237,6 +237,33 @@ function EventsPanel({ sum }: { sum: CategorySummary[] }) {
   )
 }
 
+/** Sorotan hidden cost di tab Ringkasan: apa itu, berapa yang sudah disisihkan, dan jalan pintas untuk mengaturnya. */
+function HiddenCostBanner({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () => void }) {
+  const hidden = sum.filter((c) => c.hidden)
+  const reserved = hidden.reduce((a, c) => a + c.allocated, 0)
+  const used = hidden.reduce((a, c) => a + c.committed, 0)
+  return (
+    <section className="flex flex-col gap-4 rounded-[24px] border border-accent/30 bg-accent-soft p-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex min-w-0 gap-3">
+        <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-full bg-white/70 text-accent">
+          <IcHiddenCost className="size-6" strokeWidth={1.8} />
+        </span>
+        <div className="min-w-0">
+          <p className="m-0 font-semibold text-accent-ink">Hidden cost: biaya yang sering terlupa</p>
+          <p className="m-0 mt-0.5 text-sm leading-relaxed text-body">
+            {hidden.length === 0
+              ? 'Belum ada yang disisihkan. Pajak, overtime vendor, dan konsumsi kru biasanya baru ketahuan di tagihan akhir.'
+              : `${hidden.length} jenis disisihkan, total ${rupiah(reserved)}. Sudah terpakai ${rupiah(used)}.`}
+          </p>
+        </div>
+      </div>
+      <button className="btn-primary btn-sm shrink-0 self-start sm:self-center" onClick={onOpen}>
+        {hidden.length === 0 ? 'Lihat dan atur' : 'Atur hidden cost'}
+      </button>
+    </section>
+  )
+}
+
 /** Tab Ringkasan: satu baris per kategori (digabung lintas acara), urut dari alokasi terbesar. Tanpa diagram. */
 function Overview({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () => void }) {
   const { categories } = usePlan()
@@ -419,14 +446,40 @@ function HiddenCosts() {
   }
 
   return (
-    <section className="flex flex-col gap-2.5">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div className="flex flex-col gap-0.5">
-          <h2 className="text-[26px]">
-            Hidden <span className="italic">cost</span>
-          </h2>
-          <p className="text-[13px] leading-normal text-muted-foreground">Yang sering bikin budget bengkak. Centang yang berlaku untuk kalian.</p>
+    <section className="flex flex-col gap-3 lg:col-span-2">
+      <div className="rounded-[24px] border border-accent/30 bg-accent-soft p-5 sm:p-6">
+        <div className="flex items-start gap-3">
+          <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-full bg-white/70 text-accent">
+            <IcHiddenCost className="size-6" strokeWidth={1.8} />
+          </span>
+          <div className="min-w-0">
+            <h2 className="text-[26px]">
+              Hidden <span className="italic">cost</span>
+            </h2>
+            <p className="m-0 text-sm leading-relaxed text-body">Biaya yang jarang masuk hitungan di awal, tapi hampir selalu muncul di tagihan akhir.</p>
+          </div>
         </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <div className="rounded-2xl bg-white/70 p-4">
+            <p className="eyebrow">Apa itu</p>
+            <p className="m-0 mt-1.5 text-sm leading-relaxed text-body">Contohnya pajak dan service charge, overtime vendor, konsumsi kru, serta uang lelah dan tip. Tidak ada di penawaran vendor, tapi tetap harus dibayar.</p>
+          </div>
+          <div className="rounded-2xl bg-white/70 p-4">
+            <p className="eyebrow">Kenapa penting</p>
+            <p className="m-0 mt-1.5 text-sm leading-relaxed text-body">Satu per satu nilainya kecil, jadi gampang terlewat. Kalau tidak disisihkan dari awal, jumlahnya menumpuk dan baru terasa menjelang hari-H, saat uangnya sulit digeser dari kategori lain.</p>
+          </div>
+          <div className="rounded-2xl bg-white/70 p-4">
+            <p className="eyebrow">Cara mengisi</p>
+            <ol className="m-0 mt-1.5 flex list-decimal flex-col gap-1.5 pl-5 text-sm leading-relaxed text-body">
+              <li>Centang biaya yang mungkin berlaku untuk acara kalian. Nominalnya dihitung otomatis dari total budget dan jumlah tamu.</li>
+              <li>Kalau sudah tahu angka pastinya, ubah nominalnya di tab Kategori, bagian Hidden cost.</li>
+              <li>Saat tagihannya muncul, catat di kategori itu supaya kelihatan berapa yang sudah terpakai dari yang disisihkan.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+        <p className="m-0 text-sm font-semibold">Pilih yang berlaku untuk kalian</p>
         <button className="btn-ghost btn-sm" onClick={recalc}>
           <RotateCcw className="size-4" aria-hidden /> Hitung ulang
         </button>
@@ -562,7 +615,12 @@ export default function Budget() {
           ))}
         </div>
 
-        {tab === 'ringkasan' && <Overview sum={sum} onOpen={() => setTab('kategori')} />}
+        {tab === 'ringkasan' && (
+          <>
+            <HiddenCostBanner sum={sum} onOpen={() => setTab('pengaturan')} />
+            <Overview sum={sum} onOpen={() => setTab('kategori')} />
+          </>
+        )}
 
         {tab === 'kategori' && (
           <section className="flex flex-col gap-2.5">
@@ -589,8 +647,8 @@ export default function Budget() {
 
         {tab === 'pengaturan' && (
           <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start">
-            <AllocationCard sum={sum} />
             <HiddenCosts />
+            <AllocationCard sum={sum} />
           </div>
         )}
       </div>
