@@ -266,7 +266,9 @@ function HiddenCostBanner({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () 
 
 /** Tab Ringkasan: satu baris per kategori (digabung lintas acara), urut dari alokasi terbesar. Tanpa diagram. */
 function Overview({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () => void }) {
-  const { categories } = usePlan()
+  const { categories, profile } = usePlan()
+  const totalUsed = sum.reduce((a, c) => a + c.committed, 0)
+  const totalPct = profile.totalBudget > 0 ? Math.round((totalUsed / profile.totalBudget) * 100) : 0
   const groups = new Map<string, { name: string; vkey: string; allocated: number; committed: number }>()
   for (const c of sum) {
     const key = categories.find((x) => x.id === c.id)?.key
@@ -288,10 +290,16 @@ function Overview({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () => void 
 
   return (
     <section className="flex flex-col gap-2.5">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-primary-soft px-4 py-3 text-sm">
+        <span className="font-semibold text-on-primary-soft">Total terpakai {totalPct}%</span>
+        <span className="text-body">
+          {rupiah(totalUsed)} dari total budget {rupiah(profile.totalBudget)}
+        </span>
+      </div>
       <div className="flex flex-col gap-0.5 px-1">
         <h2 className="font-sans text-[15px] font-semibold">Pemakaian per kategori</h2>
-        <p className="text-xs text-muted-foreground">
-          Biaya yang sudah disepakati dibanding alokasi tiap kategori. Angka di sini gabungan semua acara.{' '}
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Persen di tiap kartu menunjukkan berapa dari alokasi kategori itu sendiri yang sudah terpakai, jadi tidak dijumlahkan. Angka di sini gabungan semua acara.{' '}
           <Link to="/app/panduan#budget" className="font-semibold text-primary underline-offset-4 hover:underline">
             Cara membaca halaman ini
           </Link>
@@ -316,7 +324,7 @@ function Overview({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () => void 
                   <span className={cn('font-serif text-[44px] leading-[0.85] tabular-nums', over && 'text-destructive')}>{pct}%</span>
                   <span className="text-right text-xs leading-snug text-muted-foreground tabular-nums">
                     <span className="block font-semibold text-ink">{rupiahShort(g.committed)}</span>
-                    dari {rupiahShort(g.allocated)}
+                    dari alokasi {rupiahShort(g.allocated)}
                   </span>
                 </span>
                 <span className="h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden>
@@ -341,7 +349,7 @@ function Overview({ sum, onOpen }: { sum: CategorySummary[]; onOpen: () => void 
                     <span className={cn('shrink-0 text-sm font-semibold tabular-nums', over ? 'text-destructive' : 'text-ink')}>{pct}%</span>
                   </span>
                   <span className="text-xs text-muted-foreground tabular-nums">
-                    {rupiah(g.committed)} dari {rupiah(g.allocated)}
+                    {rupiah(g.committed)} dari alokasi {rupiah(g.allocated)}
                     {over && <span className="font-semibold text-destructive"> · lewat {rupiah(g.committed - g.allocated)}</span>}
                   </span>
                   <span className="h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden>
