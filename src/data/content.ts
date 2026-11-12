@@ -302,7 +302,7 @@ export const OFFER = {
   checkoutHref: 'https://bridesmap.orderhero.id/form/order-bridesmap',
   phases: [
     { name: 'Pre Launching', price: 99_000, status: 'ended' as const },
-    { name: 'Launching', price: 149_000, status: 'active' as const },
+    { name: 'Launching', price: 129_000, status: 'active' as const },
   ],
   items: [
     'Undangan digital dengan desain yang tetap cantik dikenang',
@@ -345,7 +345,7 @@ export const LANDING_FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Masih bisa mendapatkan harga Pre Launching?',
-    a: 'Sayangnya, promo Pre Launching sudah berakhir. Saat ini kalian masih bisa mendapatkan Bridesmap dengan harga Launching Rp149.000, dari harga normal Rp347.000.',
+    a: 'Sayangnya, promo Pre Launching sudah berakhir. Saat ini kalian masih bisa mendapatkan Bridesmap dengan harga Launching Rp129.000, dari harga normal Rp347.000.',
   },
 ]
 
