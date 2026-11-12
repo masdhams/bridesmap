@@ -351,5 +351,5 @@ export const LANDING_FAQ: { q: string; a: string }[] = [
 
 export const LEGAL = {
   maker: 'Tim Bridesmap', // TODO: nama pembuat/perusahaan asli (PRD #11 — identitas pembuat transparan)
-  contactEmail: 'halo@bridecanvas.id', // TODO: email resmi
+  contactEmail: 'bridesmapofficial@gmail.com',
 }
