@@ -250,7 +250,7 @@ const FRAME_W = 390
 const FRAME_H = 780
 
 /** Menampilkan rute undangan di iframe selebar ponsel lalu diskalakan ke lebar kartu. */
-function ScaledFrame({ src, title }: { src: string; title: string }) {
+export function ScaledFrame({ src, title }: { src: string; title: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(0)
   useEffect(() => {
@@ -277,10 +277,11 @@ function ScaledFrame({ src, title }: { src: string; title: string }) {
   )
 }
 
-const DESIGNS = [
-  { name: 'Sage', mood: 'Amplop hijau, bunga melati', to: '/undangan/sage' },
-  { name: 'Noir', mood: 'Hitam arang, mewah minimalis', to: '/undangan/noir' },
-  { name: 'Red Retro', mood: 'Kliping koran, scrapbook', to: '/undangan/red-retro' },
+export const INVITATION_DESIGNS = [
+  { name: 'Tema-1', mood: 'Gapura batu, taman Eropa, hijau sage', to: '/undangan/taman-klasik' },
+  { name: 'Tema-2', mood: 'Amplop hijau, bunga melati', to: '/undangan/sage' },
+  { name: 'Tema-3', mood: 'Hitam arang, mewah minimalis', to: '/undangan/noir' },
+  { name: 'Tema-4', mood: 'Kliping koran, scrapbook', to: '/undangan/red-retro' },
 ]
 
 export function InvitationCarousel() {
@@ -292,11 +293,11 @@ export function InvitationCarousel() {
     if (!el) return
     const card = el.firstElementChild as HTMLElement | null
     if (!card) return
-    setIndex(Math.min(DESIGNS.length - 1, Math.round(el.scrollLeft / (card.offsetWidth + 16))))
+    setIndex(Math.min(INVITATION_DESIGNS.length - 1, Math.round(el.scrollLeft / (card.offsetWidth + 16))))
   }
   const go = (d: number) => {
     const el = track.current
-    const card = el?.children[Math.max(0, Math.min(DESIGNS.length - 1, index + d))] as HTMLElement | undefined
+    const card = el?.children[Math.max(0, Math.min(INVITATION_DESIGNS.length - 1, index + d))] as HTMLElement | undefined
     if (el && card) el.scrollTo({ left: card.offsetLeft - el.offsetLeft, behavior: reducedMotion() ? 'auto' : 'smooth' })
   }
 
@@ -307,7 +308,7 @@ export function InvitationCarousel() {
         onScroll={onScroll}
         className="-mx-[clamp(20px,4vw,56px)] flex snap-x snap-mandatory gap-4 overflow-x-auto px-[clamp(20px,4vw,56px)] pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 lg:gap-10 [&::-webkit-scrollbar]:hidden"
       >
-        {DESIGNS.map((d, i) => (
+        {INVITATION_DESIGNS.map((d, i) => (
           <figure key={d.name} data-reveal style={{ ['--reveal-delay' as string]: `${i * 110}ms` }} className="flex w-[72%] shrink-0 snap-center flex-col gap-4 sm:w-[46%] md:w-auto">
             <ScaledFrame src={d.to} title={`Pratinjau undangan ${d.name}`} />
             <figcaption className="flex items-end justify-between gap-3 px-1">
@@ -324,13 +325,13 @@ export function InvitationCarousel() {
       </div>
       <div className="flex items-center justify-between md:hidden">
         <span className="text-sm tabular-nums text-muted-foreground" aria-live="polite">
-          {index + 1} / {DESIGNS.length}
+          {index + 1} / {INVITATION_DESIGNS.length}
         </span>
         <div className="flex gap-2">
           <button onClick={() => go(-1)} disabled={index === 0} aria-label="Desain sebelumnya" className="grid size-11 place-items-center rounded-full border border-line bg-card disabled:opacity-40">
             <ChevronLeft className="size-5" strokeWidth={1.8} />
           </button>
-          <button onClick={() => go(1)} disabled={index === DESIGNS.length - 1} aria-label="Desain berikutnya" className="grid size-11 place-items-center rounded-full border border-line bg-card disabled:opacity-40">
+          <button onClick={() => go(1)} disabled={index === INVITATION_DESIGNS.length - 1} aria-label="Desain berikutnya" className="grid size-11 place-items-center rounded-full border border-line bg-card disabled:opacity-40">
             <ChevronRight className="size-5" strokeWidth={1.8} />
           </button>
         </div>

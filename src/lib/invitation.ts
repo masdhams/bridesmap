@@ -6,9 +6,10 @@ import type { InvitationEventInput, InvitationTemplate, InvitationTimezone, Rund
 import { dueFromWedding, todayISO } from './utils'
 
 export const TEMPLATES: { id: InvitationTemplate; name: string; desc: string; swatch: string[] }[] = [
-  { id: 'sage', name: 'Sage', desc: 'Amplop sage, editorial ivory dan hijau sirih', swatch: ['#FBF8F2', '#34432F', '#9A4E3B'] },
-  { id: 'noir', name: 'Noir', desc: 'Minimalis mewah hitam arang dengan sorot lampu', swatch: ['#141414', '#F4F1EC', '#CDB08A'] },
-  { id: 'red-retro', name: 'Red Retro', desc: 'Scrapbook kliping koran merah dan krem', swatch: ['#992215', '#ECE5DC', '#C9A27A'] },
+  { id: 'taman-klasik', name: 'Tema-1', desc: 'Gapura batu dan taman Eropa, hijau sage dan kertas ivory', swatch: ['#FBF8F2', '#34432F', '#9A4E3B'] },
+  { id: 'sage', name: 'Tema-2', desc: 'Amplop sage, editorial ivory dan hijau sirih', swatch: ['#FBF8F2', '#34432F', '#9A4E3B'] },
+  { id: 'noir', name: 'Tema-3', desc: 'Minimalis mewah hitam arang dengan sorot lampu', swatch: ['#141414', '#F4F1EC', '#CDB08A'] },
+  { id: 'red-retro', name: 'Tema-4', desc: 'Scrapbook kliping koran merah dan krem', swatch: ['#992215', '#ECE5DC', '#C9A27A'] },
 ]
 
 export const TZ_OFFSET: Record<InvitationTimezone, string> = { WIB: '+07:00', WITA: '+08:00', WIT: '+09:00' }
@@ -16,18 +17,19 @@ export const TZ_OFFSET: Record<InvitationTimezone, string> = { WIB: '+07:00', WI
 /** Slot foto yang dipakai tiap template, urut sesuai kemunculannya. */
 export type PhotoSlot = 'envelope1' | 'envelope2' | 'hero' | 'heroSmall' | 'personA' | 'personB' | 'story' | 'gallery' | 'closing'
 export const TEMPLATE_PHOTOS: Record<InvitationTemplate, PhotoSlot[]> = {
+  'taman-klasik': ['hero', 'personA', 'personB', 'gallery', 'closing'],
   sage: ['envelope1', 'envelope2', 'hero', 'heroSmall', 'personA', 'personB', 'gallery'],
   noir: ['hero', 'personA', 'personB', 'heroSmall', 'gallery', 'closing'],
   'red-retro': ['hero', 'heroSmall', 'personA', 'personB', 'story', 'gallery', 'closing'],
 }
 export const PHOTO_LABEL: Record<Exclude<PhotoSlot, 'story' | 'gallery'>, Record<InvitationTemplate | 'default', string>> = {
-  envelope1: { default: 'Foto amplop 1', sage: 'Foto di amplop sampul (kiri)', noir: '', 'red-retro': '' },
-  envelope2: { default: 'Foto amplop 2', sage: 'Foto di amplop sampul (kanan)', noir: '', 'red-retro': '' },
-  hero: { default: 'Foto utama', sage: 'Foto pembuka (besar)', noir: 'Foto sampul & pembuka', 'red-retro': 'Foto di buku sampul' },
-  heroSmall: { default: 'Foto kedua', sage: 'Foto pembuka (kecil)', noir: 'Foto Kisah Kami', 'red-retro': 'Foto di buku "Untuk Kamu"' },
-  personA: { default: 'Foto Mempelai Pria', sage: '', noir: '', 'red-retro': '' },
-  personB: { default: 'Foto Mempelai Wanita', sage: '', noir: '', 'red-retro': '' },
-  closing: { default: 'Foto penutup', sage: '', noir: '', 'red-retro': '' },
+  envelope1: { default: 'Foto amplop 1', 'taman-klasik': '', sage: 'Foto di amplop sampul (kiri)', noir: '', 'red-retro': '' },
+  envelope2: { default: 'Foto amplop 2', 'taman-klasik': '', sage: 'Foto di amplop sampul (kanan)', noir: '', 'red-retro': '' },
+  hero: { default: 'Foto utama', 'taman-klasik': 'Foto pasangan (bagian kutipan)', sage: 'Foto pembuka (besar)', noir: 'Foto sampul & pembuka', 'red-retro': 'Foto di buku sampul' },
+  heroSmall: { default: 'Foto kedua', 'taman-klasik': '', sage: 'Foto pembuka (kecil)', noir: 'Foto Kisah Kami', 'red-retro': 'Foto di buku "Untuk Kamu"' },
+  personA: { default: 'Foto Mempelai Pria', 'taman-klasik': 'Foto Mempelai Pria', sage: '', noir: '', 'red-retro': '' },
+  personB: { default: 'Foto Mempelai Wanita', 'taman-klasik': 'Foto Mempelai Wanita', sage: '', noir: '', 'red-retro': '' },
+  closing: { default: 'Foto penutup', 'taman-klasik': 'Foto penutup', sage: '', noir: '', 'red-retro': '' },
 }
 export const GALLERY_MAX = 6
 

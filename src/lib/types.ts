@@ -301,7 +301,7 @@ export interface RsvpResponse {
 
 /* ---------- Undangan digital (PRD #33) ---------- */
 
-export type InvitationTemplate = 'sage' | 'noir' | 'red-retro'
+export type InvitationTemplate = 'taman-klasik' | 'sage' | 'noir' | 'red-retro'
 export type InvitationTimezone = 'WIB' | 'WITA' | 'WIT'
 
 /** Isian mempelai. Yang kosong diisi otomatis dari profil (nama). */

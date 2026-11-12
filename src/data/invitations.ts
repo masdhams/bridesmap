@@ -181,3 +181,68 @@ export const NOIR_DEMO: Invitation = {
   families: 'Keluarga Besar Wicaksana & Pramono',
   photos: { envelope: [], gallery: [] },
 }
+
+// Foto contoh dari folder undangan-taman-klasik: pasangan belum ada, jadi slot foto mempelai tetap kotak penanda.
+import tamanGalleryDanau from '../assets/taman-klasik/danau-air-mancur.webp'
+import tamanGalleryLanskap from '../assets/taman-klasik/lanskap-danau-cemara.webp'
+import tamanGalleryKabut from '../assets/taman-klasik/latar-rumah-kabut.webp'
+import tamanGalleryLorong from '../assets/taman-klasik/lorong-taman.webp'
+import tamanGalleryBunga from '../assets/taman-klasik/pemandangan-bunga-liar.webp'
+import tamanGalleryRumah from '../assets/taman-klasik/rumah-taman-ukiran.webp'
+import tamanClosing from '../assets/taman-klasik/taman-penutup.webp'
+
+export const TAMAN_KLASIK_DEMO: Invitation = {
+  groom: {
+    nick: 'Arga',
+    full: 'Arga Mahendra',
+    childOf: 'Putra pertama dari',
+    parents: 'Bapak Surya Mahendra & Ibu Wulan Sari',
+    instagram: 'argamahendra',
+  },
+  bride: {
+    nick: 'Kirana',
+    full: 'Kirana Ayudia',
+    childOf: 'Putri kedua dari',
+    parents: 'Bapak Rudi Hartono & Ibu Laras Pertiwi',
+    instagram: 'kiranaayudia',
+  },
+  date: '2027-05-15',
+  timezone: 'WIB',
+  utcOffset: '+07:00',
+  city: 'Bogor',
+  quote: {
+    text: 'Rumah itu bukan soal tempat. Rumah itu soal dengan siapa kita pulang.',
+    by: 'Kutipan favorit kami',
+  },
+  story: [],
+  events: [
+    {
+      name: 'Akad Nikah',
+      start: '08.00',
+      end: '10.00',
+      venue: 'Rumah Mempelai Wanita',
+      address: 'Jl. Pajajaran No. 18, Baranangsiang, Kota Bogor, Jawa Barat 16143',
+    },
+    {
+      name: 'Resepsi',
+      start: '11.00',
+      end: '14.00',
+      venue: 'Taman Kebun Raya Hall',
+      address: 'Jl. Ir. H. Juanda No. 13, Paledang, Kota Bogor, Jawa Barat 16122',
+    },
+  ],
+  mapsQuery: 'Jl. Ir. H. Juanda No. 13, Paledang, Kota Bogor, Jawa Barat 16122',
+  rsvpDeadline: '2027-05-05',
+  accounts: [
+    { bank: 'BCA', number: '8720 1145 63', holder: 'Arga Mahendra' },
+    { bank: 'Mandiri', number: '1330 0098 7712', holder: 'Kirana Ayudia' },
+  ],
+  giftAddress: 'Jl. Pajajaran No. 18, Baranangsiang, Kota Bogor, Jawa Barat 16143 (a.n. Kirana Ayudia)',
+  families: 'Keluarga Besar Mahendra & Hartono',
+  photos: {
+    envelope: [],
+    hero: tamanGalleryKabut,
+    closing: tamanClosing,
+    gallery: [tamanGalleryDanau, tamanGalleryLanskap, tamanGalleryKabut, tamanGalleryLorong, tamanGalleryBunga, tamanGalleryRumah],
+  },
+}

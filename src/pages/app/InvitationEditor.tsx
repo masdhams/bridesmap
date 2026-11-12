@@ -196,7 +196,7 @@ export default function InvitationEditor() {
           </Card>
 
           {/* Cerita */}
-          <Card title="Kutipan & cerita" sub={usesStoryPhoto ? 'Template Red Retro menampilkan satu foto di setiap momen.' : undefined}>
+          <Card title="Kutipan & cerita" sub={usesStoryPhoto ? 'Tema-4 menampilkan satu foto di setiap momen.' : undefined}>
             <div className="grid gap-3 sm:grid-cols-[1fr_200px]">
               <Field label="Kutipan" htmlFor="inv-q">
                 <textarea id="inv-q" rows={3} className="input" value={inv.quote.text} onChange={(e) => setInvitation({ quote: { ...inv.quote, text: e.target.value } })} />

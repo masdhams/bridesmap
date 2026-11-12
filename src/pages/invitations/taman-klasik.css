@@ -1,0 +1,440 @@
+/* Undangan "Taman Klasik": ukiran taman Eropa, hijau sage dan kertas ivory (referensi Viding tema 206).
+   Semua aturan diberi awalan .inv-taman supaya tidak bocor ke aplikasi. Gambar lewat komponen TamanKlasikInvitation.tsx. */
+/* Template "Taman Klasik": undangan bergaya ukiran taman Eropa (referensi Viding tema 206).
+   Warna dan huruf mengikuti token aplikasi Bridesmap. */
+.inv-taman {
+  --ivory: #fbf8f2;
+  --kain: #f3eee4;
+  --pasir: #e5dccb;
+  --sirih: #34432f;
+  --sirih-tua: #243020;
+  --sage: #a9b59a;
+  --sage-muda: #e6ebdd;
+  --ink: #22261f;
+  --body: #4a4e43;
+  --muted: #62665a;
+  --bata: #9a4e3b;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+.inv-taman * { box-sizing: border-box; }
+.inv-taman { margin: 0; }
+.inv-taman {
+  background: var(--pasir);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.inv-taman img { display: block; max-width: 100%; }
+.inv-taman button, .inv-taman input, .inv-taman select, .inv-taman textarea { font: inherit; color: inherit; }
+.inv-taman .page {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--ivory);
+  overflow: hidden;
+  box-shadow: 0 0 60px rgb(34 38 31 / 0.12);
+}
+
+/* ---------- Tipografi ---------- */
+.inv-taman .script {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--sirih);
+  line-height: 1.05;
+  margin: 0;
+}
+.inv-taman .title { font-size: 46px; text-align: center; }
+.inv-taman .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+.inv-taman .serif { font-family: var(--serif); }
+.inv-taman .center { text-align: center; }
+
+/* ---------- Slot gambar (dengan penanda kalau file belum ada) ---------- */
+.inv-taman .slot { position: relative; margin: 0; }
+.inv-taman .slot img { width: 100%; height: 100%; object-fit: cover; }
+/* nada ukiran pudar (hijau keabuan) supaya semua gambar senada dengan referensi */
+.inv-taman .slot.scene img, .inv-taman .slot.decor img { filter: saturate(0.62) sepia(0.14) contrast(0.96) brightness(1.02); }
+.inv-taman .slot.missing img { display: none; }
+.inv-taman .slot.missing::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  text-align: center;
+  font: 600 10.5px/1.4 var(--sans);
+  letter-spacing: 0.04em;
+  color: var(--sirih);
+  white-space: pre-line;
+}
+.inv-taman .slot.scene.missing {
+  background:
+    repeating-linear-gradient(0deg, rgb(52 67 47 / 0.07) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, var(--sage-muda), var(--kain));
+}
+.inv-taman .slot.decor.missing::after { place-items: end center; padding-bottom: 14px; }
+.inv-taman .slot.missing::before { display: none; }
+.inv-taman .slot.decor.missing { outline: 1.5px dashed rgb(52 67 47 / 0.35); outline-offset: -6px; background: rgb(230 235 221 / 0.5); }
+.inv-taman .slot.photo.missing { background: linear-gradient(160deg, var(--sage-muda), var(--pasir)); }
+.inv-taman .fade-bottom { -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
+.inv-taman .fade-both { -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 72%, transparent); mask-image: linear-gradient(transparent, #000 18%, #000 72%, transparent); }
+.inv-taman .paper {
+  background-color: var(--ivory);
+}
+
+/* ---------- Sampul: satu gambar gapura + istana ---------- */
+.inv-taman .cover {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  background: var(--pasir);
+  transition: opacity 1.6s ease, visibility 1.6s;
+}
+.inv-taman .cover.is-open { opacity: 0; visibility: hidden; pointer-events: none; }
+.inv-taman .cover__stage {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 100%;
+  overflow: hidden;
+  background: #f4efdd;
+}
+.inv-taman .cover__bg { position: absolute; inset: 0; }
+.inv-taman .cover__bg.slot img { object-position: 50% 100%; filter: none; animation: drift 14s ease-in-out infinite alternate; }
+/* gerak pelan terus-menerus supaya sampul terasa hidup */
+@keyframes drift { from { transform: scale(1); } to { transform: scale(1.05); } }
+.inv-taman .cover__top { position: absolute; bottom: calc(7% + 58px); left: 50%; width: 260px; margin-left: -130px; padding: 14px 0 10px; text-align: center; z-index: 2;
+  background: radial-gradient(ellipse at center, rgb(251 248 242 / 0.92) 35%, rgb(251 248 242 / 0.6) 58%, transparent 72%); }
+.inv-taman .cover__top .eyebrow { margin-bottom: 2px; }
+.inv-taman .cover__top strong { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--ink); text-shadow: 0 0 10px var(--ivory); }
+/* langit di dalam lengkung gapura ada di sekitar 33% sampai 58% tinggi gambar */
+.inv-taman .cover__text { position: absolute; left: 14%; right: 14%; top: 38%; text-align: center; z-index: 2; }
+.inv-taman .cover__lead { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sirih); margin: 0; }
+.inv-taman .cover__names { font-size: 46px; margin: 10px 0 6px; white-space: nowrap; }
+.inv-taman .cover__names span { font-size: 34px; color: var(--muted); }
+.inv-taman .cover__date { font-family: var(--serif); font-size: 19px; color: var(--sirih); margin: 0; }
+.inv-taman .cover__btn { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); z-index: 3; }
+.inv-taman .cover__top, .inv-taman .cover__text, .inv-taman .cover__btn { animation: rise 1.6s ease both; }
+.inv-taman .cover__text { animation-delay: 0.4s; }
+.inv-taman .cover__btn { animation-name: rise-btn; animation-delay: 0.9s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+@keyframes rise-btn { from { opacity: 0; transform: translate(-50%, 14px); } }
+
+/* saat dibuka: tulisan pudar dulu, lalu kamera maju pelan ke lubang gapura */
+.inv-taman .cover__stage { transition: transform 3.2s cubic-bezier(0.45, 0, 0.2, 1); transform-origin: 50% 52%; }
+.inv-taman .cover.is-zooming .cover__stage { transform: scale(2.2); }
+.inv-taman .cover.is-zooming .cover__top, .inv-taman .cover.is-zooming .cover__text, .inv-taman .cover.is-zooming .cover__btn { opacity: 0; transition: opacity 0.7s ease; animation: none; }
+.inv-taman .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sirih);
+  color: var(--ivory);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.inv-taman .btn { text-shadow: none; box-shadow: 0 0 26px 10px rgb(251 248 242 / 0.85); }
+.inv-taman .btn:hover { background: var(--sirih-tua); }
+.inv-taman .btn:focus-visible { outline: 2px solid var(--sirih); outline-offset: 3px; }
+.inv-taman .btn--block { width: 100%; }
+.inv-taman .btn--ghost { background: transparent; color: var(--sirih); border: 1px solid var(--sage); }
+.inv-taman .btn--ghost:hover { background: var(--sage-muda); }
+.inv-taman .btn svg { width: 17px; height: 17px; flex: none; }
+
+/* ---------- Pembuka: istana di balik gapura, kabut memudar pelan ---------- */
+.inv-taman .hero { position: relative; height: 100svh; min-height: 640px; max-height: 920px; overflow: hidden; background: var(--ivory); }
+.inv-taman .hero > .slot { position: absolute; }
+.inv-taman .hero__img, .inv-taman .hero__fog { left: 0; right: 0; top: 0; bottom: -16%; }
+.inv-taman .hero__img img { object-position: 50% 0; transform: scale(1.2); transition: transform 6s cubic-bezier(0.2, 0.6, 0.2, 1); }
+.inv-taman .hero__fog { transition: opacity 4s ease 0.4s; }
+.inv-taman .hero__fog img { object-position: 50% 60%; transform: scale(1.3); }
+.inv-taman .hero__haze {
+  position: absolute; left: 18%; right: 18%; top: 34%; height: 34%; z-index: 1;
+  background: radial-gradient(ellipse at 50% 45%, rgb(251 248 242 / 0.92) 30%, rgb(251 248 242 / 0.6) 55%, transparent 72%);
+}
+/* gapura 112% lebar layar; lubangnya 27%-73% lebar dan mulai 25% tinggi */
+.inv-taman .hero__arch { position: absolute; left: -6%; width: 112%; bottom: 11%; aspect-ratio: 1080 / 1350; z-index: 2; }
+.inv-taman .hero__frame { position: absolute; inset: 0; }
+.inv-taman .hero__frame img { object-fit: contain; }
+.inv-taman .hero__arch { transform: scale(1.14); opacity: 0; transform-origin: 50% 60%; transition: transform 4.5s cubic-bezier(0.2, 0.6, 0.2, 1) 0.2s, opacity 2.4s ease 0.2s; }
+.inv-taman .hero__front { left: -22%; right: -22%; bottom: -3%; aspect-ratio: 1080 / 480; z-index: 3; transform: translateY(30%); opacity: 0; transition: transform 4s cubic-bezier(0.2, 0.6, 0.2, 1) 0.6s, opacity 2.4s ease 0.6s; }
+.inv-taman .hero__front img { object-fit: contain; object-position: bottom; }
+.inv-taman .hero__front { -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
+.inv-taman .hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 90px; z-index: 4; pointer-events: none; background: linear-gradient(rgb(251 248 242 / 0), var(--ivory)); }
+.inv-taman.opened .hero__img img { transform: scale(1); }
+.inv-taman.opened .hero__fog { opacity: 0; }
+.inv-taman.opened .hero__arch { transform: none; opacity: 1; }
+.inv-taman.opened .hero__front { transform: none; opacity: 1; }
+.inv-taman .hero__text { position: absolute; left: 27.5%; right: 27.5%; top: 29.5%; text-align: center; }
+.inv-taman .hero__lead { font-size: 22px; }
+.inv-taman .hero__names { font-size: 46px; margin: 6px 0 6px; }
+.inv-taman .hero__names span { display: block; font-size: 30px; color: var(--muted); margin: -2px 0; }
+.inv-taman .hero__date { font-family: var(--serif); font-size: 16px; color: var(--sirih); margin: 0; }
+/* tulisan muncul pelan seperti ditulis dari kiri ke kanan */
+.inv-taman .hero__text > * { clip-path: inset(0 100% 0 0); transition: clip-path 2.2s ease; }
+.inv-taman.opened .hero__text > * { clip-path: inset(0 0 0 0); }
+.inv-taman.opened .hero__lead { transition-delay: 1.8s; }
+.inv-taman.opened .hero__names { transition-delay: 2.8s; }
+.inv-taman.opened .hero__date { transition-delay: 4s; }
+.inv-taman .glow { text-shadow: 0 0 18px var(--ivory), 0 0 8px var(--ivory), 0 0 2px var(--ivory); }
+
+/* ---------- Kutipan ---------- */
+.inv-taman .quote { position: relative; z-index: 2; padding: 22px 0 0; text-align: center; }
+.inv-taman .oval {
+  position: relative;
+  width: 228px;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 50%;
+  padding: 9px;
+  border: 1.5px solid var(--sirih);
+  box-shadow: 0 0 0 5px var(--ivory), 0 0 0 6.5px var(--sage);
+}
+.inv-taman .oval .slot { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; }
+.inv-taman .quote__bouquet { width: 340px; aspect-ratio: 1080 / 600; margin: -96px auto 0; z-index: 2; }
+.inv-taman .quote__bouquet img { object-fit: contain; }
+.inv-taman .quote__scene { aspect-ratio: 1218 / 1292; margin-top: -40px; }
+.inv-taman .quote__text { position: relative; margin-top: 6px; padding: 0 32px 36px; }
+.inv-taman .quote__text p { font-family: var(--serif); font-style: italic; font-size: 23px; line-height: 1.35; color: var(--sirih); margin: 0 0 12px; }
+.inv-taman .quote__text cite { font-style: normal; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- Medali "Undangan Pernikahan" ---------- */
+.inv-taman .medal { position: relative; aspect-ratio: 1080 / 1350; }
+.inv-taman .medal > .slot { position: absolute; inset: 0; }
+.inv-taman .medal__oval {
+  position: absolute;
+  top: 6%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 210px;
+  height: 270px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, #fff 55%, var(--ivory) 80%);
+  box-shadow: 0 0 0 1.5px var(--sage), 0 0 30px 14px rgb(251 248 242 / 0.95);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  z-index: 2;
+}
+.inv-taman .medal__oval .eyebrow { font-size: 10px; }
+.inv-taman .medal__oval .script { font-size: 44px; margin-top: 8px; }
+.inv-taman .medal__oval .script span { display: block; font-size: 28px; color: var(--sage); }
+
+/* ---------- Mempelai ---------- */
+.inv-taman .couple { padding: 40px 0 32px; }
+.inv-taman .person { position: relative; text-align: center; padding: 0 28px; }
+.inv-taman .person__photo { position: relative; width: 250px; margin: 20px auto 0; }
+.inv-taman .person__photo > .slot.photo {
+  aspect-ratio: 4 / 5;
+  border-radius: 999px 999px 14px 14px;
+  overflow: hidden;
+  border: 6px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--sage), 0 18px 36px rgb(34 38 31 / 0.12);
+}
+.inv-taman .person__flower { position: absolute; width: 150px; aspect-ratio: 600 / 800; bottom: -36px; z-index: 2; }
+.inv-taman .person__flower img { object-fit: contain; }
+.inv-taman .person__flower--left { left: -58px; }
+.inv-taman .person__flower--right { right: -58px; }
+.inv-taman .person__name { font-size: 40px; margin-top: 44px; }
+.inv-taman .person__title { font-family: var(--serif); font-size: 19px; color: var(--sirih); margin: 4px 0 10px; }
+.inv-taman .person__parents { margin: 0; font-size: 14px; }
+.inv-taman .person__parents b { display: block; font-weight: 600; color: var(--ink); }
+.inv-taman .ig { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 13px; color: var(--sirih); text-decoration: none; border-bottom: 1px solid var(--sage); }
+.inv-taman .ig svg { width: 14px; height: 14px; }
+.inv-taman .couple__and { font-size: 54px; text-align: center; margin: 26px 0 0; color: var(--sage); }
+
+/* ---------- Simpan tanggal: hitung mundur di dalam gapura ---------- */
+.inv-taman .date { position: relative; padding: 8px 0 0; text-align: center; }
+.inv-taman .date__arch { position: relative; width: 125%; margin-left: -12.5%; aspect-ratio: 1080 / 1350; }
+.inv-taman .date__arch > .slot { position: absolute; }
+.inv-taman .date__view { left: 27%; right: 27%; top: 25%; bottom: 3%; border-radius: 999px 999px 0 0; overflow: hidden; -webkit-mask-image: linear-gradient(#000 80%, transparent); mask-image: linear-gradient(#000 80%, transparent); }
+.inv-taman .date__view::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgb(251 248 242 / 0.78), rgb(251 248 242 / 0.4) 65%, rgb(251 248 242 / 0.05)); }
+.inv-taman .date__frame { inset: 0; }
+.inv-taman .date__frame img { object-fit: contain; }
+.inv-taman .date__text { position: absolute; left: 28%; right: 28%; top: 33%; z-index: 2; }
+.inv-taman .date__text .title { font-size: 36px; margin: 6px 0 4px; }
+.inv-taman .date__day { font-family: var(--serif); font-size: 17px; color: var(--sirih); margin: 0 0 12px; }
+.inv-taman .count { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 10px; }
+.inv-taman .count div { padding: 6px 0 4px; border-top: 1px solid var(--sage); border-bottom: 1px solid var(--sage); background: rgb(251 248 242 / 0.6); }
+.inv-taman .count b { display: block; font-family: var(--serif); font-size: 30px; font-weight: 400; line-height: 1; color: var(--sirih); }
+.inv-taman .count span { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.inv-taman .date__front { position: relative; width: 120%; margin: -36% 0 0 -10%; -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); aspect-ratio: 1080 / 480; z-index: 3; pointer-events: none; }
+.inv-taman .date__front img { object-fit: contain; object-position: bottom; }
+.inv-taman .date__btn { margin-top: 16px; padding: 0 18px; font-size: 13px; white-space: nowrap; }
+
+/* ---------- Acara: tulisan di atas, pilar + air mancur di belakang bagian bawah ---------- */
+.inv-taman .events { position: relative; text-align: center; }
+.inv-taman .event { position: relative; }
+.inv-taman .event__text { position: relative; z-index: 2; padding: 40px 30px 0; }
+.inv-taman .event__text .title { font-size: 46px; }
+.inv-taman .event__name { font-size: 34px; margin-top: 18px; }
+.inv-taman .event__day { font-size: 38px; margin: 10px 0 0; }
+.inv-taman .event__month { font-family: var(--serif); font-size: 20px; color: var(--sirih); margin: 2px 0 0; }
+.inv-taman .event__time { font-family: var(--serif); font-size: 19px; color: var(--sirih); margin: 14px 0; }
+.inv-taman .event__venue { font-family: var(--serif); font-size: 22px; color: var(--ink); margin: 0 0 4px; }
+.inv-taman .event__addr { font-size: 14px; color: var(--ink); margin: 0 0 18px; }
+.inv-taman .event__scene {
+  aspect-ratio: 1122 / 1402;
+  margin-top: -62%;
+  -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 88%, transparent);
+  mask-image: linear-gradient(transparent, #000 30%, #000 88%, transparent);
+}
+/* kabut tipis di atas pemandangan supaya alamat dan tombol tetap terbaca */
+.inv-taman .event__scene::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgb(251 248 242 / 0.85), rgb(251 248 242 / 0.35) 55%, rgb(251 248 242 / 0)); }
+.inv-taman .event__scene img { object-fit: contain; object-position: bottom; }
+
+/* ---------- Formulir ---------- */
+.inv-taman .block { padding: 44px 24px; }
+.inv-taman .form { display: grid; gap: 12px; margin-top: 26px; }
+.inv-taman .field {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 15px;
+  border: 1px solid var(--pasir);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.85);
+  font-size: 14px;
+}
+.inv-taman .field:focus { outline: 2px solid var(--sage); outline-offset: 0; border-color: var(--sirih); }
+.inv-taman textarea.field { min-height: 110px; resize: vertical; }
+.inv-taman .phone { display: flex; gap: 8px; }
+.inv-taman .phone span { display: grid; place-items: center; padding: 0 14px; border: 1px solid var(--pasir); border-radius: 12px; background: rgb(255 255 255 / 0.85); font-size: 14px; }
+.inv-taman .phone .field { flex: 1; }
+.inv-taman .note { font-size: 13px; color: var(--muted); text-align: center; margin: 10px 0 0; }
+.inv-taman .done { margin-top: 24px; padding: 22px; background: rgb(255 255 255 / 0.85); border: 1px solid var(--pasir); border-radius: 18px; text-align: center; }
+.inv-taman .done .script { font-size: 32px; }
+.inv-taman .done p { margin: 6px 0 14px; }
+.inv-taman .wishes__list { display: grid; gap: 10px; margin-top: 24px; max-height: 360px; overflow-y: auto; padding-right: 4px; }
+.inv-taman .wish { padding: 14px 16px; background: #fff; border: 1px solid var(--pasir); border-radius: 14px; }
+.inv-taman .wish b { color: var(--ink); font-weight: 600; font-size: 14px; }
+.inv-taman .wish small { color: var(--muted); font-size: 12px; margin-left: 6px; }
+.inv-taman .wish p { margin: 4px 0 0; font-size: 14px; }
+
+/* ---------- Kado ---------- */
+.inv-taman .divider-scene { aspect-ratio: 1080 / 720; }
+.inv-taman .tabs { display: inline-flex; padding: 4px; margin: 22px auto 0; background: var(--kain); border: 1px solid var(--pasir); border-radius: 999px; }
+.inv-taman .tabs button { border: 0; background: transparent; padding: 8px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+.inv-taman .tabs button[aria-selected='true'] { background: var(--sirih); color: var(--ivory); }
+.inv-taman .gift__intro { margin: 18px 0 22px; text-align: center; font-size: 14px; }
+.inv-taman .card { padding: 18px 20px; background: #fff; border: 1px solid var(--pasir); border-radius: 18px; text-align: left; }
+.inv-taman .card + .card { margin-top: 12px; }
+.inv-taman .card .eyebrow { color: var(--sirih); font-weight: 700; }
+.inv-taman .card__num { font-family: var(--serif); font-size: 26px; color: var(--ink); margin: 2px 0 0; letter-spacing: 0.02em; }
+.inv-taman .card__holder { font-size: 13px; margin: 0 0 12px; }
+.inv-taman .copy { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--sage); border-radius: 999px; background: transparent; font-size: 12.5px; font-weight: 600; color: var(--sirih); cursor: pointer; }
+.inv-taman .copy svg { width: 14px; height: 14px; }
+
+/* ---------- Galeri ---------- */
+.inv-taman .gallery { padding: 0 0 56px; text-align: center; }
+.inv-taman .gallery .title { margin-top: 12px; }
+.inv-taman .slider { position: relative; margin: 24px 24px 0; }
+.inv-taman .slider__main { aspect-ratio: 4 / 5; border-radius: 18px; overflow: hidden; border: 6px solid #fff; box-shadow: 0 0 0 1px var(--pasir), 0 16px 32px rgb(34 38 31 / 0.1); }
+.inv-taman .slider__main .slot { width: 100%; height: 100%; }
+.inv-taman .slider__nav { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgb(251 248 242 / 0.92); color: var(--sirih); display: grid; place-items: center; cursor: pointer; box-shadow: 0 2px 8px rgb(34 38 31 / 0.15); }
+.inv-taman .slider__nav svg { width: 18px; height: 18px; }
+.inv-taman .slider__nav--prev { left: 12px; }
+.inv-taman .slider__nav--next { right: 12px; }
+.inv-taman .thumbs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 12px 24px 0; }
+.inv-taman .thumbs button { padding: 0; border: 2px solid transparent; border-radius: 8px; overflow: hidden; aspect-ratio: 1; cursor: pointer; background: none; opacity: 0.6; transition: opacity 0.2s; }
+.inv-taman .thumbs button[aria-current='true'] { border-color: var(--sirih); opacity: 1; }
+.inv-taman .thumbs .slot { width: 100%; height: 100%; }
+.inv-taman .thumbs .slot.missing::after { font-size: 8px; padding: 2px; }
+
+/* ---------- Penutup ---------- */
+.inv-taman .closing { position: relative; padding-top: 44px; text-align: center; }
+.inv-taman .closing__text { padding: 0 32px; }
+.inv-taman .closing__text p { margin: 14px 0 0; }
+.inv-taman .closing__frame { position: relative; width: 380px; max-width: 100%; aspect-ratio: 1; margin: 36px auto 0; z-index: 2; }
+.inv-taman .closing__frame > .slot.photo { position: absolute; inset: 18% 28.3% 19%; border-radius: 45% 45% 3% 3% / 28% 28% 3% 3%; overflow: hidden; }
+.inv-taman .closing__frame > .slot.decor { position: absolute; inset: 0; }
+.inv-taman .closing__frame > .slot.decor img { object-fit: contain; }
+.inv-taman .closing__sign { position: relative; z-index: 2; font-size: 38px; margin: 0; }
+.inv-taman .closing > .slot.scene { aspect-ratio: 1080 / 1620; margin-top: -34%; }
+.inv-taman .footer { padding: 18px 24px 28px; text-align: center; font-size: 12px; color: var(--muted); background: var(--ivory); }
+.inv-taman .footer b { font-family: var(--serif); font-size: 15px; font-weight: 400; color: var(--sirih); }
+
+/* ---------- Gerak objek (semua pelan) ---------- */
+/* zoom: pemandangan mendekat pelan saat masuk layar */
+.inv-taman .anim.zoom { overflow: hidden; }
+.inv-taman .anim.zoom img { transform: scale(1.14); transition: transform 4.5s cubic-bezier(0.2, 0.6, 0.2, 1); }
+.inv-taman .anim.zoom.is-in img { transform: scale(1); }
+/* settle: gapura turun ke tempatnya */
+.inv-taman .anim.settle img { transform: scale(1.08); opacity: 0; transition: transform 3s cubic-bezier(0.2, 0.6, 0.2, 1), opacity 1.8s ease; }
+.inv-taman .anim.settle.is-in img { transform: none; opacity: 1; }
+/* rise: bunga naik dan muncul, lalu bergoyang pelan terus */
+.inv-taman .anim.rise { opacity: 0; translate: 0 26px; transition: opacity 1.8s ease, translate 2.4s cubic-bezier(0.2, 0.6, 0.2, 1); }
+.inv-taman .anim.rise.is-in { opacity: 1; translate: 0 0; }
+.inv-taman .sway-left img { transform-origin: 0% 100%; }
+.inv-taman .sway-right img { transform-origin: 100% 100%; }
+.inv-taman .sway-hang img { transform-origin: 50% 0%; }
+.inv-taman .sway-grass img, .inv-taman .hero__front img { transform-origin: 50% 100%; }
+.inv-taman .sway-left.is-in img { animation: sway 6s ease-in-out 2s infinite alternate; }
+.inv-taman .sway-right.is-in img { animation: sway 6.6s ease-in-out 2.4s infinite alternate-reverse; }
+.inv-taman .sway-hang.is-in img { animation: sway-soft 7s ease-in-out 2s infinite alternate; }
+.inv-taman .sway-grass.is-in img, .inv-taman.opened .hero__front img { animation: breeze 8s ease-in-out 3s infinite alternate; }
+@keyframes sway { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+@keyframes sway-soft { from { transform: rotate(-0.8deg); } to { transform: rotate(0.8deg); } }
+@keyframes breeze { from { transform: skewX(-1.6deg); } to { transform: skewX(1.6deg); } }
+/* medali nama dan foto oval melayang pelan */
+.inv-taman .medal__oval.is-in { animation: float 7s ease-in-out 1.6s infinite alternate; }
+.inv-taman .oval.is-in { animation: float 8s ease-in-out 1.6s infinite alternate; }
+@keyframes float { from { translate: 0 0; } to { translate: 0 -8px; } }
+/* bingkai foto penutup muncul pelan dari sedikit lebih kecil */
+.inv-taman .closing__frame[data-reveal] { transform: scale(0.94); transition: opacity 1.6s ease, transform 2.4s cubic-bezier(0.2, 0.6, 0.2, 1); }
+/* angka hitung mundur muncul bergantian */
+.inv-taman .date__text.is-in .count div { animation: rise-in 1.4s ease both; }
+.inv-taman .date__text.is-in .count div:nth-child(2) { animation-delay: 0.2s; }
+.inv-taman .date__text.is-in .count div:nth-child(3) { animation-delay: 0.4s; }
+.inv-taman .date__text.is-in .count div:nth-child(4) { animation-delay: 0.6s; }
+@keyframes rise-in { from { opacity: 0; transform: translateY(10px); } }
+
+/* ---------- Animasi muncul (sederhana) ---------- */
+.inv-taman [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.inv-taman [data-reveal].is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+.inv-taman [data-reveal] { opacity: 1; transform: none; transition: none; }
+.inv-taman .cover, .inv-taman .cover *, .inv-taman .hero *, .inv-taman .anim, .inv-taman .anim img, .inv-taman .oval, .inv-taman .medal__oval, .inv-taman .count div { transition: none !important; animation: none !important; opacity: 1 !important; translate: none !important; }
+.inv-taman .anim img { transform: none !important; }
+}
+.inv-taman .toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translate(-50%, 20px);
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--sirih);
+  color: var(--ivory);
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 60;
+}
+.inv-taman .toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 360px) {
+.inv-taman .cover__names { font-size: 42px; }
+.inv-taman .title { font-size: 40px; }
+.inv-taman .hero__names { font-size: 52px; }
+}

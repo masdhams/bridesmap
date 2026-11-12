@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { PublicPage } from '../../components/PublicLayout'
 
 const TOOLS = [
-  { to: '/alat/kalkulator-budget', icon: Calculator, title: 'Kalkulator budget nikah', text: 'Bagi total budget ke kategori standar dan lihat 15 hidden cost yang sering terlupa.' },
+  { to: '/alat/kalkulator-budget', icon: Calculator, title: 'Kalkulator budget nikah', text: 'Bagi total budget ke kategori standar dan lihat 14 hidden cost yang sering terlupa.' },
   { to: '/alat/checklist', icon: ListChecks, title: 'Checklist persiapan', text: 'Daftar tugas H-12 bulan sampai hari-H, tanggalnya otomatis dari hari-H kalian.' },
 ]
 

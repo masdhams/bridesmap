@@ -5,6 +5,7 @@ import { useAuth } from './lib/auth'
 import { usePlan } from './lib/store'
 import About from './pages/About'
 import Landing from './pages/Landing'
+import SalesPage from './pages/SalesPage'
 import AksesBelumAktif from './pages/AksesBelumAktif'
 import LupaSandi from './pages/LupaSandi'
 import Masuk from './pages/Masuk'
@@ -38,6 +39,7 @@ import BudgetCalculator from './pages/tools/BudgetCalculator'
 import FreeChecklist from './pages/tools/FreeChecklist'
 import RedRetroInvitation from './pages/invitations/RedRetroInvitation'
 import NoirInvitation from './pages/invitations/NoirInvitation'
+import TamanKlasikInvitation from './pages/invitations/TamanKlasikInvitation'
 import SageInvitation from './pages/invitations/SageInvitation'
 import ToolsIndex from './pages/tools/ToolsIndex'
 
@@ -81,6 +83,7 @@ export default function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/penawaran" element={<SalesPage />} />
         <Route path="/tentang" element={<About />} />
         <Route path="/masuk" element={<Masuk />} />
         <Route path="/lupa-sandi" element={<LupaSandi />} />
@@ -97,6 +100,7 @@ export default function App() {
         <Route path="/alat/checklist" element={<FreeChecklist />} />
         <Route path="/w/:slug" element={<SlugRedirect />} />
         <Route path="/u/:slug" element={<LiveInvitation />} />
+        <Route path="/undangan/taman-klasik" element={<TamanKlasikInvitation />} />
         <Route path="/undangan/sage" element={<SageInvitation />} />
         <Route path="/undangan/noir" element={<NoirInvitation />} />
         <Route path="/undangan/red-retro" element={<RedRetroInvitation />} />
