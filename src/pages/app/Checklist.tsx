@@ -4,7 +4,7 @@ import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { PanelBar, PanelStat, SidePanel, WithPanel } from '../../components/bento'
 import { docProgress } from '../../lib/documents'
-import { CalendarButtons, ConfirmButton, Field, FilterChips, Modal, PageHeader, PartnerAvatar, RoundButton, Segmented } from '../../components/ui'
+import { CalendarButtons, ConfirmButton, Field, Modal, PageHeader, PartnerAvatar, RoundButton, Segmented } from '../../components/ui'
 import { PHASES } from '../../data/content'
 import { taskDue, timelineCompressed } from '../../lib/selectors'
 import { CATEGORIES, categoryOf, taskCategoryOf } from '../../lib/taskCategory'
@@ -237,24 +237,31 @@ export default function Checklist() {
         <CategoryView tasks={tasks} profile={profile} Row={Row} openCat={openCat} setOpenCat={setOpenCat} />
       ) : (
       <>
-      <FilterChips
-        wrap
-        label="Fase persiapan"
-        value={phase}
-        onChange={(p) => {
-          setPhase(p)
-          setShowDone(false)
-        }}
-        options={PHASES.map((p) => ({
-          value: p,
-          label: (
-            <>
-              {phaseDone(p) && <Check className="size-3.5 text-success-solid" strokeWidth={2.6} aria-label="selesai" />}
-              {PHASE_SHORT[p]}
-            </>
-          ),
-        }))}
-      />
+      {/* Fase persiapan: kotak berukuran sama, 2 kolom di ponsel dan 4 kolom di layar lebar, supaya label tidak berantakan */}
+      <div role="tablist" aria-label="Fase persiapan" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {PHASES.map((p) => {
+          const active = phase === p
+          return (
+            <button
+              key={p}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => {
+                setPhase(p)
+                setShowDone(false)
+              }}
+              className={cn(
+                'flex min-h-11 items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-center text-[13px] leading-snug last:col-span-2 sm:last:col-span-1',
+                active ? 'border-primary bg-primary font-semibold text-white lg:border-ink lg:bg-ink' : 'border-border bg-card font-medium text-body hover:border-line',
+              )}
+            >
+              {phaseDone(p) && <Check className="size-3.5 shrink-0 text-success-solid" strokeWidth={2.6} aria-label="selesai" />}
+              <span>{PHASE_SHORT[p]}</span>
+            </button>
+          )
+        })}
+      </div>
 
       <section className="flex flex-col gap-2">
         <div className="flex items-baseline justify-between">
