@@ -143,7 +143,7 @@ export default function AppLayout() {
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-6xl flex-1 px-5 pt-4 pb-32 sm:px-6 lg:px-10 lg:pt-6 lg:pb-14">
+        <main className="mx-auto w-full max-w-6xl flex-1 px-5 lg:max-w-none pt-4 pb-32 sm:px-6 lg:px-10 lg:pt-6 lg:pb-14">
           <DemoBanner />
           {storageFull && (
             <div role="alert" className="no-print mb-4 rounded-2xl bg-danger-soft px-4 py-3 text-sm text-danger-ink">
