@@ -59,9 +59,6 @@ export default function InvitationEditor() {
         title="Undangan digital"
         subtitle="Pilih template, lengkapi isinya, lalu kirim tautan personal ke setiap tamu dari halaman Tamu."
       />
-      <p className="mb-4 rounded-xl bg-warning-soft px-4 py-3 text-sm text-warning">
-        Mode pratinjau: undangan saat ini hanya bisa dibuka di perangkat ini. Tamu bisa membukanya dari HP masing-masing setelah backend tersambung.
-      </p>
       {storageFull && <p className="mb-4 rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger-ink">Penyimpanan perangkat penuh, perubahan terakhir belum tersimpan. Hapus beberapa foto lalu coba lagi.</p>}
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_390px] xl:items-start">
