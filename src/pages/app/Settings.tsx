@@ -17,7 +17,7 @@ export default function Settings() {
   const invite = `${location.origin}/mulai?undangan=${encodeURIComponent(profile.partnerA)}`
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-2xl xl:max-w-none xl:grid xl:grid-cols-2 xl:items-start xl:gap-5 xl:[&>*:nth-child(-n+2)]:col-span-2">
       <PageHeader back="/app" title="Pengaturan & pasangan" />
 
       <section className="card p-5 flex flex-wrap items-center justify-between gap-3">

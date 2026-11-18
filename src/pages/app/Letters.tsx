@@ -196,7 +196,7 @@ export default function Letters() {
   const nextCd = next ? countdown(next.unlockDate) : null
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-5">
+    <div className="mx-auto flex max-w-2xl flex-col gap-5 xl:max-w-none">
       <header className="flex h-11 items-center justify-between gap-3">
         <SplitTitle a="Surat untuk " b="Nanti" />
         <Link to="/app/surat/tulis" aria-label="Tulis surat baru" className="grid size-11 shrink-0 place-items-center rounded-full bg-accent text-white hover:bg-accent-hover">

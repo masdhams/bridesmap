@@ -9,7 +9,7 @@ export default function Allocation() {
   const reserved = s.categories.filter((c) => c.hidden).reduce((a, c) => a + c.allocated, 0)
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-4">
+    <div className="mx-auto flex max-w-2xl flex-col gap-4 xl:max-w-none">
       <PageHeader back="/app/budget" title="Alokasi budget" subtitle="Bagi total budget ke tiap acara, lalu ke tiap kategori. Angka awal hanyalah estimasi, bukan standar baku." />
 
       {s.events.length === 0 ? (

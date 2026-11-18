@@ -71,7 +71,7 @@ export default function Bonus() {
   }
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-8">
+    <div className="mx-auto flex max-w-3xl flex-col gap-8 xl:max-w-none">
       <PageHeader back="/app" title="Bonus" subtitle="Dua panduan tambahan khusus untuk pembeli Bridesmap. Unduh file yang kalian butuhkan kapan saja." />
 
       {BONUSES.map((b) => (

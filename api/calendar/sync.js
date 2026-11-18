@@ -153,6 +153,10 @@ export default async function handler(req, res) {
     res.json(result)
   } catch (error) {
     console.error('[sync]', error)
+    // Refresh token Google sudah tidak berlaku (dicabut, kedaluwarsa, atau aplikasi OAuth masih mode Testing).
+    // Minta pengguna menghubungkan ulang, bukan pesan "gagal" yang tidak jelas.
+    const text = `${error?.response?.data?.error ?? ''} ${error?.message ?? ''}`
+    if (text.includes('invalid_grant')) return res.status(401).json({ error: 'reconnect_required' })
     res.status(502).json({ error: 'google_error' })
   }
 }

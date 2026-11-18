@@ -24,7 +24,7 @@ export default function Guide() {
   }, [hash])
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-8">
+    <div className="mx-auto flex max-w-3xl flex-col gap-8 xl:max-w-none">
       <PageHeader back="/app" title="Panduan" subtitle={GUIDE_INTRO} />
 
       <section aria-labelledby="h-contoh" className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">

@@ -36,7 +36,7 @@ export default function HoneymoonItinerary() {
   const subtitle = h.startDate && h.endDate ? `${h.destination || 'Rencana perjalanan kalian'} · ${fmtDate(h.startDate, 'd')}–${fmtDate(h.endDate, 'd MMM yyyy')}` : 'Atur tanggal berangkat dan pulang dulu'
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-4">
+    <div className="mx-auto flex max-w-2xl flex-col gap-4 xl:max-w-none">
       <PageHeader
         back="/app/honeymoon"
         title={
