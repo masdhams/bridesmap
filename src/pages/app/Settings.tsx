@@ -2,6 +2,7 @@ import { Camera, Copy, Download, FileUp, Send, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CalendarCard } from '../../components/CalendarCard'
+import { IcsExportCard } from '../../components/IcsExportCard'
 import { ConfirmButton, Field, MoneyInput, PageHeader, PartnerAvatar } from '../../components/ui'
 import { useAuth } from '../../lib/auth'
 import { supabase } from '../../lib/supabase'
@@ -104,6 +105,7 @@ export default function Settings() {
       </section>
 
       <CalendarCard />
+      <IcsExportCard />
 
       <section className="card mt-5 p-5">
         <h2 className="text-2xl font-semibold">Data kalian</h2>
