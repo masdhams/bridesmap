@@ -156,7 +156,7 @@ export default function Onboarding() {
   // Langkah 0 — Sambutan: apa yang bisa dilakukan di app, lalu cara mulainya, baru CTA.
   if (step === 0)
     return (
-      <div className="mx-auto flex min-h-dvh max-w-md flex-col">
+      <div className="mx-auto flex min-h-dvh max-w-md lg:max-w-3xl flex-col">
         <section className="relative m-3 overflow-hidden rounded-[28px] bg-primary p-6 text-white">
           <span aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(201,212,186,0.22),transparent_55%),radial-gradient(circle_at_10%_90%,rgba(154,78,59,0.25),transparent_50%)]" />
           <Link to="/" className="relative font-serif text-[22px]">
@@ -227,7 +227,7 @@ export default function Onboarding() {
     return (
       <>
       <form
-        className="mx-auto flex min-h-dvh max-w-md flex-col gap-5 px-5 pb-8 pt-4"
+        className="mx-auto flex min-h-dvh max-w-md lg:max-w-3xl flex-col gap-5 px-5 pb-8 pt-4"
         onSubmit={(e) => {
           e.preventDefault()
           if (detailsValid) goAllocation()
@@ -341,7 +341,7 @@ export default function Onboarding() {
   if (step === 2) {
     const t = alloc.allocTotals(form.totalBudget, plan.events, reserved)
     return (
-      <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-5 px-5 pt-4">
+      <div className="mx-auto flex min-h-dvh max-w-md lg:max-w-3xl flex-col gap-5 px-5 pt-4">
         <Steps at={2} onBack={() => setStep(1)} />
         <div className="flex flex-col gap-1.5">
           <p className="eyebrow">Alokasi budget</p>
@@ -383,7 +383,7 @@ export default function Onboarding() {
   // Langkah 3 — Undang pasangan (pesan dikirim sendiri lewat WhatsApp pengguna)
   if (step === 3)
     return (
-      <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-5 px-5 pb-8 pt-4">
+      <div className="mx-auto flex min-h-dvh max-w-md lg:max-w-3xl flex-col gap-5 px-5 pb-8 pt-4">
         <Steps at={3} onBack={() => setStep(2)} />
         <div className="flex flex-col gap-1.5">
           <p className="eyebrow">Undang pasangan</p>
@@ -467,7 +467,7 @@ export default function Onboarding() {
     )
   return (
     <div className="min-h-dvh bg-primary text-white">
-      <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-6 px-5 pb-8 pt-5">
+      <div className="mx-auto flex min-h-dvh max-w-md lg:max-w-3xl flex-col gap-6 px-5 pb-8 pt-5">
         <span className="font-serif text-[22px]">
           Brides<span className="italic">map</span>
         </span>
