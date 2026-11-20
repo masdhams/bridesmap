@@ -18,19 +18,18 @@
 .inv-tepi { scroll-behavior: smooth; overflow-x: clip; }
 .inv-tepi { margin: 0; }
 .inv-tepi {
-  background-color: var(--kertas);
-  background-image: url('../../assets/tepi-laut/tekstur-kertas.webp');
-  background-size: 800px auto;
+  background-color: var(--pasir);
   color: var(--body);
   font-family: var(--sans);
   font-size: 15px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 .inv-tepi img { display: block; max-width: 100%; }
 .inv-tepi button, .inv-tepi input, .inv-tepi select { font: inherit; color: inherit; }
-.inv-tepi .page { max-width: 1120px; margin: 0 auto; padding: 0 40px; position: relative; }
+/* Kanvas selalu selebar HP (maks 480px), juga saat dibuka di layar desktop. */
+.inv-tepi .page { max-width: 480px; min-height: 100vh; margin: 0 auto; padding: 0 20px; position: relative; overflow-x: clip; background-color: var(--kertas); background-image: url('../../assets/tepi-laut/tekstur-kertas.webp'); background-size: 800px auto; box-shadow: 0 0 60px rgb(43 46 49 / 0.16); }
 /* ---------- Tipografi ---------- */
 .inv-tepi .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin: 0; }
 .inv-tepi .eyebrow i { font-style: normal; margin: 0 6px; color: var(--pasir); }
@@ -198,9 +197,7 @@
 .inv-tepi .ch { transform: none; }
 .inv-tepi .wave path { stroke-dashoffset: 0; }
 }
-/* ---------- HP ---------- */
-@media (max-width: 760px) {
-.inv-tepi .page { padding: 0 20px; }
+/* ---------- Tata letak satu kolom (kanvas HP) ---------- */
 .inv-tepi .hero { grid-template-columns: 1fr; padding-top: 34px; gap: 30px; min-height: 0; }
 .inv-tepi .hero__names { font-size: 64px; }
 .inv-tepi .gull { left: auto; right: 10px; bottom: 30px; }
@@ -217,7 +214,6 @@
 .inv-tepi .polaroid--2 { transform: rotate(2deg); }
 .inv-tepi .closing { margin: 60px -20px 0; padding: 90px 20px 40px; }
 .inv-tepi .gift__cards { grid-template-columns: 1fr; }
-}
 /* kutipan di bagian mempelai dan teks penutup */
 .inv-tepi .quote { font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.3; color: var(--ink); margin: 24px 0 0; max-width: 400px; }
 .inv-tepi .count-sec__day { font-family: var(--serif); font-size: 20px; color: var(--ink); margin: 6px 0 0; }
@@ -228,7 +224,7 @@
 .inv-tepi .wave path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.2s ease 0.5s; }
 .inv-tepi .is-in .wave path { stroke-dashoffset: 0; }
 /* ---------- Progress scroll + parallax dekor ---------- */
-.inv-tepi .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 70; pointer-events: none; }
+.inv-tepi .progress { position: fixed; top: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; height: 3px; z-index: 70; pointer-events: none; }
 .inv-tepi .progress i { display: block; height: 100%; background: var(--laut); transform-origin: 0 50%; transform: scaleX(0); }
 .inv-tepi .slot.art[data-parallax] img { translate: 0 var(--py, 0px); will-change: translate; }
 /* ---------- Foto polaroid: lurus dan terangkat saat disentuh ---------- */
