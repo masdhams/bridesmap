@@ -246,3 +246,47 @@ export const TAMAN_KLASIK_DEMO: Invitation = {
     gallery: [tamanGalleryDanau, tamanGalleryLanskap, tamanGalleryKabut, tamanGalleryLorong, tamanGalleryBunga, tamanGalleryRumah],
   },
 }
+
+// Contoh fiktif template "Tepi Laut" (Tema-4). Foto pasangan belum ada, jadi semua slot foto tampil sebagai kotak penanda.
+export const TEPI_LAUT_DEMO: Invitation = {
+  groom: {
+    nick: 'Bima',
+    full: 'Bima Arya Pradana',
+    childOf: 'Putra pertama dari',
+    parents: 'Bapak Made Pradana & Ibu Ketut Ayu',
+    instagram: 'bimaarya',
+  },
+  bride: {
+    nick: 'Laras',
+    full: 'Laras Kinanti',
+    childOf: 'Putri kedua dari',
+    parents: 'Bapak Agus Santoso & Ibu Dewi Rahayu',
+    instagram: 'laraskinanti',
+  },
+  date: '2027-06-12',
+  timezone: 'WITA',
+  utcOffset: '+08:00',
+  city: 'Uluwatu, Bali',
+  quote: {
+    text: 'Rumah itu bukan soal tempat. Rumah itu soal dengan siapa kita pulang.',
+    by: 'Kutipan favorit kami',
+  },
+  story: [
+    { year: '2021', title: 'Pertama Bertemu', text: 'Kami berkenalan lewat teman di Denpasar. Obrolan singkat sore itu ternyata berlanjut sampai berbulan-bulan.' },
+    { year: '2024', title: 'Menjalin Hubungan', text: 'Setelah tiga tahun berteman, kami memutuskan untuk berjalan bersama.' },
+    { year: '2026', title: 'Lamaran', text: 'Disaksikan kedua keluarga, kami resmi bertunangan dan mulai mempersiapkan hari bahagia.' },
+  ],
+  events: [
+    { name: 'Akad Nikah', start: '15.00', end: '16.00', venue: 'Teras Samudra', address: 'Jl. Labuansait, Pecatu, Kuta Selatan, Kabupaten Badung, Bali 80361' },
+    { name: 'Resepsi', start: '16.30', end: '18.30', venue: 'Teras Samudra', address: 'Jl. Labuansait, Pecatu, Kuta Selatan, Kabupaten Badung, Bali 80361' },
+  ],
+  mapsQuery: 'Pecatu, Kuta Selatan, Badung, Bali',
+  rsvpDeadline: '2027-05-29',
+  accounts: [
+    { bank: 'BCA', number: '6040 1182 73', holder: 'Bima Arya Pradana' },
+    { bank: 'BNI', number: '0912 3345 66', holder: 'Laras Kinanti' },
+  ],
+  giftAddress: '',
+  families: 'Keluarga Besar Pradana & Santoso',
+  photos: { envelope: [], gallery: [] },
+}

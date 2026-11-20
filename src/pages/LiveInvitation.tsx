@@ -7,6 +7,7 @@ import { fmtDate, uid } from '../lib/utils'
 import NoirInvitation from './invitations/NoirInvitation'
 import RedRetroInvitation from './invitations/RedRetroInvitation'
 import SageInvitation from './invitations/SageInvitation'
+import TepiLautInvitation from './invitations/TepiLautInvitation'
 import TamanKlasikInvitation from './invitations/TamanKlasikInvitation'
 import { GuestBookContext, type GuestBookHandlers } from './invitations/shared'
 
@@ -14,6 +15,7 @@ const COMPONENTS: Record<InvitationTemplate, typeof SageInvitation> = {
   'taman-klasik': TamanKlasikInvitation,
   sage: SageInvitation,
   noir: NoirInvitation,
+  'tepi-laut': TepiLautInvitation,
   'red-retro': RedRetroInvitation,
 }
 

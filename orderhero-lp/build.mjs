@@ -15,7 +15,7 @@ const origin = (process.env.APP_ORIGIN ?? '').replace(/\/$/, '')
 
 let code = js
 for (const [from, to] of Object.entries(images)) code = code.split(from).join(to)
-if (origin) for (const p of ['taman-klasik', 'sage', 'noir', 'red-retro']) code = code.split(`/undangan/${p}`).join(`${origin}/undangan/${p}`)
+if (origin) for (const p of ['taman-klasik', 'sage', 'noir', 'tepi-laut', 'red-retro']) code = code.split(`/undangan/${p}`).join(`${origin}/undangan/${p}`)
 code = code.replace(/<\/script/gi, '<\/script')
 
 const html = `<!doctype html>

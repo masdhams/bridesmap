@@ -281,7 +281,8 @@ export const INVITATION_DESIGNS = [
   { name: 'Tema-1', mood: 'Gapura batu, taman Eropa, hijau sage', to: '/undangan/taman-klasik' },
   { name: 'Tema-2', mood: 'Amplop hijau, bunga melati', to: '/undangan/sage' },
   { name: 'Tema-3', mood: 'Hitam arang, mewah minimalis', to: '/undangan/noir' },
-  { name: 'Tema-4', mood: 'Kliping koran, scrapbook', to: '/undangan/red-retro' },
+  { name: 'Tema-4', mood: 'Pantai, foto bertepi sobek, cat air', to: '/undangan/tepi-laut' },
+  { name: 'Tema-5', mood: 'Kliping koran, scrapbook', to: '/undangan/red-retro' },
 ]
 
 export function InvitationCarousel() {

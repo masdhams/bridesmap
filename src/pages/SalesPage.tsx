@@ -776,7 +776,7 @@ const NORMAL_PRICE = MODULES.reduce((a, m) => a + m.value, 0)
 const SAVE_PCT = Math.floor((1 - LAUNCH.price / NORMAL_PRICE) * 100)
 
 // Gambar sampul tiap desain, urutannya sama dengan INVITATION_DESIGNS. Taman Klasik memakai gambar sampul aslinya.
-const INVITE_SHOTS = ['/lp/undangan-taman-klasik.webp', '/lp/undangan-sage.webp', '/lp/undangan-noir.webp', '/lp/undangan-red-retro.webp']
+const INVITE_SHOTS = ['/lp/undangan-taman-klasik.webp', '/lp/undangan-sage.webp', '/lp/undangan-noir.webp', '/lp/undangan-tepi-laut.webp', '/lp/undangan-red-retro.webp']
 
 /** Bonus utama: undangan digital, tampil lebih lebar dengan pratinjau desain yang bisa digeser. */
 function FeaturedBonus() {

@@ -329,7 +329,7 @@ export const LANDING_FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Bagaimana cara membuat undangan dan melihat konfirmasi tamu?',
-    a: 'Pilih salah satu dari empat tema undangan (Tema-1 sampai Tema-4), lalu tambahkan nama, foto, dan cerita kalian. Setelah selesai, bagikan link undangan personal kepada tamu melalui WhatsApp. Konfirmasi kehadiran dan ucapan mereka akan langsung tercatat di daftar tamu.',
+    a: 'Pilih salah satu dari lima tema undangan (Tema-1 sampai Tema-5), lalu tambahkan nama, foto, dan cerita kalian. Setelah selesai, bagikan link undangan personal kepada tamu melalui WhatsApp. Konfirmasi kehadiran dan ucapan mereka akan langsung tercatat di daftar tamu.',
   },
   {
     q: 'Bagaimana kalau daftar tamu sudah kami buat di Excel?',

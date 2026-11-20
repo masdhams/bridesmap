@@ -40,6 +40,7 @@ import FreeChecklist from './pages/tools/FreeChecklist'
 import RedRetroInvitation from './pages/invitations/RedRetroInvitation'
 import NoirInvitation from './pages/invitations/NoirInvitation'
 import TamanKlasikInvitation from './pages/invitations/TamanKlasikInvitation'
+import TepiLautInvitation from './pages/invitations/TepiLautInvitation'
 import SageInvitation from './pages/invitations/SageInvitation'
 import ToolsIndex from './pages/tools/ToolsIndex'
 
@@ -103,6 +104,7 @@ export default function App() {
         <Route path="/undangan/taman-klasik" element={<TamanKlasikInvitation />} />
         <Route path="/undangan/sage" element={<SageInvitation />} />
         <Route path="/undangan/noir" element={<NoirInvitation />} />
+        <Route path="/undangan/tepi-laut" element={<TepiLautInvitation />} />
         <Route path="/undangan/red-retro" element={<RedRetroInvitation />} />
         <Route path="/undangan/kliping" element={<KeepQueryRedirect to="/undangan/red-retro" />} />
         <Route
