@@ -209,12 +209,13 @@ export default function TamanKlasikInvitation({ data = TAMAN_KLASIK_DEMO }: { da
 
         {/* Acara */}
         <section className="events">
-          {events.map((e) => {
+          {events.map((e, i) => {
             const d = at(data, e.start)
+            const last = i === events.length - 1
             return (
-              <article className="event" key={`${e.name}-${e.start}`}>
+              <article className={cn('event', last ? 'event--last' : 'event--plain')} key={`${e.name}-${e.start}-${i}`}>
                 <div className="event__text glow">
-                  <h2 className="script title" data-reveal>Waktu &amp; Tempat</h2>
+                  {i === 0 && <h2 className="script title" data-reveal>Waktu &amp; Tempat</h2>}
                   <h3 className="script event__name" data-reveal>{e.name}</h3>
                   <p className="script event__day" data-reveal>
                     {fmt(d, { weekday: 'long' })}, {fmt(d, { day: 'numeric' })}
@@ -230,7 +231,8 @@ export default function TamanKlasikInvitation({ data = TAMAN_KLASIK_DEMO }: { da
                     Lihat Lokasi
                   </a>
                 </div>
-                <Slot kind="decor" src={pilarAirMancur} className="event__scene anim zoom" />
+                {/* Latar bergambar hanya di acara terakhir; acara sebelumnya polos. */}
+                {last && <Slot kind="decor" src={pilarAirMancur} className="event__scene anim zoom" />}
               </article>
             )
           })}

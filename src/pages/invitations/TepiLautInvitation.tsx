@@ -192,8 +192,8 @@ export default function TepiLautInvitation({ data = TEPI_LAUT_DEMO }: { data?: I
   const dateLine = fmt(day, { day: 'numeric', month: 'long', year: 'numeric' })
   const longDate = fmt(day, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   const deadline = fmt(parseDay(data.rsvpDeadline), { day: 'numeric', month: 'long', year: 'numeric' })
-  const venue = first?.venue || data.city
-  const venueText = `${first?.venue ? `Seluruh rangkaian acara kami laksanakan di ${first.venue}. ` : ''}Semoga Anda berkenan hadir dan menjadi bagian dari kenangan indah kami.`
+  const sameVenue = !!first?.venue && events.every((e) => e.venue === first.venue)
+  const venueText = `${sameVenue ? `Seluruh rangkaian acara kami laksanakan di ${first.venue}. ` : ''}Semoga Anda berkenan hadir dan menjadi bagian dari kenangan indah kami.`
   const gallery = photos.gallery.length ? photos.gallery.slice(0, 6) : [undefined, undefined, undefined]
   const person = (p: Invitation['groom'], photo: string | undefined, label: string) => (
     <div className="couple__one" data-reveal="zoom" style={delay(p === bride ? 0 : 1, 0.25)} key={label}>
@@ -293,29 +293,32 @@ export default function TepiLautInvitation({ data = TEPI_LAUT_DEMO }: { data?: I
           <Wave />
         </section>
         <section className="loc" id="lokasi" ref={locRef}>
-          <div className="loc__map" data-reveal="right">
-            <iframe title={`Peta ${data.mapsQuery}`} src={mapsEmbed(data.mapsQuery)} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-          </div>
-          <div className="loc__card" data-reveal="left" style={delay(1, 0.3)}>
-            <Spark />
-            <p className="loc__venue">{venue}</p>
-            {first?.address && <p className="loc__addr">{first.address}</p>}
-            <ul className="loc__times">
-              {events.map((e, i) => (
-                <li key={`${e.name}-${i}`}>
-                  <span className="loc__ev">{e.name}</span>
-                  <span className="loc__time">
+          {events.map((e, i) => {
+            const last = i === events.length - 1
+            return (
+              <div className={cn('loc__item', last && 'loc__item--last')} key={`${e.name}-${i}`}>
+                {/* Peta bergambar hanya di acara terakhir; acara sebelumnya kartu polos. */}
+                {last && (
+                  <div className="loc__map" data-reveal="right">
+                    <iframe title={`Peta ${data.mapsQuery}`} src={mapsEmbed(data.mapsQuery)} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+                  </div>
+                )}
+                <div className={cn('loc__card', !last && i % 2 === 1 && 'loc__card--r')} data-reveal={i % 2 ? 'right' : 'left'} style={delay(last ? 1 : 0, 0.3)}>
+                  <Spark />
+                  <p className="loc__ev">{e.name}</p>
+                  <p className="loc__venue">{e.venue || data.city}</p>
+                  {e.address && <p className="loc__addr">{e.address}</p>}
+                  <p className="loc__time">
                     Pukul {e.start} sampai {e.end} {data.timezone}
-                    {e.venue && e.venue !== first?.venue ? `, ${e.venue}` : ''}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <a className="btn" href={first ? eventMapsHref(first) : '#'} target="_blank" rel="noopener noreferrer">
-              <MapPin aria-hidden />
-              Petunjuk arah
-            </a>
-          </div>
+                  </p>
+                  <a className="btn" href={eventMapsHref(e)} target="_blank" rel="noopener noreferrer">
+                    <MapPin aria-hidden />
+                    Petunjuk arah
+                  </a>
+                </div>
+              </div>
+            )
+          })}
           <p className="loc__note" data-reveal="up">
             {venueText}
           </p>

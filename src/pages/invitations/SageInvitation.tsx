@@ -5,7 +5,7 @@ import { SAGE_DEMO, type Invitation } from '../../data/invitations'
 import { cn } from '../../lib/utils'
 import CalendarCard from './CalendarCard'
 import Sparkle from './Sparkle'
-import { at, calendarLink, fmt, mapsEmbed, mapsLink, parseDay, useCopy, useCountdown, useGuestBook, useReveal, useScrollLock, type GuestWish } from './shared'
+import { at, calendarLink, eventMapsHref, fmt, mapsEmbed, parseDay, useCopy, useCountdown, useGuestBook, useReveal, useScrollLock, type GuestWish } from './shared'
 import './sage.css'
 
 /** Undangan digital template "Sage" — sampul amplop terbuka berisi foto, tanggal, dan segel berinisial (PRD #33).
@@ -151,36 +151,50 @@ export default function SageInvitation({ data = SAGE_DEMO }: { data?: Invitation
         {/* Lokasi */}
         <section className="relative grid gap-8 px-6 py-[72px]">
           <SectionTitle kicker="Tempat acara" title="Lokasi" />
-          <div data-reveal className="relative">
-            <div className="ml-auto w-[88%] rotate-[2deg] bg-white p-2 shadow-[0_2px_4px_rgba(34,38,31,.08),0_22px_40px_-16px_rgba(34,38,31,.35)]">
-              <iframe
-                title={`Peta ${data.mapsQuery}`}
-                src={mapsEmbed(data.mapsQuery)}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="block h-[230px] w-full border-0 bg-muted"
-              />
-            </div>
-            <div className="relative -mt-14 w-[82%] -rotate-[1.5deg] border border-border bg-background p-5 shadow-[0_2px_4px_rgba(34,38,31,.08),0_18px_34px_-14px_rgba(34,38,31,.35)]">
-              <Sparkle className="absolute top-4 left-4 size-3 text-primary" />
-              <div className="grid justify-items-center gap-1 text-center">
-                <span className="font-serif text-[18px] leading-none text-accent italic">
-                  {first.name}
-                </span>
-                <span className="font-serif text-[26px] leading-[1.1] text-primary uppercase">{first.venue}</span>
-                <span className="mt-1 text-[13px] leading-snug text-muted-foreground">{first.address}</span>
-                <a
-                  href={data.mapsUrl || mapsLink(data.mapsQuery)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-flex min-h-11 items-center gap-2 bg-primary px-5 text-[13px] font-semibold text-background no-underline transition-colors hover:bg-primary-hover hover:text-background"
+          {data.events.map((e, i) => {
+            const last = i === data.events.length - 1
+            return (
+              <div data-reveal key={`${e.name}-${i}`} className="relative">
+                {/* Peta bergambar hanya di acara terakhir; acara sebelumnya kartu polos. */}
+                {last && (
+                  <div className="ml-auto w-[88%] rotate-[2deg] bg-white p-2 shadow-[0_2px_4px_rgba(34,38,31,.08),0_22px_40px_-16px_rgba(34,38,31,.35)]">
+                    <iframe
+                      title={`Peta ${data.mapsQuery}`}
+                      src={mapsEmbed(data.mapsQuery)}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="block h-[230px] w-full border-0 bg-muted"
+                    />
+                  </div>
+                )}
+                <div
+                  className={cn(
+                    'relative w-[82%] border border-border bg-background p-5 shadow-[0_2px_4px_rgba(34,38,31,.08),0_18px_34px_-14px_rgba(34,38,31,.35)]',
+                    last ? '-mt-14 -rotate-[1.5deg]' : i % 2 ? 'ml-auto rotate-[1.5deg]' : '-rotate-[1.5deg]',
+                  )}
                 >
-                  <MapPin className="size-4" strokeWidth={1.75} />
-                  Petunjuk arah
-                </a>
+                  <Sparkle className="absolute top-4 left-4 size-3 text-primary" />
+                  <div className="grid justify-items-center gap-1 text-center">
+                    <span className="font-serif text-[18px] leading-none text-accent italic">{e.name}</span>
+                    <span className="font-serif text-[26px] leading-[1.1] text-primary uppercase">{e.venue}</span>
+                    <span className="mt-1 text-[13px] leading-snug text-muted-foreground">{e.address}</span>
+                    <span className="text-[13px] font-semibold text-primary">
+                      Pukul {e.start} sampai {e.end} {data.timezone}
+                    </span>
+                    <a
+                      href={eventMapsHref(e)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-3 inline-flex min-h-11 items-center gap-2 bg-primary px-5 text-[13px] font-semibold text-background no-underline transition-colors hover:bg-primary-hover hover:text-background"
+                    >
+                      <MapPin className="size-4" strokeWidth={1.75} />
+                      Petunjuk arah
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            )
+          })}
           <p data-reveal className="m-0 mx-auto max-w-[34ch] text-center text-sm leading-[1.75] text-muted-foreground">
             Kami memilih tempat ini karena suasananya yang hangat — semoga menjadi bagian dari kenangan indah kita bersama.
           </p>
