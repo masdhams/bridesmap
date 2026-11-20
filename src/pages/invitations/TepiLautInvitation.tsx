@@ -194,7 +194,8 @@ export default function TepiLautInvitation({ data = TEPI_LAUT_DEMO }: { data?: I
   const deadline = fmt(parseDay(data.rsvpDeadline), { day: 'numeric', month: 'long', year: 'numeric' })
   const sameVenue = !!first?.venue && events.every((e) => e.venue === first.venue)
   const venueText = `${sameVenue ? `Seluruh rangkaian acara kami laksanakan di ${first.venue}. ` : ''}Semoga Anda berkenan hadir dan menjadi bagian dari kenangan indah kami.`
-  const gallery = photos.gallery.length ? photos.gallery.slice(0, 6) : [undefined, undefined, undefined]
+  // Seperti Sage: dua kolom polaroid kecil. Kosong = 6 kotak penanda; ada foto = hanya foto yang diisi.
+  const gallery: (string | undefined)[] = photos.gallery.length ? photos.gallery.slice(0, 6) : Array.from({ length: 6 }, () => undefined)
   const person = (p: Invitation['groom'], photo: string | undefined, label: string) => (
     <div className="couple__one" data-reveal="zoom" style={delay(p === bride ? 0 : 1, 0.25)} key={label}>
       <Slot kind="photo" src={photo} label={label} className="couple__photo" />
@@ -349,16 +350,18 @@ export default function TepiLautInvitation({ data = TEPI_LAUT_DEMO }: { data?: I
         )}
 
         {/* Galeri */}
-        <section className="head" data-reveal>
-          <h2 className="h2">Galeri</h2>
-          <Wave />
-        </section>
-        <section className="gallery">
-          {gallery.map((g, i) => (
-            <figure className={`polaroid polaroid--${(i % 3) + 1}`} key={i} data-reveal="drop" style={delay(i % 3, 0.25)}>
-              <Slot kind="photo" src={g} label={`Foto galeri ${i + 1}`} />
-            </figure>
-          ))}
+        <section className="gallery-sec">
+          <div className="head" data-reveal>
+            <h2 className="h2">Galeri</h2>
+            <Wave />
+          </div>
+          <div className="gallery">
+            {gallery.map((g, i) => (
+              <figure className="polaroid" key={i} data-reveal="drop" style={delay(i % 2, 0.25)}>
+                <Slot kind="photo" src={g} label={`Foto galeri ${i + 1}`} />
+              </figure>
+            ))}
+          </div>
         </section>
 
         {/* RSVP, kado digital, penutup */}

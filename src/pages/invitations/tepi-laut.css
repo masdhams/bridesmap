@@ -108,7 +108,7 @@
 .inv-tepi .count b { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6vw, 56px); line-height: 1; color: var(--ink); }
 .inv-tepi .count span { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
 /* foto polaroid: bingkai putih, bawah lebih lebar, sedikit miring */
-.inv-tepi .polaroid { margin: 0; padding: 10px; background: #fff; box-shadow: 0 10px 26px rgb(43 46 49 / 0.12); }
+.inv-tepi .polaroid { margin: 0; padding: 8px 8px 24px; background: #fff; box-shadow: 0 10px 26px rgb(43 46 49 / 0.12); }
 .inv-tepi .polaroid .slot { aspect-ratio: 4 / 5; }
 .inv-tepi .polaroid figcaption { font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.15; color: var(--ink); text-align: center; padding: 10px 4px 14px; }
 /* ---------- Cerita ---------- */
@@ -150,10 +150,17 @@
 .inv-tepi .kisah__text { font-size: 14px; line-height: 1.6; margin: 8px 0 6px; }
 .inv-tepi .kisah__year { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; color: var(--muted); margin: 0; }
 /* ---------- Galeri ---------- */
-.inv-tepi .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; padding: 50px 10px 0; }
-.inv-tepi .polaroid--1 { transform: rotate(-3deg); }
-.inv-tepi .polaroid--2 { transform: rotate(2deg) translateY(14px); }
-.inv-tepi .polaroid--3 { transform: rotate(-1.5deg); }
+.inv-tepi .gallery-sec { margin: 70px -20px 0; padding: 64px 20px 72px; background: rgb(236 229 216 / 0.7); }
+.inv-tepi .gallery-sec .head { padding-top: 0; }
+.inv-tepi .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px 16px; padding: 40px 0 0; }
+/* kolom kanan turun sedikit dan kemiringan bergantian, seperti galeri Sage */
+.inv-tepi .gallery .polaroid:nth-child(even) { margin-top: 24px; }
+.inv-tepi .gallery .polaroid:nth-child(6n+1) { transform: rotate(-3deg); }
+.inv-tepi .gallery .polaroid:nth-child(6n+2) { transform: rotate(2.5deg); }
+.inv-tepi .gallery .polaroid:nth-child(6n+3) { transform: rotate(2deg); }
+.inv-tepi .gallery .polaroid:nth-child(6n+4) { transform: rotate(-2.5deg); }
+.inv-tepi .gallery .polaroid:nth-child(6n+5) { transform: rotate(-1.5deg); }
+.inv-tepi .gallery .polaroid:nth-child(6n) { transform: rotate(3deg); }
 /* ---------- Penutup + RSVP + amplop ---------- */
 .inv-tepi .closing { position: relative; text-align: center; padding: 100px 0 40px; margin: 70px -40px 0; padding-left: 40px; padding-right: 40px; background: rgb(236 229 216 / 0.6); }
 .inv-tepi .ribbon--closing { aspect-ratio: 1400 / 487; width: 500px; right: -110px; top: -34px; transform: rotate(-10deg); }
@@ -214,8 +221,6 @@
 .inv-tepi .story { grid-template-columns: 1fr; gap: 34px; padding: 80px 6px 20px; }
 .inv-tepi .story__photo { width: 82%; margin: 0 auto; }
 .inv-tepi .kisah__item { grid-template-columns: 120px 1fr; gap: 16px; }
-.inv-tepi .gallery { grid-template-columns: 1fr; gap: 30px; padding: 40px 30px 0; }
-.inv-tepi .polaroid--2 { transform: rotate(2deg); }
 .inv-tepi .closing { margin: 60px -20px 0; padding: 90px 20px 40px; }
 .inv-tepi .gift__cards { grid-template-columns: 1fr; }
 /* kutipan di bagian mempelai dan teks penutup */
@@ -236,3 +241,6 @@
 .inv-tepi .polaroid:hover { transform: rotate(0deg) translateY(-8px) scale(1.02); box-shadow: 0 20px 38px rgb(43 46 49 / 0.18); }
 .inv-tepi .kisah__photo, .inv-tepi .couple__photo { transition: transform 0.8s ease; }
 .inv-tepi .kisah__item:hover .kisah__photo { transform: scale(1.04); }
+
+/* galeri dan penutup sama-sama berlatar pita: rapatkan supaya tidak ada celah */
+.inv-tepi .gallery-sec + .closing { margin-top: 0; }
