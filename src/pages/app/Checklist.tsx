@@ -310,7 +310,7 @@ export default function Checklist() {
         title={draft?.id ? 'Ubah tugas' : 'Tugas baru'}
         footer={
           <>
-            {draft?.id && draft.custom && (
+            {draft?.id && (
               <ConfirmButton className="btn-ghost mr-auto text-destructive" onConfirm={() => { remove('tasks', draft.id!); setDraft(null) }}>
                 <Trash2 className="size-4" aria-hidden /> Hapus
               </ConfirmButton>
