@@ -58,6 +58,7 @@ export function eventsFromRundown(rundown: RundownEvent[]): InvitationEventInput
       end: last?.end || last?.time || sorted[0]?.time || '10:00',
       venue: r.location ?? '',
       address: '',
+      date: r.date || undefined,
     }
   })
 }
@@ -82,6 +83,7 @@ export function buildInvitation(s: Pick<PlanState, 'profile' | 'rundown' | 'invi
     end: dot(e.end),
     venue: e.venue,
     address: e.address,
+    date: e.date || undefined,
     mapsUrl: cleanUrl(e.mapsUrl),
   }))
   const lastPlace = [...events].reverse().find((e) => e.venue || e.address)

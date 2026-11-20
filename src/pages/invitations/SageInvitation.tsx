@@ -5,7 +5,7 @@ import { SAGE_DEMO, type Invitation } from '../../data/invitations'
 import { cn } from '../../lib/utils'
 import CalendarCard from './CalendarCard'
 import Sparkle from './Sparkle'
-import { at, calendarLink, eventMapsHref, fmt, mapsEmbed, parseDay, useCopy, useCountdown, useGuestBook, useReveal, useScrollLock, type GuestWish } from './shared'
+import { at, calendarLink, eventDay, eventMapsHref, fmt, isMultiDay, mapsEmbed, parseDay, useCopy, useCountdown, useGuestBook, useReveal, useScrollLock, type GuestWish } from './shared'
 import './sage.css'
 
 /** Undangan digital template "Sage" — sampul amplop terbuka berisi foto, tanggal, dan segel berinisial (PRD #33).
@@ -38,6 +38,8 @@ export default function SageInvitation({ data = SAGE_DEMO }: { data?: Invitation
   const first = data.events[0]
   const gcal = calendarLink(data)
   const dayLong = fmt(day, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  const multiDay = isMultiDay(data)
+  const evLong = (e: Invitation['events'][number]) => fmt(eventDay(data, e), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
   return (
     <div ref={rootRef} className="inv-sage flex min-h-dvh justify-center bg-[#2B3727] font-sans text-ink antialiased">
@@ -127,7 +129,7 @@ export default function SageInvitation({ data = SAGE_DEMO }: { data?: Invitation
             <span className="font-serif text-[20px] leading-none text-[#C9D0BC] italic">
               Kami menanti Anda
             </span>
-            <span className="mt-4 text-[11px] font-semibold uppercase tracking-[.22em] text-[#C9D0BC]">{dayLong}</span>
+            {!multiDay && <span className="mt-4 text-[11px] font-semibold uppercase tracking-[.22em] text-[#C9D0BC]">{dayLong}</span>}
           </div>
           <Timeline
             light
@@ -137,6 +139,12 @@ export default function SageInvitation({ data = SAGE_DEMO }: { data?: Invitation
               title: e.name,
               body: (
                 <>
+                  {multiDay && (
+                    <>
+                      <span className="text-[#C9D0BC]">{evLong(e)}</span>
+                      <br />
+                    </>
+                  )}
                   <span className="font-semibold text-background">
                     {e.start} – {e.end} {data.timezone}
                   </span>
@@ -179,6 +187,12 @@ export default function SageInvitation({ data = SAGE_DEMO }: { data?: Invitation
                     <span className="font-serif text-[26px] leading-[1.1] text-primary uppercase">{e.venue}</span>
                     <span className="mt-1 text-[13px] leading-snug text-muted-foreground">{e.address}</span>
                     <span className="text-[13px] font-semibold text-primary">
+                      {multiDay && (
+                        <>
+                          {evLong(e)}
+                          <br />
+                        </>
+                      )}
                       Pukul {e.start} sampai {e.end} {data.timezone}
                     </span>
                     <a
@@ -203,7 +217,7 @@ export default function SageInvitation({ data = SAGE_DEMO }: { data?: Invitation
         {/* Hitung mundur */}
         <section className="relative grid gap-6 px-6 pb-[72px]">
           <SectionTitle kicker="Menuju hari bahagia" title="Sebentar Lagi" />
-          <Countdown target={at(data, first.start).getTime()} />
+          <Countdown target={at(data, first.start, first.date).getTime()} />
         </section>
 
         {/* Galeri */}

@@ -3,7 +3,7 @@ import { useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { RED_RETRO_DEMO, type Invitation } from '../../data/invitations'
 import { cn } from '../../lib/utils'
-import { at, calendarLink, eventMapsHref, fmt, parseDay, useCopy, useCountdown, useGuestBook, useReveal, useScrollLock, type GuestWish } from './shared'
+import { at, calendarLink, eventDay, eventMapsHref, fmt, parseDay, useCopy, useCountdown, useGuestBook, useReveal, useScrollLock, type GuestWish } from './shared'
 import coverNotebook from '../../assets/red-retro/cover-notebook.webp'
 import coverTape from '../../assets/red-retro/cover-tape.webp'
 import memoClip from '../../assets/red-retro/memo-clip.webp'
@@ -119,7 +119,7 @@ export default function RedRetroInvitation({ data = RED_RETRO_DEMO }: { data?: I
         <Section tone="cream" tear={1}>
           <Title kicker="menuju hari bahagia" title="Save the Date" />
           <CalendarPad day={day} />
-          <CountdownTicket target={at(data, data.events[0].start).getTime()} />
+          <CountdownTicket target={at(data, data.events[0].start, data.events[0].date).getTime()} />
           <a data-reveal href={calendarLink(data)} target="_blank" rel="noreferrer" className={cn(BUTTON, 'justify-self-center')}>
             Simpan ke kalender
           </a>
@@ -489,7 +489,7 @@ function CountdownTicket({ target }: { target: number }) {
 
 /** Kartu acara dari kertas buku tulis, ditempel selotip, dengan label tulisan tangan dan panah. */
 function EventNote({ data, event: e, labelRight }: { data: Invitation; event: Invitation['events'][number]; labelRight: boolean }) {
-  const day = parseDay(data.date)
+  const day = eventDay(data, e)
   return (
     <div data-reveal className="grid gap-2">
       <span className={cn('flex items-center gap-2 text-[34px] leading-none font-bold text-[#F6F1EA]', labelRight ? 'justify-end' : 'justify-start')} style={{ fontFamily: CAVEAT }}>

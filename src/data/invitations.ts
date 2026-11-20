@@ -17,6 +17,8 @@ export type InvitationEvent = {
   end: string
   venue: string
   address: string
+  /** Tanggal acara YYYY-MM-DD; kosong = tanggal hari-H. Acara bisa beda hari (akad, resepsi, ngunduh mantu). */
+  date?: string
   /** Tautan Google Maps dari pasangan; kosong = dicari dari nama tempat & alamat. */
   mapsUrl?: string
 }
@@ -230,8 +232,16 @@ export const TAMAN_KLASIK_DEMO: Invitation = {
       venue: 'Taman Kebun Raya Hall',
       address: 'Jl. Ir. H. Juanda No. 13, Paledang, Kota Bogor, Jawa Barat 16122',
     },
+    {
+      name: 'Ngunduh Mantu',
+      date: '2027-05-22',
+      start: '11.00',
+      end: '14.00',
+      venue: 'Rumah Mempelai Pria',
+      address: 'Jl. Salak No. 7, Tanah Sareal, Kota Bogor, Jawa Barat 16161',
+    },
   ],
-  mapsQuery: 'Jl. Ir. H. Juanda No. 13, Paledang, Kota Bogor, Jawa Barat 16122',
+  mapsQuery: 'Jl. Salak No. 7, Tanah Sareal, Kota Bogor, Jawa Barat 16161',
   rsvpDeadline: '2027-05-05',
   accounts: [
     { bank: 'BCA', number: '8720 1145 63', holder: 'Arga Mahendra' },
@@ -279,8 +289,9 @@ export const TEPI_LAUT_DEMO: Invitation = {
   events: [
     { name: 'Akad Nikah', start: '15.00', end: '16.00', venue: 'Teras Samudra', address: 'Jl. Labuansait, Pecatu, Kuta Selatan, Kabupaten Badung, Bali 80361' },
     { name: 'Resepsi', start: '16.30', end: '18.30', venue: 'Teras Samudra', address: 'Jl. Labuansait, Pecatu, Kuta Selatan, Kabupaten Badung, Bali 80361' },
+    { name: 'Ngunduh Mantu', date: '2027-06-19', start: '11.00', end: '14.00', venue: 'Rumah Mempelai Pria', address: 'Jl. Teuku Umar No. 21, Denpasar Barat, Kota Denpasar, Bali 80113' },
   ],
-  mapsQuery: 'Pecatu, Kuta Selatan, Badung, Bali',
+  mapsQuery: 'Jl. Teuku Umar No. 21, Denpasar Barat, Kota Denpasar, Bali 80113',
   rsvpDeadline: '2027-05-29',
   accounts: [
     { bank: 'BCA', number: '6040 1182 73', holder: 'Bima Arya Pradana' },

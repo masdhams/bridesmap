@@ -321,6 +321,8 @@ export interface InvitationEventInput {
   end: string
   venue: string
   address: string
+  /** Tanggal acara "yyyy-MM-dd". Kosong = tanggal pernikahan di profil. */
+  date?: string
   /** Tautan Google Maps (mis. https://maps.app.goo.gl/…). Kosong = dicari dari nama tempat & alamat. */
   mapsUrl?: string
 }

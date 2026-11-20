@@ -5,7 +5,7 @@ import { NOIR_DEMO, type Invitation } from '../../data/invitations'
 import { cn } from '../../lib/utils'
 import CalendarCard from './CalendarCard'
 import Sparkle from './Sparkle'
-import { at, calendarLink, eventMapsHref, fmt, parseDay, useCopy, useCountdown, useGuestBook, useReveal, useScrollLock, type GuestWish } from './shared'
+import { at, calendarLink, eventDay, eventMapsHref, fmt, isMultiDay, parseDay, useCopy, useCountdown, useGuestBook, useReveal, useScrollLock, type GuestWish } from './shared'
 import './noir.css'
 
 /** Undangan digital template "Noir": minimalis mewah hitam arang dengan sorot lampu panggung (PRD #33).
@@ -87,7 +87,7 @@ export default function NoirInvitation({ data = NOIR_DEMO }: { data?: Invitation
           <div className="grid justify-items-center">
             <CalendarCard day={day} tone="noir" />
           </div>
-          <Countdown target={at(data, data.events[0].start).getTime()} />
+          <Countdown target={at(data, data.events[0].start, data.events[0].date).getTime()} />
           <a data-reveal href={calendarLink(data)} target="_blank" rel="noreferrer" className={cn(GOLD_BTN, 'justify-self-center no-underline')}>
             <CalendarPlus className="size-4" strokeWidth={2} />
             Simpan ke Kalender
@@ -97,9 +97,11 @@ export default function NoirInvitation({ data = NOIR_DEMO }: { data?: Invitation
         {/* Acara */}
         <section className="relative grid gap-6 px-6 pb-20">
           <Heading kicker="Wedding event" title="Rangkaian Acara" />
-          <span data-reveal className="-mt-3 text-center text-[11px] font-semibold uppercase tracking-[.22em] text-[#B9B3AA]">
-            {fmt(day, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-          </span>
+          {!isMultiDay(data) && (
+            <span data-reveal className="-mt-3 text-center text-[11px] font-semibold uppercase tracking-[.22em] text-[#B9B3AA]">
+              {fmt(day, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            </span>
+          )}
           <EventTimeline data={data} />
         </section>
 
@@ -301,6 +303,11 @@ function EventTimeline({ data }: { data: Invitation }) {
           <Sparkle className="mt-1.5 size-3.5 justify-self-center text-[#CDB08A]" />
           <div className="grid justify-items-start gap-1">
             <h3 className="m-0 font-serif text-[26px] font-normal leading-[1.1] text-[#F4F1EC]">{e.name}</h3>
+            {isMultiDay(data) && (
+              <span className="text-[13px] font-semibold text-[#F4F1EC]">
+                {fmt(eventDay(data, e), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+              </span>
+            )}
             <span className="text-[13px] font-semibold text-[#CDB08A]">
               Pukul {e.start} s.d. {e.end} {data.timezone}
             </span>

@@ -146,7 +146,10 @@ export default function InvitationEditor() {
                   <Field label="Nama acara" htmlFor={`ev-n-${e.id}`}>
                     <input id={`ev-n-${e.id}`} className="input" value={e.name} onChange={(x) => patchEvent(e.id, { name: x.target.value })} />
                   </Field>
-                  <div className="grid grid-cols-2 gap-2">
+                  <Field label="Tanggal" htmlFor={`ev-d-${e.id}`}>
+                    <input id={`ev-d-${e.id}`} type="date" className="input" value={e.date || profile.weddingDate} onChange={(x) => patchEvent(e.id, { date: x.target.value })} />
+                  </Field>
+                  <div className="grid grid-cols-2 gap-2 sm:col-span-2">
                     <Field label="Mulai" htmlFor={`ev-s-${e.id}`}>
                       <input id={`ev-s-${e.id}`} type="time" className="input" value={e.start} onChange={(x) => patchEvent(e.id, { start: x.target.value })} />
                     </Field>
@@ -179,7 +182,7 @@ export default function InvitationEditor() {
                 </li>
               ))}
             </ul>
-            <button type="button" className="btn-outline btn-sm" onClick={() => setEvents([...events, { id: uid(), name: 'Acara baru', start: '10:00', end: '12:00', venue: '', address: '' }])}>
+            <button type="button" className="btn-outline btn-sm" onClick={() => setEvents([...events, { id: uid(), name: 'Acara baru', start: '10:00', end: '12:00', venue: '', address: '', date: profile.weddingDate }])}>
               <Plus className="size-4" aria-hidden /> Tambah acara
             </button>
             <div className="grid gap-3 sm:grid-cols-2">

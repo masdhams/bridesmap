@@ -8,7 +8,7 @@ import pesisir from '../../assets/tepi-laut/pesisir-cat-air.webp'
 import pita1 from '../../assets/tepi-laut/pita-kain-1.webp'
 import pita2 from '../../assets/tepi-laut/pita-kain-2.webp'
 import pita3 from '../../assets/tepi-laut/pita-kain-3.webp'
-import { calendarLink, eventMapsHref, fmt, mapsEmbed, parseDay, at, useCopy, useCountdown, useGuestBook } from './shared'
+import { at, calendarLink, eventDay, eventMapsHref, fmt, mapsEmbed, parseDay, useCopy, useCountdown, useGuestBook } from './shared'
 import './tepi-laut.css'
 
 /** Undangan digital template "Tepi Laut" (Tema-4): editorial bertema pesisir, kertas hangat, foto bertepi sobek,
@@ -280,7 +280,7 @@ export default function TepiLautInvitation({ data = TEPI_LAUT_DEMO }: { data?: I
           <Slot kind="art" src={desaTebing} className="count-sec__village" parallax={0.12} />
           <h2 className="h2">Simpan Tanggalnya</h2>
           <p className="small count-sec__day">{longDate}</p>
-          <Count target={at(data, first?.start ?? '08.00').getTime()} reduce={reduce} />
+          <Count target={at(data, first?.start ?? '08.00', first?.date).getTime()} reduce={reduce} />
           <a className="btn btn--ghost" href={calendarLink(data)} target="_blank" rel="noopener noreferrer">
             <CalendarPlus aria-hidden />
             Simpan ke Kalender
@@ -309,6 +309,8 @@ export default function TepiLautInvitation({ data = TEPI_LAUT_DEMO }: { data?: I
                   <p className="loc__venue">{e.venue || data.city}</p>
                   {e.address && <p className="loc__addr">{e.address}</p>}
                   <p className="loc__time">
+                    {fmt(eventDay(data, e), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                    <br />
                     Pukul {e.start} sampai {e.end} {data.timezone}
                   </p>
                   <a className="btn" href={eventMapsHref(e)} target="_blank" rel="noopener noreferrer">

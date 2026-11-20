@@ -79,7 +79,7 @@ export default function TamanKlasikInvitation({ data = TAMAN_KLASIK_DEMO }: { da
   const { groom, bride, photos, quote, events } = data
   const gallery = photos.gallery
   const day = parseDay(data.date)
-  const countdown = useCountdown(at(data, events[0]?.start ?? '08.00').getTime())
+  const countdown = useCountdown(at(data, events[0]?.start ?? '08.00', events[0]?.date).getTime())
   const { copied, copy } = useCopy()
   const { wishes, addWish, rsvp, saveRsvp } = useGuestBook('taman-klasik', SAMPLE_WISHES)
 
@@ -210,7 +210,7 @@ export default function TamanKlasikInvitation({ data = TAMAN_KLASIK_DEMO }: { da
         {/* Acara */}
         <section className="events">
           {events.map((e, i) => {
-            const d = at(data, e.start)
+            const d = at(data, e.start, e.date)
             const last = i === events.length - 1
             return (
               <article className={cn('event', last ? 'event--last' : 'event--plain')} key={`${e.name}-${e.start}-${i}`}>

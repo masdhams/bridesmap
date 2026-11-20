@@ -6,17 +6,23 @@ import type { Invitation } from '../../data/invitations'
 export const parseDay = (iso: string) => new Date(`${iso}T12:00:00`)
 export const fmt = (d: Date, o: Intl.DateTimeFormatOptions) => d.toLocaleDateString('id-ID', o)
 /** Waktu acara pada hari-H, jam "08.00" di zona waktu undangan. */
-export const at = (data: Invitation, hm: string) => new Date(`${data.date}T${hm.replace('.', ':')}:00${data.utcOffset}`)
+export const at = (data: Invitation, hm: string, date?: string) => new Date(`${date || data.date}T${hm.replace('.', ':')}:00${data.utcOffset}`)
+/** Hari acara (tengah hari) dari tanggal acara itu sendiri; kosong = hari-H. */
+export const eventDay = (data: Invitation, e: { date?: string }) => parseDay(e.date || data.date)
+/** True kalau acara jatuh di lebih dari satu tanggal. */
+export const isMultiDay = (data: Invitation) => new Set(data.events.map((e) => e.date || data.date)).size > 1
 const gcalStamp = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
 
-/** Tautan "tambah ke Google Calendar" dari acara pertama sampai acara terakhir. */
+/** Tautan "tambah ke Google Calendar": acara pertama sampai acara terakhir di hari yang sama dengan acara pertama. */
 export function calendarLink(data: Invitation) {
   const first = data.events[0]
-  const last = data.events[data.events.length - 1]
+  const firstDate = first.date || data.date
+  const sameDay = data.events.filter((e) => (e.date || data.date) === firstDate)
+  const last = sameDay[sameDay.length - 1]
   return (
     'https://calendar.google.com/calendar/render?action=TEMPLATE' +
     `&text=${encodeURIComponent(`Pernikahan ${data.groom.nick} & ${data.bride.nick}`)}` +
-    `&dates=${gcalStamp(at(data, first.start))}/${gcalStamp(at(data, last.end))}` +
+    `&dates=${gcalStamp(at(data, first.start, first.date))}/${gcalStamp(at(data, last.end, last.date))}` +
     `&location=${encodeURIComponent(data.mapsQuery)}`
   )
 }
