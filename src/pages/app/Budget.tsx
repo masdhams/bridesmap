@@ -438,6 +438,7 @@ function AllocationCard({ sum }: { sum: CategorySummary[] }) {
 function HiddenCosts() {
   const { profile, categories, toggleHiddenCost, update } = usePlan()
   const [showAll, setShowAll] = useState(false)
+  const [note, setNote] = useState('')
   const byKey = new Map(categories.filter((c) => c.hiddenKey).map((c) => [c.hiddenKey!, c]))
   // Kategori dari daftar lama (kuncinya sudah tidak ada) tidak punya rumus: dibiarkan dengan nominal yang tersimpan.
   const est = (key: string) => HIDDEN_COSTS.find((h) => h.key === key)?.estimate({ budget: profile.totalBudget, guests: profile.guestEstimate })
@@ -446,11 +447,17 @@ function HiddenCosts() {
   const checkedCount = byKey.size
   const visible = showAll ? ordered : ordered.slice(0, Math.max(4, checkedCount + 2))
 
+  // Mengisi ulang nominal semua hidden cost yang sudah dicentang dengan saran terbaru (sesuai total budget & jumlah tamu).
   const recalc = () => {
+    let n = 0
     for (const c of categories) {
       const value = c.hiddenKey ? est(c.hiddenKey) : undefined
-      if (value !== undefined) update('categories', c.id, { allocated: Math.round(value / 10000) * 10000 })
+      if (value !== undefined) {
+        update('categories', c.id, { allocated: Math.round(value / 10000) * 10000 })
+        n++
+      }
     }
+    setNote(n ? `${n} biaya dihitung ulang sesuai total budget dan jumlah tamu.` : 'Centang dulu biaya yang berlaku, lalu hitung ulang.')
   }
 
   return (
@@ -488,9 +495,16 @@ function HiddenCosts() {
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2 px-1">
         <p className="m-0 text-sm font-semibold">Pilih yang berlaku untuk kalian</p>
-        <button className="btn-ghost btn-sm" onClick={recalc}>
-          <RotateCcw className="size-4" aria-hidden /> Hitung ulang
-        </button>
+        <div className="flex flex-col items-end gap-1">
+          <button className="btn-ghost btn-sm" onClick={recalc}>
+            <RotateCcw className="size-4" aria-hidden /> Hitung ulang
+          </button>
+          {note && (
+            <p className="m-0 text-xs text-muted-foreground" role="status">
+              {note}
+            </p>
+          )}
+        </div>
       </div>
       <ul className="overflow-hidden rounded-[20px] border border-border bg-card">
         {visible.map((h) => {
