@@ -342,7 +342,6 @@ export default function TepiLautInvitation({ data = TEPI_LAUT_DEMO }: { data?: I
           {gallery.map((g, i) => (
             <figure className={`polaroid polaroid--${(i % 3) + 1}`} key={i} data-reveal="drop" style={delay(i % 3, 0.25)}>
               <Slot kind="photo" src={g} label={`Foto galeri ${i + 1}`} />
-              <figcaption>{['Berdua', 'Cincin kami', 'Di tepi pantai'][i % 3]}</figcaption>
             </figure>
           ))}
         </section>

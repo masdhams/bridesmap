@@ -108,7 +108,7 @@
 .inv-tepi .count b { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6vw, 56px); line-height: 1; color: var(--ink); }
 .inv-tepi .count span { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
 /* foto polaroid: bingkai putih, bawah lebih lebar, sedikit miring */
-.inv-tepi .polaroid { margin: 0; padding: 10px 10px 0; background: #fff; box-shadow: 0 10px 26px rgb(43 46 49 / 0.12); }
+.inv-tepi .polaroid { margin: 0; padding: 10px; background: #fff; box-shadow: 0 10px 26px rgb(43 46 49 / 0.12); }
 .inv-tepi .polaroid .slot { aspect-ratio: 4 / 5; }
 .inv-tepi .polaroid figcaption { font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.15; color: var(--ink); text-align: center; padding: 10px 4px 14px; }
 /* ---------- Cerita ---------- */
