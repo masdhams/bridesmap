@@ -298,9 +298,19 @@ export default function TepiLautInvitation({ data = TEPI_LAUT_DEMO }: { data?: I
           </div>
           <div className="loc__card" data-reveal="left" style={delay(1, 0.3)}>
             <Spark />
-            <p className="loc__name">{first?.name}</p>
             <p className="loc__venue">{venue}</p>
             {first?.address && <p className="loc__addr">{first.address}</p>}
+            <ul className="loc__times">
+              {events.map((e, i) => (
+                <li key={`${e.name}-${i}`}>
+                  <span className="loc__ev">{e.name}</span>
+                  <span className="loc__time">
+                    Pukul {e.start} sampai {e.end} {data.timezone}
+                    {e.venue && e.venue !== first?.venue ? `, ${e.venue}` : ''}
+                  </span>
+                </li>
+              ))}
+            </ul>
             <a className="btn" href={first ? eventMapsHref(first) : '#'} target="_blank" rel="noopener noreferrer">
               <MapPin aria-hidden />
               Petunjuk arah
