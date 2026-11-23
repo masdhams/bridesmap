@@ -1,4 +1,4 @@
-import { Check, Mail, Sparkles } from 'lucide-react'
+import { Check, Mail, MessageCircle, Sparkles } from 'lucide-react'
 import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useStartSteps } from '../../components/StartHere'
@@ -26,6 +26,18 @@ export default function Guide() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 xl:max-w-none">
       <PageHeader back="/app" title="Panduan" subtitle={GUIDE_INTRO} />
+
+      <section aria-labelledby="h-grup" className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="min-w-0">
+          <h2 id="h-grup" className="font-sans text-[15px] font-semibold">
+            Grup support Bridesmap
+          </h2>
+          <p className="mt-0.5 text-sm text-body">Ada pertanyaan atau kendala saat memakai Bridesmap? Gabung grup WhatsApp support, tanya langsung di sana.</p>
+        </div>
+        <a href="https://chat.whatsapp.com/HiImqsECLiDKLtu6vvlJud?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" className="btn-soft btn-sm shrink-0 self-start sm:self-center">
+          <MessageCircle className="size-4" aria-hidden /> Gabung grup WhatsApp
+        </a>
+      </section>
 
       <section aria-labelledby="h-contoh" className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="min-w-0">
