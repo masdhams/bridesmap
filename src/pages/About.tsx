@@ -27,6 +27,10 @@ export default function About() {
             <li>Data dikirim lewat koneksi terenkripsi (HTTPS). Koneksi Google Calendar disimpan terenkripsi, dan hanya judul serta tanggal tugas yang dikirim ke Google. Nominal budget tidak pernah dikirim.</li>
             <li>Kami tidak menjual atau membagikan data ke pihak ketiga tanpa izin kalian.</li>
             <li>Kalian bisa mengekspor data kapan saja dari menu Pengaturan.</li>
+            <li>
+              Halaman penawaran Bridesmap memakai Microsoft Clarity untuk merekam interaksi pengunjung, seperti scroll dan klik, dalam bentuk rekaman sesi dan peta panas. Data ini kami pakai untuk memperbaiki halaman, dan bagian formulir disamarkan. Cara Microsoft mengelola datanya dijelaskan di{' '}
+              <a className="text-primary underline" href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noreferrer">kebijakan privasi Microsoft</a>.
+            </li>
           </ul>
         </section>
 
